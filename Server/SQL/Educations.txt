@@ -1,9 +1,0 @@
-CREATE TABLE Educations (
-    Id INT PRIMARY KEY IDENTITY,
-    EmployeeId INT NOT NULL,
-    [EducationsLevelId] INT,
-    [MajorId] INT,
-    Institution NVARCHAR(200),
-    IssuedDate DATE,
-    Note NVARCHAR(300)
-);
