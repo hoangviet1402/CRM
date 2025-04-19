@@ -1,0 +1,38 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# mỗi khi kêu thêm tính năng thì làm việc sau
+# - tạo project mới để trong thư mục Modules cấu trúc thư mục gồm 
+│   │   ├── Controllers/
+│   │   ├── Services/
+│   │   ├── Repositories/
+│   │   ├── DTOs/
+│   │   └── Entities/
+
+# Gợi ý tích hợp
+# - Mỗi Module có thể có test riêng (ex: Employee.Tests)
+# - Shared có thể thêm Validation, BaseEntity, IResult
+# - Infrastructure có thể chia ExternalService / Persistence
+
+# Gợi ý tích hợp tools:
+# - MediatR (CQRS)
+# - FluentValidation
+# - AutoMapper
+# - Serilog (logging)
+# - Swagger UI
+
+# Mối quan hệ giữa các phần
+#
+# [API Layer] gọi đến các Service trong Modules để xử lý yêu cầu
+# [Modules Layer] sử dụng logic nghiệp vụ, gọi Repository hoặc ExternalServices nếu cần
+# [Shared Layer] cung cấp enum, result, helper… cho tất cả Modules và Infrastructure
+# [Infrastructure Layer] kết nối DB, dịch vụ ngoài, gửi mail, lưu trữ file...
+#
+# Quan hệ tham chiếu:
+# - API → Modules, Shared, Infrastructure
+# - Modules → Shared, Infrastructure
+# - Infrastructure → Shared (nếu cần)
+# - Shared → không tham chiếu ngược lại ai
