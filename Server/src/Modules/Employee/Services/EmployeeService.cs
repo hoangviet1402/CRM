@@ -9,8 +9,6 @@ namespace EmployeeModule.Services;
 public class EmployeeService : IEmployeeService
 {
     private readonly IEmployeeRepository _employeeRepository;
-    private readonly IMapper _mapper;
-
     public EmployeeService(IEmployeeRepository employeeRepository)
     {
         _employeeRepository = employeeRepository;
@@ -31,7 +29,7 @@ public class EmployeeService : IEmployeeService
         return newEmployeeId;
     }
 
-    public async Task<int> CreateEmployeeSimple(string fullName, string employeeCode, string email, string phone)
+    public async Task<ApiResult<CreateEmployeeResponse>> CreateEmployeeSimple(string fullName, string employeeCode, string email, string phone)
     {
         // Validate input (có thể thêm FluentValidation ở đây)
         if (string.IsNullOrWhiteSpace(fullName))
@@ -47,13 +45,13 @@ public class EmployeeService : IEmployeeService
             throw new ArgumentException("Phone is required.", nameof(phone));
 
         // Gọi stored procedure thông qua repository
-        var newEmployeeId = await _employeeRepository.CreateEmployeeSimple(
+        var data = await _employeeRepository.CreateEmployeeSimple(
             fullName: fullName,
             employeeCode: employeeCode,
             email: email,
             phone: phone
         );
 
-        return newEmployeeId;
+        return data;
     }
 } 

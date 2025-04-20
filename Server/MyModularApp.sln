@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducationModule", "src\Modu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanyModule", "src\Modules\Company\CompanyModule.csproj", "{E4345BF7-07F6-C2C5-0B2F-346379DFE4C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthModule", "src\Modules\Auth\AuthModule.csproj", "{356408BB-7952-6077-11A3-B7BDAD539347}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,6 +110,18 @@ Global
 		{E4345BF7-07F6-C2C5-0B2F-346379DFE4C8}.Release|x64.Build.0 = Release|Any CPU
 		{E4345BF7-07F6-C2C5-0B2F-346379DFE4C8}.Release|x86.ActiveCfg = Release|Any CPU
 		{E4345BF7-07F6-C2C5-0B2F-346379DFE4C8}.Release|x86.Build.0 = Release|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Debug|x64.Build.0 = Debug|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Debug|x86.Build.0 = Debug|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Release|Any CPU.Build.0 = Release|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Release|x64.ActiveCfg = Release|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Release|x64.Build.0 = Release|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Release|x86.ActiveCfg = Release|Any CPU
+		{356408BB-7952-6077-11A3-B7BDAD539347}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

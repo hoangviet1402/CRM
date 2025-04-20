@@ -3,6 +3,8 @@ using EmployeeModule.DTOs;
 using EmployeeModule.Services;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Result;
+using Shared.Helpers;
+using Shared.Enums;
 
 namespace EmployeeModule.Controllers;
 
@@ -31,19 +33,20 @@ public class EmployeesController : ControllerBase
         {
             var employee = await _employeeService.GetEmployeeByIdAsync(id);
             if (employee == null)
-                return NotFound(new { message = $"Employee with ID {id} not found." });
+                return NotFound(new { message = $"Không tìm thấy nhân viên với ID {id}." });
 
             return Ok(employee);
         }
         catch (ArgumentException ex)
         {
+            LoggerHelper.Warning($"GetEmployee Tham số không hợp lệ. ID: {id}. Lỗi: {ex.Message}");
             return BadRequest(new { message = ex.Message });
         }
         catch (Exception ex)
         {
-            // Log error here if needed
+            LoggerHelper.Error($"GetEmployee ID: {id}.Exception.", ex);
             return StatusCode(500,
-                new { message = "An error occurred while retrieving the employee." });
+                new { message = "Đã xảy ra lỗi trong quá trình lấy thông tin nhân viên." });
         }
     }
 
@@ -59,26 +62,25 @@ public class EmployeesController : ControllerBase
     {
         try
         {
-            var employeeId = await _employeeService.CreateEmployeeSimple(request.FullName, request.EmployeeCode, request.Email, request.Phone);
-            
+            var data = await _employeeService.CreateEmployeeSimple(request.FullName, request.EmployeeCode, request.Email, request.Phone);
+            return Ok(data);
             // Trả về 201 Created với Id của employee mới
-            return CreatedAtAction(
-                nameof(GetEmployee), // Tên action method để lấy chi tiết employee
-                new { id = employeeId }, // Route values
-                employeeId // Response body
-            );
+            //return CreatedAtAction(
+            //    nameof(GetEmployee), // Tên action method để lấy chi tiết employee
+            //    new { id = data.Data.EmployeeId }, // Route values
+            //    data // Response body
+            //);
         }
         catch (ArgumentException ex)
         {
-            // Xử lý validation errors
+            LoggerHelper.Error($"GetEmployee ArgumentException.", ex);
             ModelState.AddModelError(ex.ParamName ?? "Error", ex.Message);
             return ValidationProblem(ModelState);
         }
         catch (Exception ex)
         {
-            // Log error here if needed
-            return StatusCode(500, // Internal Server Error
-                new { message = "An error occurred while creating the employee." });
+            LoggerHelper.Error($"GetEmployee Exception.", ex);
+            return StatusCode(200,new { message = "Đã xảy ra lỗi trong quá trình tạo nhân viên mới." });
         }
     }
 } 

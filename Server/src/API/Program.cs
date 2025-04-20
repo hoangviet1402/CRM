@@ -3,8 +3,13 @@ using Education;
 using EmployeeModule;
 using Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
+using Shared.Helpers;
+using AuthModule;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Initialize Logger
+LoggerHelper.Initialize(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -17,6 +22,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddEmployeeModule();
 builder.Services.AddEducationModule();
 builder.Services.AddCompanyModule();
+builder.Services.AddAuthModule(builder.Configuration);
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -33,6 +39,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Add authentication & authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

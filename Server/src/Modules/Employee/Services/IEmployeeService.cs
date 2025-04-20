@@ -6,6 +6,6 @@ namespace EmployeeModule.Services;
 
 public interface IEmployeeService
 {
-    Task<int> CreateEmployeeSimple(string fullName, string employeeCode, string email, string phone);
+    Task<ApiResult<CreateEmployeeResponse>> CreateEmployeeSimple(string fullName, string employeeCode, string email, string phone);
     Task<EmployeeEntity?> GetEmployeeByIdAsync(int id);
 } 

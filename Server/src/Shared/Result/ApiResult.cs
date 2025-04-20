@@ -1,8 +1,11 @@
+using Shared.Enums;
+using Shared.Helpers;
+
 namespace Shared.Result;
 
 public class ApiResult<T>
 {
-    public bool IsSuccess { get; set; }
+    public int Code { get; set; }
     public T? Data { get; set; }
     public string? Message { get; set; }
     public List<string> Errors { get; set; } = new();
@@ -11,17 +14,17 @@ public class ApiResult<T>
     {
         return new ApiResult<T>
         {
-            IsSuccess = true,
+            Code = ResponseCodeEnum.Success.Value(),
             Data = data,
             Message = message
         };
     }
 
-    public static ApiResult<T> Failure(string message, List<string>? errors = null)
+    public static ApiResult<T> Failure(int code, string message, List<string>? errors = null)
     {
         return new ApiResult<T>
         {
-            IsSuccess = false,
+            Code = code,
             Message = message,
             Errors = errors ?? new List<string>()
         };
