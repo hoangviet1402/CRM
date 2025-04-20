@@ -1,2 +1,11 @@
 /Server/.vs
 /Server/src/API/obj
+/Server/src/API/bin
+/Server/src/Modules/Auth/bin
+/Server/src/Modules/Auth/obj
+/Server/src/Modules/Company/bin
+/Server/src/Modules/Company/obj
+/Server/src/Modules/Education/bin
+/Server/src/Modules/Education/obj
+/Server/src/Modules/Employee/bin
+/Server/src/Modules/Employee/obj
