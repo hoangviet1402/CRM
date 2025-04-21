@@ -9,3 +9,6 @@
 /Server/src/Modules/Education/obj
 /Server/src/Modules/Employee/bin
 /Server/src/Modules/Employee/obj
+/Server/src/Infrastructure/bin
+/Server/src/Shared/obj
+/Server/src/Infrastructure/obj
