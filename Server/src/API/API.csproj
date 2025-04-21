@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Shared.csproj" />
+    <None Include="API.csproj" />
   </ItemGroup>
 
   <ItemGroup>

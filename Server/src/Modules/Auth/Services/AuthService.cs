@@ -100,7 +100,7 @@ public class AuthService : IAuthService
             {
                 UserName = request.Username,
                 Email = request.Email,
-                FullName = request.FullName,
+                Email = request.FullName,
                 IsActive = true,
                 CreatedDate = DateTime.UtcNow
             };
@@ -153,7 +153,7 @@ public class AuthService : IAuthService
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? ""),
             new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
-            new Claim("fullName", user.FullName ?? ""),
+            new Claim("fullName", user.Email ?? ""),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
