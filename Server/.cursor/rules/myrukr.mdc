@@ -13,6 +13,7 @@ alwaysApply: true
 │   │   └── Entities/
 
 # Gợi ý tích hợp
+# - namespace có tên chung là tên tính năng cộng hậu tốt Module
 # - Mỗi Module có thể có test riêng (ex: Employee.Tests)
 # - Shared có thể thêm Validation, BaseEntity, IResult
 # - Infrastructure có thể chia ExternalService / Persistence

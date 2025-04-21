@@ -3,32 +3,51 @@ using System.Security.Claims;
 using System.Text;
 using AuthModule.DTOs;
 using AuthModule.Entities;
+using AuthModule.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Enums;
 using Shared.Helpers;
+using Shared.Result;
 
 namespace AuthModule.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IConfiguration _configuration;
-
-    public AuthService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+    private readonly IAuthRepository _authRepository;
+    public AuthService(IAuthRepository authRepository)
     {
-        _userManager = userManager;
-        _configuration = configuration;
+        _authRepository = authRepository;
     }
 
-    public async Task<AuthResponse> LoginAsync(LoginRequest request)
+    public async Task<ApiResult<AuthResponse>> LoginAsync(string email, string password)
     {
+        var response = new ApiResult<AuthResponse>()
+        {
+            Data = new AuthResponse(),
+            Code = ResponseCodeEnum.SystemMaintenance.Value(),
+            Message = ResponseCodeEnum.SystemMaintenance.Text()
+        };
+
+        // Validate input (có thể thêm FluentValidation ở đây)
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            throw new ArgumentException("Vui lòng nhập email.", nameof(email));
+        }
+
+        // Validate input (có thể thêm FluentValidation ở đây)
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            throw new ArgumentException("Vui lòng nhập mật khẩu.", nameof(password));
+        }
+
         try
         {
-            var user = await _userManager.FindByNameAsync(request.Username);
+            var user = await _authRepository.Login(email,password);
             if (user == null)
             {
-                LoggerHelper.Warning($"Login failed: User {request.Username} not found");
+                LoggerHelper.Warning($"Login failed: User {request.Email} not found");
                 return new AuthResponse 
                 { 
                     Succeeded = false,
@@ -36,7 +55,7 @@ public class AuthService : IAuthService
                 };
             }
 
-            if (!user.IsActive)
+            if (!user.IsActive.GetValueOrDefault(0))
             {
                 LoggerHelper.Warning($"Login failed: User {request.Username} is inactive");
                 return new AuthResponse 

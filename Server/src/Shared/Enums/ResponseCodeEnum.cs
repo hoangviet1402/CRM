@@ -51,7 +51,8 @@ public enum ResponseCodeEnum
     DataCorrupted = 3003,
     DataTypeError = 3004,
     DataConflict = 3005,
-    
+    DataCreateFail = 3006,
+
     // Security Error Codes (4xxx)
     SecurityViolation = 4001,
     InvalidToken = 4002,

@@ -10,6 +10,7 @@ using Shared.Enums;
 using System.Security.Cryptography;
 using System.Text;
 using System.Reflection.PortableExecutable;
+using Shared.Entities;
 
 namespace AuthModule.Repositories;
 
@@ -22,13 +23,10 @@ public class AuthRepository : IAuthRepository
         _context = context;
     }
 
-    public async Task<ApiResult<ApplicationUser>> Login(string email, string password)
+    public async Task<ApplicationUser> Login(string email, string password)
     {
         var connection = _context.Database.GetDbConnection();
-        var response = new ApiResult<ApplicationUser>() 
-        { 
-            Code = ResponseCodeEnum.SystemMaintenance.Value(),
-        };
+        var response = new ApplicationUser();
 
         if (connection.State != ConnectionState.Open)
             await connection.OpenAsync();
@@ -36,45 +34,39 @@ public class AuthRepository : IAuthRepository
         try
         {
             using var command = connection.CreateCommand();
-            command.CommandText = "sp_ValidateCredentials";
+            command.CommandText = "Ins_Account_Login";
             command.CommandType = CommandType.StoredProcedure;
 
-            command.Parameters.Add(new SqlParameter("@Username", SqlDbType.NVarChar, 100) { Value = email });
-            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = HashPassword(password) });
+            command.Parameters.Add(new SqlParameter("@Email", SqlDbType.NVarChar, 100) { Value = email });
+            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = AESHelper.HashPassword(password) });
 
-            var result = await command.ExecuteReaderAsync();
+            using var result = await command.ExecuteReaderAsync();
             if (await result.ReadAsync())
             {
-                response.Data = new ApplicationUser()
+                if (result.GetSafeInt32("Id") > 0)
                 {
-                    Id = result.GetInt32(result.GetOrdinal("Id")),
-                };
-                //return new ApplicationUser
-                //{
-                //    //Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                //    //FullName = reader.GetString(reader.GetOrdinal("FullName")),
-                //    //EmployeeCode = reader.GetString(reader.GetOrdinal("EmployeeCode")),
-                //    //Email = reader.GetString(reader.GetOrdinal("Email")),
-                //    //Phone = reader.GetString(reader.GetOrdinal("Phone"))
-                //};
-            }
-
-            response.Code = ResponseCodeEnum.Success.Value();
-            response.Message = response.Data ? "Xác thực thành công" : "Thông tin đăng nhập không chính xác";
+                    response = new ApplicationUser()
+                    {
+                        Id = result.GetSafeInt32("Id"),// result.GetInt32(result.GetOrdinal("Id")),
+                        Email = result.GetSafeString("Email"),
+                        CompanyId = result.GetSafeInt32("CompanyId"),
+                        Role = result.GetSafeInt32("Role"),
+                        CreatedAt = result.GetSafeDateTime("CreatedAt"),
+                        IsActive = result.GetSafeBoolean("IsActive"),
+                    };
+                }
+            }            
+            return response;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            LoggerHelper.Error($"ValidateCredentials Exception.", ex);
-            response.Code = ResponseCodeEnum.DatabaseError.Value();
-            response.Message = "Lỗi xác thực thông tin đăng nhập";
+            throw;
         }
         finally
         {
             if (connection.State == ConnectionState.Open)
                 await connection.CloseAsync();
         }
-
-        return response;
     }
 
     public async Task<ApiResult<bool>> CreateUser(string username, string password, string email)
@@ -96,7 +88,7 @@ public class AuthRepository : IAuthRepository
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new SqlParameter("@Username", SqlDbType.NVarChar, 100) { Value = username });
-            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = HashPassword(password) });
+            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = AESHelper.HashPassword(password) });
             command.Parameters.Add(new SqlParameter("@Email", SqlDbType.NVarChar, 100) { Value = email });
 
             await command.ExecuteNonQueryAsync();
@@ -139,8 +131,8 @@ public class AuthRepository : IAuthRepository
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int) { Value = userId });
-            command.Parameters.Add(new SqlParameter("@OldPassword", SqlDbType.NVarChar, 256) { Value = HashPassword(oldPassword) });
-            command.Parameters.Add(new SqlParameter("@NewPassword", SqlDbType.NVarChar, 256) { Value = HashPassword(newPassword) });
+            command.Parameters.Add(new SqlParameter("@OldPassword", SqlDbType.NVarChar, 256) { Value = AESHelper.HashPassword(oldPassword) });
+            command.Parameters.Add(new SqlParameter("@NewPassword", SqlDbType.NVarChar, 256) { Value = AESHelper.HashPassword(newPassword) });
 
             var result = await command.ExecuteScalarAsync();
             
@@ -163,12 +155,40 @@ public class AuthRepository : IAuthRepository
         return response;
     }
 
-    private string HashPassword(string password)
+    public async Task<int> CreateAccountForEmployee(string email, string password, int companyId, int role)
     {
-        using (var sha256 = SHA256.Create())
+        var connection = _context.Database.GetDbConnection();
+        var response = 0;       
+
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        try
         {
-            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return Convert.ToBase64String(hashedBytes);
+            using var command = connection.CreateCommand();
+            command.CommandText = "Ins_Account_CreateForEmployees";
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.Add(new SqlParameter("@Email", SqlDbType.NVarChar, 100) { Value = email });
+            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = AESHelper.HashPassword(password) });
+            command.Parameters.Add(new SqlParameter("@CompanyId", SqlDbType.Int) { Value = companyId });
+            command.Parameters.Add(new SqlParameter("@Role", SqlDbType.Int) { Value = role });
+            command.Parameters.Add(new SqlParameter("@AccountId", SqlDbType.Int) { Direction = ParameterDirection.Output });
+
+            await command.ExecuteNonQueryAsync();
+            response = Convert.ToInt32(command.Parameters["@AccountId"].Value);
         }
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            if (connection.State == ConnectionState.Open)
+                await connection.CloseAsync();
+        }
+
+        return response;
     }
+
 } 

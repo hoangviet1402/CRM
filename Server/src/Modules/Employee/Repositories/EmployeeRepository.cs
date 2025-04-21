@@ -19,20 +19,18 @@ public class EmployeeRepository : IEmployeeRepository
         _context = context;
     }
 
-    public async Task<ApiResult<CreateEmployeeResponse>> CreateEmployeeSimple(string fullName, string employeeCode, string email, string phone)
+    public async Task<CreateEmployeeResponse> CreateEmployeeSimple(string fullName, string employeeCode, string email, string phone)
     {
         var connection = _context.Database.GetDbConnection();
-        var response = new ApiResult<CreateEmployeeResponse>() { 
-            Code = ResponseCodeEnum.SystemMaintenance.Value(),
-            Data = new CreateEmployeeResponse()
-        };    
+        var response = new CreateEmployeeResponse();    
+
         if (connection.State != ConnectionState.Open)
             await connection.OpenAsync();
 
         try
         {
             using var command = connection.CreateCommand();
-            command.CommandText = "sp_InsertEmployee";
+            command.CommandText = "Ins_Employee_InsertSimple";
             command.CommandType = CommandType.StoredProcedure;
 
             // Thêm input parameters
@@ -54,31 +52,22 @@ public class EmployeeRepository : IEmployeeRepository
             await command.ExecuteNonQueryAsync();
 
             // Lấy Id được trả về
-            response.Data = new CreateEmployeeResponse()
+            response = new CreateEmployeeResponse()
             {
                 EmployeeId = (int)outputIdParam.Value
             };
-            response.Code = ResponseCodeEnum.Success.Value();
-            response.Message = "Tạo nhân viên thành công";
+           
             return response;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            LoggerHelper.Error($"CreateEmployeeSimple Exception.", ex);
-            response.Data = new CreateEmployeeResponse()
-            {
-                EmployeeId = 0
-            };
-            response.Code = ResponseCodeEnum.DatabaseError.Value();
-            response.Message = "Tạo nhân viên thất bại";            
+            throw;
         }
         finally
         {
             if (connection.State == ConnectionState.Open)
                 await connection.CloseAsync();
         }
-
-        return response;
     }
 
     public async Task<EmployeeEntity?> GetEmployeeById(int id)
