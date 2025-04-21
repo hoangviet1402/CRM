@@ -9,6 +9,7 @@ using Shared.Helpers;
 using Shared.Enums;
 using System.Security.Cryptography;
 using System.Text;
+using System.Reflection.PortableExecutable;
 
 namespace AuthModule.Repositories;
 
@@ -21,13 +22,12 @@ public class AuthRepository : IAuthRepository
         _context = context;
     }
 
-    public async Task<ApiResult<bool>> Login(string email, string password)
+    public async Task<ApiResult<ApplicationUser>> Login(string email, string password)
     {
         var connection = _context.Database.GetDbConnection();
-        var response = new ApiResult<bool>() 
+        var response = new ApiResult<ApplicationUser>() 
         { 
             Code = ResponseCodeEnum.SystemMaintenance.Value(),
-            Data = false
         };
 
         if (connection.State != ConnectionState.Open)
@@ -42,9 +42,23 @@ public class AuthRepository : IAuthRepository
             command.Parameters.Add(new SqlParameter("@Username", SqlDbType.NVarChar, 100) { Value = email });
             command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = HashPassword(password) });
 
-            var result = await command.ExecuteScalarAsync();
-            
-            response.Data = Convert.ToBoolean(result);
+            var result = await command.ExecuteReaderAsync();
+            if (await result.ReadAsync())
+            {
+                response.Data = new ApplicationUser()
+                {
+                    Id = result.GetInt32(result.GetOrdinal("Id")),
+                };
+                //return new ApplicationUser
+                //{
+                //    //Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                //    //FullName = reader.GetString(reader.GetOrdinal("FullName")),
+                //    //EmployeeCode = reader.GetString(reader.GetOrdinal("EmployeeCode")),
+                //    //Email = reader.GetString(reader.GetOrdinal("Email")),
+                //    //Phone = reader.GetString(reader.GetOrdinal("Phone"))
+                //};
+            }
+
             response.Code = ResponseCodeEnum.Success.Value();
             response.Message = response.Data ? "Xác thực thành công" : "Thông tin đăng nhập không chính xác";
         }
