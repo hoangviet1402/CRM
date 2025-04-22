@@ -47,34 +47,19 @@ public class AuthService : IAuthService
             var user = await _authRepository.Login(email,password);
             if (user == null)
             {
-                LoggerHelper.Warning($"Login failed: User {request.Email} not found");
-                return new AuthResponse 
-                { 
-                    Succeeded = false,
-                    Message = "Tài khoản không tồn tại" 
-                };
+                LoggerHelper.Warning($"LoginAsync email {email} không tồn tại");
+                response.Code = ResponseCodeEnum.DataNotFound.Value();
+                response.Message = $"email {email} không tồn tại";
             }
 
-            if (!user.IsActive.GetValueOrDefault(0))
+            if (!user.IsActive.GetValueOrDefault(false))
             {
-                LoggerHelper.Warning($"Login failed: User {request.Username} is inactive");
-                return new AuthResponse 
-                { 
-                    Succeeded = false,
-                    Message = "Tài khoản đã bị khóa" 
-                };
+                LoggerHelper.Warning($"LoginAsync email {email} này đã bị khóa.");
+                response.Code = ResponseCodeEnum.AccountLocked.Value();
+                response.Message = $"email {email} này đã bị khóa.";
             }
 
-            var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
-            if (!isPasswordValid)
-            {
-                LoggerHelper.Warning($"Login failed: Invalid password for user {request.Username}");
-                return new AuthResponse 
-                { 
-                    Succeeded = false,
-                    Message = "Mật khẩu không đúng" 
-                };
-            }
+            // Xử lý token
 
             var token = GenerateJwtToken(user);
             user.LastLoginDate = DateTime.UtcNow;

@@ -47,7 +47,7 @@ public class EmployeeRepository : IEmployeeRepository
                 Direction = ParameterDirection.Output
             };
             command.Parameters.Add(outputIdParam);
-           
+
             // Thực thi stored procedure
             await command.ExecuteNonQueryAsync();
 
@@ -56,7 +56,7 @@ public class EmployeeRepository : IEmployeeRepository
             {
                 EmployeeId = (int)outputIdParam.Value
             };
-           
+
             return response;
         }
         catch (Exception)
