@@ -2,6 +2,7 @@ namespace AuthModule.DTOs;
 
 public class AuthResponse
 {
+    public int AccountID { get; set; }
     public bool Succeeded { get; set; }
     public string? AccessToken { get; set; }
     public string? RefreshToken { get; set; }

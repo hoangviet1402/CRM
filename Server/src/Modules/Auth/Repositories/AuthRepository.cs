@@ -1,16 +1,11 @@
+using System.Data;
 using AuthModule.DTOs;
 using AuthModule.Entities;
 using Infrastructure.DbContext;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
-using System.Data;
-using Shared.Result;
-using Shared.Helpers;
-using Shared.Enums;
-using System.Security.Cryptography;
-using System.Text;
-using System.Reflection.PortableExecutable;
+using Microsoft.EntityFrameworkCore;
 using Shared.Entities;
+using Shared.Helpers;
 
 namespace AuthModule.Repositories;
 
@@ -69,14 +64,10 @@ public class AuthRepository : IAuthRepository
         }
     }
 
-    public async Task<ApiResult<bool>> CreateUser(string username, string password, string email)
+    public async Task<bool> CreateUser(string username, string password, string email)
     {
         var connection = _context.Database.GetDbConnection();
-        var response = new ApiResult<bool>() 
-        { 
-            Code = ResponseCodeEnum.SystemMaintenance.Value(),
-            Data = false
-        };
+        var response = false;
 
         if (connection.State != ConnectionState.Open)
             await connection.OpenAsync();
@@ -93,15 +84,11 @@ public class AuthRepository : IAuthRepository
 
             await command.ExecuteNonQueryAsync();
             
-            response.Data = true;
-            response.Code = ResponseCodeEnum.Success.Value();
-            response.Message = "Tạo tài khoản thành công";
+            response = true;
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"CreateUser Exception.", ex);
-            response.Code = ResponseCodeEnum.DatabaseError.Value();
-            response.Message = "Tạo tài khoản thất bại";
+            LoggerHelper.Error($"CreateUser Exception.", ex);           
         }
         finally
         {
@@ -112,14 +99,10 @@ public class AuthRepository : IAuthRepository
         return response;
     }
 
-    public async Task<ApiResult<bool>> ChangePassword(int userId, string oldPassword, string newPassword)
+    public async Task<bool> ChangePassword(int userId, string oldPassword, string newPassword)
     {
         var connection = _context.Database.GetDbConnection();
-        var response = new ApiResult<bool>() 
-        { 
-            Code = ResponseCodeEnum.SystemMaintenance.Value(),
-            Data = false
-        };
+        var response = false;
 
         if (connection.State != ConnectionState.Open)
             await connection.OpenAsync();
@@ -136,15 +119,11 @@ public class AuthRepository : IAuthRepository
 
             var result = await command.ExecuteScalarAsync();
             
-            response.Data = Convert.ToBoolean(result);
-            response.Code = ResponseCodeEnum.Success.Value();
-            response.Message = response.Data ? "Đổi mật khẩu thành công" : "Mật khẩu cũ không chính xác";
+            response = Convert.ToBoolean(result);        
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"ChangePassword Exception.", ex);
-            response.Code = ResponseCodeEnum.DatabaseError.Value();
-            response.Message = "Đổi mật khẩu thất bại";
+            LoggerHelper.Error($"ChangePassword Exception.", ex);          
         }
         finally
         {
@@ -189,6 +168,90 @@ public class AuthRepository : IAuthRepository
         }
 
         return response;
+    }
+
+    public async Task<int> UpdateOrInsertAccountToken(int userId, string accessToken, string refreshToken, int lifeTime, string ip, string imie)
+    {
+        var connection = _context.Database.GetDbConnection();
+        var result = 0;
+
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        try
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = "Ins_AccountTokens_UpdateOrInsert";
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int) { Value = userId });
+            command.Parameters.Add(new SqlParameter("@AccessToken", SqlDbType.NVarChar, 258) { Value = accessToken });
+            command.Parameters.Add(new SqlParameter("@RefreshToken", SqlDbType.NVarChar, 258) { Value = refreshToken });
+            command.Parameters.Add(new SqlParameter("@LifeTime", SqlDbType.Int) { Value = lifeTime });
+            command.Parameters.Add(new SqlParameter("@Ip", SqlDbType.VarChar, 100) { Value = ip });
+            command.Parameters.Add(new SqlParameter("@Imie", SqlDbType.VarChar, 100) { Value = imie });
+            command.Parameters.Add(new SqlParameter("@OutResult", SqlDbType.Int) { Direction = ParameterDirection.Output });
+
+            await command.ExecuteNonQueryAsync();
+            result = Convert.ToInt32(command.Parameters["@OutResult"].Value);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"UpdateOrInsertAccountToken Exception.", ex);
+            throw;
+        }
+        finally
+        {
+            if (connection.State == ConnectionState.Open)
+                await connection.CloseAsync();
+        }
+
+        return result;
+    }
+
+    public async Task<AccountTokenDto> GetAccountTokenByUserId(int userId)
+    {
+        var connection = _context.Database.GetDbConnection();
+        AccountTokenDto result = new AccountTokenDto();
+
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        try
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = "Ins_AccountTokens_GetByUserID";
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int) { Value = userId });
+
+            using var reader = await command.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                result = new AccountTokenDto
+                {
+                    Id = reader.GetSafeInt32("Id"),
+                    UserId = reader.GetSafeInt32("UserId"),
+                    AccessToken = reader.GetSafeString("AccessToken"),
+                    RefreshToken = reader.GetSafeString("RefreshToken"),
+                    Expires = reader.GetSafeDateTime("Expires"),
+                    CreatedAt = reader.GetSafeDateTime("CreatedAt"),
+                    CreatedByIp = reader.GetSafeString("CreatedByIp")
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"GetAccountTokenByUserId Exception.", ex);
+            throw;
+        }
+        finally
+        {
+            if (connection.State == ConnectionState.Open)
+                await connection.CloseAsync();
+        }
+
+        return result;
     }
 
 } 

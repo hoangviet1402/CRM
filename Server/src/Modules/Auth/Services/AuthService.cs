@@ -10,18 +10,25 @@ using Microsoft.IdentityModel.Tokens;
 using Shared.Enums;
 using Shared.Helpers;
 using Shared.Result;
+using Shared.Settings;
+using Shared.Utils;
 
 namespace AuthModule.Services;
 
 public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
-    public AuthService(IAuthRepository authRepository)
+    private readonly IConfiguration _configuration;
+    private readonly JwtSettings _jwtSettings;
+
+    public AuthService(IAuthRepository authRepository, IConfiguration configuration)
     {
         _authRepository = authRepository;
+        _configuration = configuration;
+        _jwtSettings = configuration.GetSection("Jwt").Get<JwtSettings>();
     }
 
-    public async Task<ApiResult<AuthResponse>> LoginAsync(string email, string password)
+    public async Task<ApiResult<AuthResponse>> LoginAsync(string email, string password, string ip, string imie)
     {
         var response = new ApiResult<AuthResponse>()
         {
@@ -50,6 +57,7 @@ public class AuthService : IAuthService
                 LoggerHelper.Warning($"LoginAsync email {email} không tồn tại");
                 response.Code = ResponseCodeEnum.DataNotFound.Value();
                 response.Message = $"email {email} không tồn tại";
+                return response;
             }
 
             if (!user.IsActive.GetValueOrDefault(false))
@@ -57,40 +65,50 @@ public class AuthService : IAuthService
                 LoggerHelper.Warning($"LoginAsync email {email} này đã bị khóa.");
                 response.Code = ResponseCodeEnum.AccountLocked.Value();
                 response.Message = $"email {email} này đã bị khóa.";
+                return response;
             }
 
             // Xử lý token
+            var accessToken = JwtHelper.GenerateAccessToken(user.Id, user.Email ?? "", user.Role.GetValueOrDefault(0), user.CompanyId.GetValueOrDefault(0), _jwtSettings);
+            var refreshToken = JwtHelper.GenerateRefreshToken();
 
-            var token = GenerateJwtToken(user);
-            user.LastLoginDate = DateTime.UtcNow;
-            await _userManager.UpdateAsync(user);
+            var isUpdateOrInsertAccountToken =  await _authRepository.UpdateOrInsertAccountToken(user.Id, accessToken , refreshToken, 30 , ip , imie);
 
-            LoggerHelper.Information($"User {request.Username} logged in successfully");
-            return new AuthResponse
+            if(isUpdateOrInsertAccountToken > 0)
             {
-                Succeeded = true,
-                AccessToken = token,
-                ExpiresIn = DateTime.UtcNow.AddHours(1),
-                Message = "Đăng nhập thành công"
-            };
+                response.Data = new AuthResponse()
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    AccountID = user.Id
+                };
+                response.Code = ResponseCodeEnum.Success.Value();
+                response.Message = "Đăng nhập thành công";
+                return response;
+            }
+            else
+            {
+                LoggerHelper.Debug($"Không tạo được token {email}");
+                response.Code = ResponseCodeEnum.AccountLocked.Value();
+                response.Message = $"Không tạo được token.";
+                return response;
+            }    
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"Login error for user {request.Username}", ex);
-            return new AuthResponse 
-            { 
-                Succeeded = false,
-                Message = "Đã có lỗi xảy ra khi đăng nhập" 
-            };
+            LoggerHelper.Error($"LoginAsync Exception {email}", ex);
+            response.Code = ResponseCodeEnum.SystemError.Value();
+            response.Message = ResponseCodeEnum.SystemError.Text(); 
+            return response;
         }
     }
 
-    public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
+    public async Task<AuthResponse> RegisterAsync(string email,string phone, string password, int companyId, int role )
     {
         try
         {
-            var existingUser = await _userManager.FindByNameAsync(request.Username);
-            if (existingUser != null)
+            var existingUser = await _authRepository.CreateUser(username, password, email);
+            if (existingUser == false)
             {
                 LoggerHelper.Warning($"Registration failed: Username {request.Username} already exists");
                 return new AuthResponse 
@@ -149,30 +167,5 @@ public class AuthService : IAuthService
     {
         // Implement revoke token logic here
         throw new NotImplementedException();
-    }
-
-    private string GenerateJwtToken(ApplicationUser user)
-    {
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? ""),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
-            new Claim("fullName", user.Email ?? ""),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? "your-256-bit-secret"));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.UtcNow.AddHours(1);
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
-            claims: claims,
-            expires: expires,
-            signingCredentials: creds
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 } 
