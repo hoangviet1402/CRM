@@ -1,1 +1,108 @@
- 
+---
+description: 
+globs: 
+alwaysApply: false
+---
+ # Quy tắc thực thi Stored Procedure
+
+## Pattern 1: Stored Procedure đơn giản
+Sử dụng khi:
+- Không có output parameter
+- Không cần xử lý nhiều result sets
+- Query đơn giản
+
+```csharp
+var parameters = new[] {
+    new SqlParameter("@Param1", SqlDbType.NVarChar) { Value = value1 },
+    new SqlParameter("@Param2", SqlDbType.Int) { Value = value2 }
+};
+
+await _context.Database.ExecuteSqlRawAsync(
+    "EXEC sp_StoreName @Param1, @Param2",
+    parameters);
+```
+
+## Pattern 2: Stored Procedure phức tạp
+Sử dụng khi:
+- Có output parameters
+- Cần xử lý nhiều result sets
+- Cần kiểm soát connection/transaction
+- Cần xử lý lỗi chi tiết
+
+```csharp
+var connection = _context.Database.GetDbConnection();
+var result = default(T); // T là kiểu trả về
+
+if (connection.State != ConnectionState.Open)
+    await connection.OpenAsync();
+
+try
+{
+    using var command = connection.CreateCommand();
+    command.CommandText = "sp_StoreName";
+    command.CommandType = CommandType.StoredProcedure;
+
+    // Add parameters
+    command.Parameters.Add(new SqlParameter("@Param1", SqlDbType.NVarChar, 100) { Value = value1 });
+    command.Parameters.Add(new SqlParameter("@Param2", SqlDbType.Int) { Value = value2 });
+    command.Parameters.Add(new SqlParameter("@OutputParam", SqlDbType.Int) { Direction = ParameterDirection.Output });
+
+    // Execute and handle result
+    await command.ExecuteNonQueryAsync();
+    result = Convert.ToT(command.Parameters["@OutputParam"].Value);
+}
+catch (Exception ex)
+{
+    LoggerHelper.Error($"StoreName Exception.", ex);
+    throw;
+}
+finally
+{
+    if (connection.State == ConnectionState.Open)
+        await connection.CloseAsync();
+}
+
+return result;
+```
+
+## Quy tắc chung:
+
+1. **Tham số đầu vào:**
+   - Luôn chỉ định SqlDbType
+   - Chỉ định size cho các tham số string (NVarChar)
+   - Password luôn hash trước khi truyền vào SP
+   - Tham số null dùng DBNull.Value
+
+2. **Xử lý kết quả:**
+   - ExecuteNonQuery: cho SP không trả về dữ liệu
+   - ExecuteScalar: cho SP trả về 1 giá trị
+   - ExecuteReader: cho SP trả về nhiều dòng/nhiều result sets
+
+3. **Xử lý lỗi:**
+   - Dùng LoggerHelper.Error để log lỗi
+   - Message lỗi format: "{StoreName} Exception."
+   - Throw lại exception sau khi log
+
+4. **Connection Management:**
+   - Luôn kiểm tra và mở connection nếu chưa mở
+   - Luôn đóng connection trong finally block
+   - Sử dụng using cho command
+
+5. **Naming Convention:**
+   - Tên SP bắt đầu bằng "sp_"
+   - Tham số bắt đầu bằng "@"
+   - Output parameter có hậu tố "Output" trong tên
+
+## Khi nào dùng Pattern nào?
+
+### Dùng Pattern 1 khi:
+- SP đơn giản, không output
+- Không cần xử lý lỗi chi tiết
+- Ưu tiên code ngắn gọn
+
+### Dùng Pattern 2 khi:
+- SP có output parameters
+- Cần xử lý nhiều result sets
+- Cần kiểm soát transaction
+- Cần xử lý lỗi chi tiết
+- Cần logging chi tiết
