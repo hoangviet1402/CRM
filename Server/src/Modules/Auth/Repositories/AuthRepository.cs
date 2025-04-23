@@ -254,4 +254,49 @@ public class AuthRepository : IAuthRepository
         return result;
     }
 
+
+    public async Task<AccountTokenDto> GetRefreshToken(int userId)
+    {
+        var connection = _context.Database.GetDbConnection();
+        AccountTokenDto result = new AccountTokenDto();
+
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        try
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = "Ins_AccountTokens_GetByUserID";
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int) { Value = userId });
+
+            using var reader = await command.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                result = new AccountTokenDto
+                {
+                    Id = reader.GetSafeInt32("Id"),
+                    UserId = reader.GetSafeInt32("UserId"),
+                    AccessToken = reader.GetSafeString("AccessToken"),
+                    RefreshToken = reader.GetSafeString("RefreshToken"),
+                    Expires = reader.GetSafeDateTime("Expires"),
+                    CreatedAt = reader.GetSafeDateTime("CreatedAt"),
+                    CreatedByIp = reader.GetSafeString("CreatedByIp")
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"GetAccountTokenByUserId Exception.", ex);
+            throw;
+        }
+        finally
+        {
+            if (connection.State == ConnectionState.Open)
+                await connection.CloseAsync();
+        }
+
+        return result;
+    }
 } 
