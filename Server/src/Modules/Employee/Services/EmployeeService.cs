@@ -31,52 +31,90 @@ public class EmployeeService : IEmployeeService
         return newEmployeeId;
     }
 
-    public async Task<ApiResult<CreateEmployeeResponse>> CreateEmployeeSimple(string fullName, string employeeCode, string email, string phone)
+
+    public async Task<ApiResult<int>> CreateEmployeeAsync(string fullname, string phone, string email, string password,string employeeCode, int companyId, int role)
     {
-        var response = new ApiResult<CreateEmployeeResponse>()
+        var response = new ApiResult<int>()
         {
-            Data = new CreateEmployeeResponse(),
+            Data = 0,
             Code = ResponseCodeEnum.SystemMaintenance.Value(),
             Message = ResponseCodeEnum.SystemMaintenance.Text()
         };
 
-        // Validate input (có thể thêm FluentValidation ở đây)
-        if (string.IsNullOrWhiteSpace(fullName))
+        #region Validate input 
+        if (string.IsNullOrWhiteSpace(fullname))
         {
-            throw new ArgumentException("Full name is required.", nameof(fullName));
-        }
-
-        if (string.IsNullOrWhiteSpace(employeeCode))
-        {
-            throw new ArgumentException("Employee code is required.", nameof(employeeCode));
-        }
-
-        if (string.IsNullOrWhiteSpace(email))
-        {
-            throw new ArgumentException("Email is required.", nameof(email));
+            throw new ArgumentException("Vui lòng nhập họ tên.", nameof(fullname));
         }
 
         if (string.IsNullOrWhiteSpace(phone))
         {
-            throw new ArgumentException("Phone is required.", nameof(phone));
+            throw new ArgumentException("Vui lòng nhập phone.", nameof(phone));
         }
+
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            throw new ArgumentException("Vui lòng nhập email.", nameof(email));
+        }
+
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            throw new ArgumentException("Vui lòng nhập mật khẩu.", nameof(password));
+        }
+
+        if (companyId <= 0)
+        {
+            throw new ArgumentException("Vui lòng chọn công ty của nhân viên.", nameof(companyId));
+        }
+
+        if (role <= 0)
+        {
+            throw new ArgumentException("Vui lòng phân quyền cho nhân viên này.", nameof(role));
+        }
+
+        #endregion
 
         try
         {
-            // Gọi stored procedure thông qua repository
-            response.Data = await _employeeRepository.CreateEmployeeSimple(
-                fullName: fullName,
-                employeeCode: employeeCode,
-                email: email,
-                phone: phone
-            );
-            response.Code = response.Data != null && response.Data.EmployeeId > 0 ? ResponseCodeEnum.Success.Value() : ResponseCodeEnum.DataCreateFail.Value();
-            response.Message = response.Data != null && response.Data.EmployeeId > 0 ? "Thêm nhân viên thành công" : "Thêm nhân viên thất bại";
+
+            var existingUser = await _employeeRepository.EmployeeRegister(fullname, phone, email, password, companyId, role);
+            response.Data = existingUser;
+            switch (existingUser)
+            {
+                case -1:
+                    LoggerHelper.Warning($"Registration failed -1: email {email} already exists :fullname {fullname},phone {phone},password {password},companyId {companyId},role {role}");
+                    response.Code = ResponseResultEnum.AlreadyExists.Value();
+                    response.Message = "Tài khoản email này đã tồn tại trong công ty.";
+                    break;
+                case -2:
+                    LoggerHelper.Warning($"Registration failed -2: email {email} already exists :fullname {fullname},phone {phone},password {password},companyId {companyId},role {role}");
+                    response.Code = ResponseResultEnum.NoData.Value();
+                    response.Message = "Công ty được chọn không tồn tại hoặc đã bị khóa.";
+                    break;
+                case -3:
+                    LoggerHelper.Warning($"Registration failed -3: email {email} already exists :fullname {fullname},phone {phone},password {password},companyId {companyId},role {role}");
+                    response.Code = ResponseResultEnum.NoData.Value();
+                    response.Message = "Công ty được chọn chưa tạo mã định danh cho nhân viên, vui lòng nhập tay.";
+                    break;
+                case 0:
+                    LoggerHelper.Warning($"Registration failed 0: email {email} already exists :fullname {fullname},phone {phone},password {password},companyId {companyId},role {role}");
+                    response.Code = ResponseResultEnum.Failed.Value();
+                    response.Message = "Chưa tạo được tài khoản do hệ thống bận vui lòng thử lại sau.";
+                    break;
+                default:
+                    response.Code = ResponseResultEnum.Success.Value();
+                    response.Message = $"tạo tài khoản {email} thành công";
+                    break;
+            }
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"CreateEmployeeSimple ex.", ex);
+            LoggerHelper.Error($"CreateEmployeeAsync Exception email {email}, fullname {fullname},phone {phone},password {password},companyId {companyId},role {role} ", ex);
+            response.Code = ResponseResultEnum.SystemError.Value();
+            response.Message = $"Có lỗi khi tạo tài khoản {email}";            
         }
         return response;
     }
-} 
+
+
+}

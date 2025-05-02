@@ -19,10 +19,10 @@ public class EmployeeRepository : IEmployeeRepository
         _context = context;
     }
 
-    public async Task<CreateEmployeeResponse> CreateEmployeeSimple(string fullName, string employeeCode, string email, string phone)
+    public async Task<int> EmployeeRegister(string fullname, string phone, string email, string password, int companyId, int role)
     {
         var connection = _context.Database.GetDbConnection();
-        var response = new CreateEmployeeResponse();    
+        var response = 0;
 
         if (connection.State != ConnectionState.Open)
             await connection.OpenAsync();
@@ -30,34 +30,19 @@ public class EmployeeRepository : IEmployeeRepository
         try
         {
             using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Employee_InsertSimple";
+            command.CommandText = "Ins_Employee_Register";
             command.CommandType = CommandType.StoredProcedure;
 
-            // Thêm input parameters
-            command.Parameters.Add(new SqlParameter("@FullName", SqlDbType.NVarChar, 100) { Value = fullName });
-            command.Parameters.Add(new SqlParameter("@EmployeeCode", SqlDbType.VarChar, 50) { Value = employeeCode });
-            command.Parameters.Add(new SqlParameter("@Email", SqlDbType.NVarChar, 100) { Value = email });
+            command.Parameters.Add(new SqlParameter("@FullName", SqlDbType.NVarChar, 100) { Value = fullname });
             command.Parameters.Add(new SqlParameter("@Phone", SqlDbType.NVarChar, 20) { Value = phone });
+            command.Parameters.Add(new SqlParameter("@Email", SqlDbType.NVarChar, 100) { Value = email });
+            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = AESHelper.HashPassword(password) });
+            command.Parameters.Add(new SqlParameter("@CompanyId", SqlDbType.Int) { Value = companyId });
+            command.Parameters.Add(new SqlParameter("@Role", SqlDbType.Int) { Value = role });
+            command.Parameters.Add(new SqlParameter("@EmployeeId", SqlDbType.Int) { Direction = ParameterDirection.Output });
 
-            // Thêm output parameter để nhận Id
-            var outputIdParam = new SqlParameter
-            {
-                ParameterName = "@EmployeeId",
-                SqlDbType = SqlDbType.Int,
-                Direction = ParameterDirection.Output
-            };
-            command.Parameters.Add(outputIdParam);
-
-            // Thực thi stored procedure
             await command.ExecuteNonQueryAsync();
-
-            // Lấy Id được trả về
-            response = new CreateEmployeeResponse()
-            {
-                EmployeeId = (int)outputIdParam.Value
-            };
-
-            return response;
+            response = Convert.ToInt32(command.Parameters["@EmployeesId"].Value);
         }
         catch (Exception)
         {
@@ -68,7 +53,10 @@ public class EmployeeRepository : IEmployeeRepository
             if (connection.State == ConnectionState.Open)
                 await connection.CloseAsync();
         }
+
+        return response;
     }
+
 
     public async Task<EmployeeEntity?> GetEmployeeById(int id)
     {

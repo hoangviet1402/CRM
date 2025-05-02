@@ -46,14 +46,14 @@ public class JwtMiddleware
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-            var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+            var employeesId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
             // Kiểm tra token trong database
-            var storedToken = await authRepository.GetAccountTokenByUserId(userId);
+            var storedToken = await authRepository.GetAccountTokenByEmployeeId(employeesId);
             if (storedToken != null && storedToken.AccessToken == token && storedToken.Expires > DateTime.UtcNow)
             {
                 // Attach user to context on successful jwt validation
-                context.Items["UserId"] = userId;
+                context.Items["EmployeeId"] = employeesId;
                 context.Items["CompanyId"] = int.Parse(jwtToken.Claims.First(x => x.Type == "companyId").Value);
                 context.Items["Role"] = int.Parse(jwtToken.Claims.First(x => x.Type == "role").Value);
             }

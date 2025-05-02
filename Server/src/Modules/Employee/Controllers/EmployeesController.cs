@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Shared.Result;
 using Shared.Helpers;
 using Shared.Enums;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace EmployeeModule.Controllers;
 
@@ -24,6 +26,7 @@ public class EmployeesController : ControllerBase
     /// </summary>
     /// <param name="id">Employee id</param>
     /// <returns>Employee information</returns>
+    [Authorize]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(EmployeeDto), 200)]
     [ProducesResponseType(404)]
@@ -62,7 +65,7 @@ public class EmployeesController : ControllerBase
     {
         try
         {
-            var data = await _employeeService.CreateEmployeeSimple(request.FullName, request.EmployeeCode, request.Email, request.Phone);
+            var data = await _employeeService.CreateEmployeeAsync(request.FullName, request.Phone, request.Email, request.Password, request.EmployeeCode, request.CompanyId, request.Role);
             return Ok(data);
             // Trả về 201 Created với Id của employee mới
             //return CreatedAtAction(
