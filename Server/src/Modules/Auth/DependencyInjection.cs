@@ -14,7 +14,7 @@ public static class DependencyInjection
     public static IServiceCollection AddAuthModule(this IServiceCollection services, IConfiguration configuration)
     {
         // Add Identity
-        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        services.AddIdentity<LoginEntities, IdentityRole>(options =>
         {
             // Password settings
             options.Password.RequireDigit = true;

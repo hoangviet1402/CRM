@@ -1,12 +1,12 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using AuthModule.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Constants;
-
-namespace AuthModule.Middleware;
+using Shared.Enums;
+using Shared.Helpers;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 public class JwtMiddleware
 {
@@ -23,45 +23,52 @@ public class JwtMiddleware
     {
         var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
-        if (token != null)
-            await AttachUserToContext(context, authRepository, token);
+        if (!string.IsNullOrEmpty(token))
+            AttachUserToContext(context, authRepository , token);
 
         await _next(context);
     }
 
-    private async Task AttachUserToContext(HttpContext context, IAuthRepository authRepository, string token)
+    private async void AttachUserToContext(HttpContext context, IAuthRepository authRepository , string token)
     {
         try
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration[AppConstants.JWT_SECRET_KEY]);
-            
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+
+            var parameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ClockSkew = TimeSpan.Zero
-            }, out SecurityToken validatedToken);
+            };
 
-            var jwtToken = (JwtSecurityToken)validatedToken;
-            var employeesId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+            var principal = tokenHandler.ValidateToken(token, parameters, out SecurityToken validatedToken);
 
-            // Kiểm tra token trong database
-            var storedToken = await authRepository.GetAccountTokenByEmployeeId(employeesId);
-            if (storedToken != null && storedToken.AccessToken == token && storedToken.Expires > DateTime.UtcNow)
+            // Lấy thông tin claims
+            var employeeId = principal.Claims.FirstOrDefault(c => c.Type == "EmployeeId")?.Value;
+            var companyId = principal.Claims.FirstOrDefault(c => c.Type == "CompanyId")?.Value;
+            var role = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (employeeId != null && companyId != null && role != null)
             {
-                // Attach user to context on successful jwt validation
-                context.Items["EmployeeId"] = employeesId;
-                context.Items["CompanyId"] = int.Parse(jwtToken.Claims.First(x => x.Type == "companyId").Value);
-                context.Items["Role"] = int.Parse(jwtToken.Claims.First(x => x.Type == "role").Value);
+                // Kiểm tra token trong database
+                var storedToken = await authRepository.GetTokenInfo(int.Parse(employeeId));
+                if (storedToken != null && storedToken.EmployeeIsActive && storedToken.CompanyIsActive)
+                {
+                    context.Items["EmployeeId"] = int.Parse(employeeId);
+                    context.Items["CompanyId"] = int.Parse(companyId);
+                    context.Items["Role"] = role;
+                }
+                
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // Không làm gì - nếu xác thực JWT thất bại thì request sẽ tiếp tục 
-            // mà không gắn user vào context
+            LoggerHelper.Warning($"[JWT ERROR] : {ex.Message}");
+            // Không làm gì, tiếp tục request sẽ bị chặn ở tầng controller nếu không có context.Items
         }
     }
-} 
+}

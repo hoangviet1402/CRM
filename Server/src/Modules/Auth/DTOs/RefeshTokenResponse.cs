@@ -1,7 +1,6 @@
 namespace AuthModule.DTOs;
 
-public class AuthResponse
+public class RefeshTokenResponse
 {
     public string? AccessToken { get; set; }
-    public string? RefreshToken { get; set; }
 } 

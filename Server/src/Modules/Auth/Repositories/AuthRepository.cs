@@ -1,4 +1,5 @@
 using System.Data;
+using System.Reflection.PortableExecutable;
 using AuthModule.DTOs;
 using AuthModule.Entities;
 using Infrastructure.DbContext;
@@ -18,10 +19,10 @@ public class AuthRepository : IAuthRepository
         _context = context;
     }
 
-    public async Task<ApplicationUser> Login(string email, string password)
+    public async Task<LoginEntities> Login(string email, string password)
     {
         var connection = _context.Database.GetDbConnection();
-        var response = new ApplicationUser();
+        var response = new LoginEntities();
 
         if (connection.State != ConnectionState.Open)
             await connection.OpenAsync();
@@ -38,16 +39,17 @@ public class AuthRepository : IAuthRepository
             using var result = await command.ExecuteReaderAsync();
             if (await result.ReadAsync())
             {
-                if (result.GetSafeInt32("Id") > 0)
+                if (result != null && result.GetSafeInt32("Id") > 0)
                 {
-                    response = new ApplicationUser()
+                    response = new LoginEntities()
                     {
                         Id = result.GetSafeInt32("Id"),// result.GetInt32(result.GetOrdinal("Id")),
-                        Email = result.GetSafeString("Email"),
-                        CompanyId = result.GetSafeInt32("CompanyId"),
+                        Email = result.GetSafeString("Email"),                        
                         Role = result.GetSafeInt32("Role"),
                         CreatedAt = result.GetSafeDateTime("CreatedAt"),
                         IsActive = result.GetSafeBoolean("IsActive"),
+                        CompanyId = result.GetSafeInt32("CompanyId"),
+                        CompanyIsActive = result.GetSafeBoolean("CompanyIsActive"),
                     };
                 }
             }            
@@ -63,7 +65,6 @@ public class AuthRepository : IAuthRepository
                 await connection.CloseAsync();
         }
     }
-  
     public async Task<int> UpdateOrInsertEmployeeToken(int employeeId, string accessToken, string refreshToken, int lifeTime, string ip, string imie)
     {
         var connection = _context.Database.GetDbConnection();
@@ -79,8 +80,8 @@ public class AuthRepository : IAuthRepository
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new SqlParameter("@EmployeeId", SqlDbType.Int) { Value = employeeId });
-            command.Parameters.Add(new SqlParameter("@AccessToken", SqlDbType.NVarChar, 258) { Value = accessToken });
-            command.Parameters.Add(new SqlParameter("@RefreshToken", SqlDbType.NVarChar, 258) { Value = refreshToken });
+            command.Parameters.Add(new SqlParameter("@AccessToken", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(accessToken) });
+            command.Parameters.Add(new SqlParameter("@RefreshToken", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(refreshToken) });
             command.Parameters.Add(new SqlParameter("@LifeTime", SqlDbType.Int) { Value = lifeTime });
             command.Parameters.Add(new SqlParameter("@Ip", SqlDbType.VarChar, 100) { Value = ip });
             command.Parameters.Add(new SqlParameter("@Imie", SqlDbType.VarChar, 100) { Value = imie });
@@ -102,11 +103,10 @@ public class AuthRepository : IAuthRepository
 
         return result;
     }
-
-    public async Task<AccountTokenDto> GetAccountTokenByEmployeeId(int employeeId)
+    public async Task<GetTokenInfoEntities> GetTokenInfo(int employeeID)
     {
         var connection = _context.Database.GetDbConnection();
-        AccountTokenDto result = new AccountTokenDto();
+        GetTokenInfoEntities result = new GetTokenInfoEntities();
 
         if (connection.State != ConnectionState.Open)
             await connection.OpenAsync();
@@ -114,68 +114,25 @@ public class AuthRepository : IAuthRepository
         try
         {
             using var command = connection.CreateCommand();
-            command.CommandText = "Ins_EmployeeTokens_GetByEmployeeId";
+            command.CommandText = "Ins_EmployeeTokens_GetByEmployeeID";
             command.CommandType = CommandType.StoredProcedure;
 
-            command.Parameters.Add(new SqlParameter("@EmployeeId", SqlDbType.Int) { Value = employeeId });
+            command.Parameters.Add(new SqlParameter("@EmployeeID", SqlDbType.Int) { Value = employeeID });
 
             using var reader = await command.ExecuteReaderAsync();
             if (await reader.ReadAsync())
             {
-                result = new AccountTokenDto
+                result = new GetTokenInfoEntities
                 {
                     Id = reader.GetSafeInt32("Id"),
-                    UserId = reader.GetSafeInt32("EmployeeId"),
                     AccessToken = reader.GetSafeString("AccessToken"),
                     RefreshToken = reader.GetSafeString("RefreshToken"),
                     Expires = reader.GetSafeDateTime("Expires"),
                     CreatedAt = reader.GetSafeDateTime("CreatedAt"),
-                    CreatedByIp = reader.GetSafeString("CreatedByIp")
-                };
-            }
-        }
-        catch (Exception ex)
-        {
-            LoggerHelper.Error($"GetAccountTokenByEmployeeId Exception.", ex);
-            throw;
-        }
-        finally
-        {
-            if (connection.State == ConnectionState.Open)
-                await connection.CloseAsync();
-        }
-
-        return result;
-    }
-
-    public async Task<AccountTokenDto> GetRefreshToken(int userId)
-    {
-        var connection = _context.Database.GetDbConnection();
-        AccountTokenDto result = new AccountTokenDto();
-
-        if (connection.State != ConnectionState.Open)
-            await connection.OpenAsync();
-
-        try
-        {
-            using var command = connection.CreateCommand();
-            command.CommandText = "Ins_AccountTokens_GetByUserID";
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int) { Value = userId });
-
-            using var reader = await command.ExecuteReaderAsync();
-            if (await reader.ReadAsync())
-            {
-                result = new AccountTokenDto
-                {
-                    Id = reader.GetSafeInt32("Id"),
-                    UserId = reader.GetSafeInt32("UserId"),
-                    AccessToken = reader.GetSafeString("AccessToken"),
-                    RefreshToken = reader.GetSafeString("RefreshToken"),
-                    Expires = reader.GetSafeDateTime("Expires"),
-                    CreatedAt = reader.GetSafeDateTime("CreatedAt"),
-                    CreatedByIp = reader.GetSafeString("CreatedByIp")
+                    CreatedByIp = reader.GetSafeString("CreatedByIp"),
+                    CompanyId = reader.GetSafeInt32("CompanyId"),
+                    CompanyIsActive = reader.GetSafeBoolean("CompanyIsActive"),
+                    EmployeeIsActive = reader.GetSafeBoolean("EmployeeIsActive"),
                 };
             }
         }

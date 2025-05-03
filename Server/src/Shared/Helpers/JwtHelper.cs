@@ -9,17 +9,18 @@ namespace Shared.Helpers
 {
     public class JwtHelper
     {
-        public static string GenerateAccessToken(int userId, string username, int role, int companyId, JwtSettings settings)
+        public static string GenerateAccessToken(int employeeId, int role, int companyId, JwtSettings settings)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, username),
+                new Claim("EmployeeId", employeeId.ToString()),
                 new Claim(ClaimTypes.Role, role.ToString()),
-                new Claim("CompanyId", companyId.ToString())
+                new Claim("CompanyId", companyId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // ID cho token
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             };
 
             var token = new JwtSecurityToken(

@@ -30,7 +30,7 @@ public class EmployeesController : ControllerBase
         try
         {
             var companyId = HttpContext.GetCompanyId();
-            var employee = await _employeeService.GetEmployeeByIdAsync(id, companyId.GetValueOrDefault());
+            var employee = await _employeeService.GetEmployeeByIdAsync(id, companyId);
             if (employee == null)
                 return NotFound(new { message = $"Không tìm thấy nhân viên với ID {id}." });
 

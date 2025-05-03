@@ -59,7 +59,8 @@ public enum ResponseCodeEnum
     AccountLocked = 4003,
     PasswordExpired = 4004,
     InvalidSession = 4005,
-    
+    InvalidRole = 4006,
+
     // File Operation Codes (5xxx)
     FileNotFound = 5001,
     FileAccessDenied = 5002,
