@@ -43,7 +43,7 @@ public class AuthRepository : IAuthRepository
                 {
                     response = new LoginEntities()
                     {
-                        Id = result.GetSafeInt32("Id"),// result.GetInt32(result.GetOrdinal("Id")),
+                        EmployeeId = result.GetSafeInt32("Id"),// result.GetInt32(result.GetOrdinal("Id")),                       
                         Email = result.GetSafeString("Email"),                        
                         Role = result.GetSafeInt32("Role"),
                         CreatedAt = result.GetSafeDateTime("CreatedAt"),

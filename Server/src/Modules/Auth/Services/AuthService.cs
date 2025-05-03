@@ -76,14 +76,14 @@ public class AuthService : IAuthService
             }
             else if (!employees.CompanyIsActive.GetValueOrDefault(false))
             {
-                LoggerHelper.Debug($"Company {employees.CompanyId} is not Active {email} employeID {employees.Id}");
+                LoggerHelper.Debug($"Company {employees.CompanyId} is not Active {email} employeID {employees.EmployeeId}");
                 response.Code = ResponseCodeEnum.AccountLocked.Value();
                 response.Message = $"Công ty nhân viên {email} đang làm việc hiện bị khóa.";
                 return response;
             }
 
             // Xử lý token int employeeId, string role, int companyId, JwtSettings settings
-            var accessToken = JwtHelper.GenerateAccessToken(employees.Id, employees.Role.GetValueOrDefault(0), employees.CompanyId.GetValueOrDefault(0), _jwtSettings);
+            var accessToken = JwtHelper.GenerateAccessToken(employees.EmployeeId, employees.Role.GetValueOrDefault(0), employees.CompanyId.GetValueOrDefault(0), _jwtSettings);
             var refreshToken = JwtHelper.GenerateRefreshToken();
             int lifeTime = 60;
             var configValue = _configuration["Token:RefreshTokenLifeTime"];
@@ -91,7 +91,7 @@ public class AuthService : IAuthService
             {
                 lifeTime = parsedLifeTime;
             }
-            var isUpdateOrInsertAccountToken =  await _authRepository.UpdateOrInsertEmployeeToken(employees.Id, accessToken , refreshToken,  lifeTime, ip , imie);
+            var isUpdateOrInsertAccountToken =  await _authRepository.UpdateOrInsertEmployeeToken(employees.EmployeeId, accessToken , refreshToken,  lifeTime, ip , imie);
 
             if(isUpdateOrInsertAccountToken > 0)
             {

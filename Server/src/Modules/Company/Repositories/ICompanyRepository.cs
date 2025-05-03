@@ -7,4 +7,5 @@ public interface ICompanyRepository
     Task<Entities.Company> CreateAsync(Entities.Company company);
     Task<Entities.Company> UpdateAsync(Entities.Company company);
     Task<bool> DeleteAsync(int id);
+    Task<int> CreateCompanyAsync(string fullName, string address);
 } 

@@ -5,6 +5,9 @@ using Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Shared.Helpers;
 using AuthModule;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 LoggerHelper.Initialize(builder.Configuration);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    });
 
 // Configure DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

@@ -61,7 +61,6 @@ public class EmployeesController : ControllerBase
     {
         try
         {
-
             var data = await _employeeService.CreateEmployeeAsync(request.FullName, request.Phone, request.Email, request.Password, request.EmployeeCode, request.CompanyId, request.Role);
             return Ok(data);
         }

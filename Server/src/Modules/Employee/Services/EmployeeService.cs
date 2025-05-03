@@ -22,7 +22,6 @@ public class EmployeeService : IEmployeeService
         if (id <= 0)
             throw new ArgumentException("ID is required.", nameof(id));
 
-      
         // Gọi stored procedure thông qua repository
         var newEmployeeId = await _employeeRepository.GetEmployeeById(
             id: id,
