@@ -16,7 +16,7 @@ public class EmployeeService : IEmployeeService
         _employeeRepository = employeeRepository;
     }
 
-    public async Task<EmployeeEntity?> GetEmployeeByIdAsync(int id)
+    public async Task<EmployeeEntity?> GetEmployeeByIdAsync(int id, int companyId)
     {
         // Validate input (có thể thêm FluentValidation ở đây)
         if (id <= 0)
@@ -25,7 +25,8 @@ public class EmployeeService : IEmployeeService
       
         // Gọi stored procedure thông qua repository
         var newEmployeeId = await _employeeRepository.GetEmployeeById(
-            id: id
+            id: id,
+            companyId : companyId
         );
 
         return newEmployeeId;

@@ -1,4 +1,9 @@
 ---
+description: 
+globs: 
+alwaysApply: true
+---
+---
 description: Rule cho việc thực thi Stored Procedure:
 - Pattern 1: SP đơn giản (không output params)
 - Pattern 2: SP phức tạp (có output params/nhiều result sets)
@@ -7,6 +12,7 @@ description: Rule cho việc thực thi Stored Procedure:
 globs: ["**/Repositories/*.cs"]
 alwaysApply: true
 ---
+
 ## Pattern 1: Stored Procedure đơn giản
 Sử dụng khi:
 - Không có output parameter

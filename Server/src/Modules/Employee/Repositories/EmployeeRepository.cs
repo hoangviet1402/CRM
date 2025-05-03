@@ -58,7 +58,7 @@ public class EmployeeRepository : IEmployeeRepository
     }
 
 
-    public async Task<EmployeeEntity?> GetEmployeeById(int id)
+    public async Task<EmployeeEntity?> GetEmployeeById(int id, int companyId)
     {
         var connection = _context.Database.GetDbConnection();
         
@@ -68,10 +68,11 @@ public class EmployeeRepository : IEmployeeRepository
         try
         {
             using var command = connection.CreateCommand();
-            command.CommandText = "sp_GetEmployeeById";
+            command.CommandText = "Ins_Employee_GetById";
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new SqlParameter("@EmployeeId", SqlDbType.Int) { Value = id });
+            command.Parameters.Add(new SqlParameter("@CompanyId", SqlDbType.Int) { Value = companyId });
 
             using var reader = await command.ExecuteReaderAsync();
             if (await reader.ReadAsync())

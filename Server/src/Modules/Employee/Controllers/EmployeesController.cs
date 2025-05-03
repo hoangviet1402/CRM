@@ -1,15 +1,11 @@
-using System.Numerics;
-using EmployeeModule.DTOs;
-using EmployeeModule.Services;
+using AuthModule.Extensions;
+using AuthModule.Middleware;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Result;
 using Shared.Helpers;
-using Shared.Enums;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
 
 namespace EmployeeModule.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class EmployeesController : ControllerBase
@@ -26,7 +22,6 @@ public class EmployeesController : ControllerBase
     /// </summary>
     /// <param name="id">Employee id</param>
     /// <returns>Employee information</returns>
-    [Authorize]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(EmployeeDto), 200)]
     [ProducesResponseType(404)]
@@ -34,7 +29,8 @@ public class EmployeesController : ControllerBase
     {
         try
         {
-            var employee = await _employeeService.GetEmployeeByIdAsync(id);
+            var companyId = HttpContext.GetCompanyId();
+            var employee = await _employeeService.GetEmployeeByIdAsync(id, companyId.GetValueOrDefault());
             if (employee == null)
                 return NotFound(new { message = $"Không tìm thấy nhân viên với ID {id}." });
 
@@ -65,14 +61,9 @@ public class EmployeesController : ControllerBase
     {
         try
         {
+
             var data = await _employeeService.CreateEmployeeAsync(request.FullName, request.Phone, request.Email, request.Password, request.EmployeeCode, request.CompanyId, request.Role);
             return Ok(data);
-            // Trả về 201 Created với Id của employee mới
-            //return CreatedAtAction(
-            //    nameof(GetEmployee), // Tên action method để lấy chi tiết employee
-            //    new { id = data.Data.EmployeeId }, // Route values
-            //    data // Response body
-            //);
         }
         catch (ArgumentException ex)
         {
