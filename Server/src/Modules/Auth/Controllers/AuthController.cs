@@ -56,9 +56,9 @@ public class AuthController : ControllerBase
             var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
             var employeID = HttpContext.GetEmployeeId();
-            var accessToken = HttpContext.GetAccessToken();
+            var jwtID = HttpContext.GetJwtID();
 
-            var result = await _authService.RefreshTokenAsync(refreshToken, accessToken, employeID ,ip, userAgent);
+            var result = await _authService.RefreshTokenAsync(refreshToken, jwtID, employeID ,ip, userAgent);
 
             return Ok(result);
         }

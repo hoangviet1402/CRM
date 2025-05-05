@@ -111,7 +111,7 @@ public class AuthService : IAuthService
         }
     }
 
-    public async Task<ApiResult<RefeshTokenResponse>> RefreshTokenAsync(string refreshToken,string accessToken, int employeID, string ip, string imie)
+    public async Task<ApiResult<RefeshTokenResponse>> RefreshTokenAsync(string refreshToken,string jwtID, int employeID, string ip, string imie)
     {
         var response = new ApiResult<RefeshTokenResponse>()
         {
@@ -144,9 +144,9 @@ public class AuthService : IAuthService
                     response.Message = $"Phiên đăng nhập Không tồn tại.";
                     return response;
                 }
-                else if(tokenInfo.AccessToken.Equals(AESHelper.HashPassword(accessToken), StringComparison.OrdinalIgnoreCase) == false)
+                else if(tokenInfo.JwtID.Equals(AESHelper.HashPassword(jwtID), StringComparison.OrdinalIgnoreCase) == false)
                 {
-                    LoggerHelper.Debug($"AccessToken {accessToken} employeID {employeID} not equals");
+                    LoggerHelper.Debug($"AccessToken {jwtID} employeID {employeID} not equals");
                     response.Code = ResponseCodeEnum.InvalidToken.Value();
                     response.Message = $"Phiên đăng nhập Không tồn tại.";
                     return response;
@@ -175,9 +175,9 @@ public class AuthService : IAuthService
 
                 // Xử lý tạo accessToken mới
                 var newJwtID = JwtHelper.GenerateRefreshToken();
-                var newAccessToken = JwtHelper.GenerateAccessToken(tokenInfo.Id, tokenInfo.Role, tokenInfo.CompanyId , tokenInfo.AccessToken, _configuration);
+                var newAccessToken = JwtHelper.GenerateAccessToken(tokenInfo.Id, tokenInfo.Role, tokenInfo.CompanyId , tokenInfo.JwtID, _configuration);
 
-                var isUpdateAccessToken = await _authRepository.UpdateEmployeeAccessToken(tokenInfo.Id, newJwtID, ip, imie);
+                var isUpdateAccessToken = await _authRepository.UpdateEmployeeJwtID(tokenInfo.Id, newJwtID, ip, imie);
 
                 if (isUpdateAccessToken > 0)
                 {

@@ -64,7 +64,7 @@ public class AuthRepository : IAuthRepository
                 await connection.CloseAsync();
         }
     }
-    public async Task<int> InsertEmployeeToken(int employeeId, string accessToken, string refreshToken, int lifeTime, string ip, string imie)
+    public async Task<int> InsertEmployeeToken(int employeeId, string jwtID, string refreshToken, int lifeTime, string ip, string imie)
     {
         var connection = _context.Database.GetDbConnection();
         var result = 0;
@@ -75,11 +75,11 @@ public class AuthRepository : IAuthRepository
         try
         {
             using var command = connection.CreateCommand();
-            command.CommandText = "Ins_EmployeeTokens_UpdateOrInsert";
+            command.CommandText = "Ins_Employee_InsertTokens";
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new SqlParameter("@EmployeeId", SqlDbType.Int) { Value = employeeId });
-            command.Parameters.Add(new SqlParameter("@AccessToken", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(accessToken) });
+            command.Parameters.Add(new SqlParameter("@JwtID", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(jwtID) });
             command.Parameters.Add(new SqlParameter("@RefreshToken", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(refreshToken) });
             command.Parameters.Add(new SqlParameter("@LifeTime", SqlDbType.Int) { Value = lifeTime });
             command.Parameters.Add(new SqlParameter("@Ip", SqlDbType.VarChar, 100) { Value = ip });
@@ -139,7 +139,7 @@ public class AuthRepository : IAuthRepository
         return result;
     }
 
-    public async Task<int> UpdateEmployeeAccessToken(int employeeId, string accessToken, string ip, string imie)
+    public async Task<int> UpdateEmployeeJwtID(int employeeId, string jwtID, string ip, string imie)
     {
         var connection = _context.Database.GetDbConnection();
         var result = 0;
@@ -150,11 +150,11 @@ public class AuthRepository : IAuthRepository
         try
         {
             using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Employee_UpdateAccessToken";
+            command.CommandText = "Ins_Employee_UpdateToken_JwtID";
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new SqlParameter("@EmployeeId", SqlDbType.Int) { Value = employeeId });
-            command.Parameters.Add(new SqlParameter("@AccessToken", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(accessToken) });        
+            command.Parameters.Add(new SqlParameter("@JwtID", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(jwtID) });        
             command.Parameters.Add(new SqlParameter("@Ip", SqlDbType.VarChar, 100) { Value = ip });
             command.Parameters.Add(new SqlParameter("@Imie", SqlDbType.VarChar, 100) { Value = imie });
             command.Parameters.Add(new SqlParameter("@OutResult", SqlDbType.Int) { Direction = ParameterDirection.Output });
@@ -187,7 +187,7 @@ public class AuthRepository : IAuthRepository
         try
         {
             using var command = connection.CreateCommand();
-            command.CommandText = "Ins_EmployeeTokens_GetByEmployeeID";
+            command.CommandText = "Ins_Employee_GetTokensByEmployeeID";
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new SqlParameter("@EmployeeID", SqlDbType.Int) { Value = employeeID });
@@ -198,7 +198,7 @@ public class AuthRepository : IAuthRepository
                 result = new GetTokenInfoEntities
                 {
                     Id = reader.GetSafeInt32("Id"),
-                    AccessToken = reader.GetSafeString("AccessToken"),
+                    JwtID = reader.GetSafeString("JwtID"),
                     RefreshToken = reader.GetSafeString("RefreshToken"),
                     Expires = reader.GetSafeDateTime("Expires"),
                     CreatedAt = reader.GetSafeDateTime("CreatedAt"),

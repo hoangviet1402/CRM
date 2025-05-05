@@ -13,9 +13,9 @@ public static class AuthorizationInforExtensions
         return context.Items["EmployeeId"] as int? ?? 0;
     }
 
-    public static string GetAccessToken(this HttpContext context)
+    public static string GetJwtID(this HttpContext context)
     {
-        return context.Items["AccessToken"] as string ?? string.Empty;
+        return context.Items["JwtID"] as string ?? string.Empty;
     }
 
     /// <summary>

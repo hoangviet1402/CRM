@@ -61,11 +61,11 @@ public class JwtMiddleware
             {
                 // Kiểm tra token trong database
                 var storedToken = await authRepository.GetTokenInfo(int.Parse(employeeId));
-                if (storedToken != null && storedToken.EmployeeIsActive && storedToken.CompanyIsActive && storedToken.AccessToken.Equals(AESHelper.HashPassword(jti)))
+                if (storedToken != null && storedToken.EmployeeIsActive && storedToken.CompanyIsActive && storedToken.JwtID.Equals(AESHelper.HashPassword(jti)))
                 {
                     context.Items["EmployeeId"] = int.Parse(employeeId);
                     context.Items["CompanyId"] = int.Parse(companyId);
-                    context.Items["AccessToken"] = int.Parse(companyId);
+                    context.Items["JwtID"] = jti;
                     context.Items["Role"] = role;
                 }
                 
