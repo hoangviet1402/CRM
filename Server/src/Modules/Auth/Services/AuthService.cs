@@ -83,21 +83,22 @@ public class AuthService : IAuthService
             }
 
             // Xử lý token int employeeId, string role, int companyId, JwtSettings settings
-            var accessToken = JwtHelper.GenerateAccessToken(employees.EmployeeId, employees.Role.GetValueOrDefault(0), employees.CompanyId.GetValueOrDefault(0), _jwtSettings);
+            var accessTokenToServer = JwtHelper.GenerateRefreshToken();
+            var accessTokenToClient = JwtHelper.GenerateAccessToken(employees.EmployeeId, employees.Role.GetValueOrDefault(0), employees.CompanyId.GetValueOrDefault(0), accessTokenToServer, _jwtSettings);
             var refreshToken = JwtHelper.GenerateRefreshToken();
-            int lifeTime = 60;
+            int lifeTime = 30;
             var configValue = _configuration["Token:RefreshTokenLifeTime"];
             if (int.TryParse(configValue, out int parsedLifeTime))
             {
                 lifeTime = parsedLifeTime;
             }
-            var isUpdateOrInsertAccountToken =  await _authRepository.UpdateOrInsertEmployeeToken(employees.EmployeeId, accessToken , refreshToken,  lifeTime, ip , imie);
+            var isUpdateOrInsertAccountToken =  await _authRepository.UpdateOrInsertEmployeeToken(employees.EmployeeId, accessTokenToServer, refreshToken,  lifeTime, ip , imie);
 
             if(isUpdateOrInsertAccountToken > 0)
             {
                 response.Data = new AuthResponse()
                 {
-                    AccessToken = accessToken,
+                    AccessToken = accessTokenToClient,
                     RefreshToken = refreshToken,
                 };
                 response.Code = ResponseCodeEnum.Success.Value();
@@ -121,7 +122,7 @@ public class AuthService : IAuthService
         }
     }
 
-    public async Task<ApiResult<RefeshTokenResponse>> RefreshTokenAsync(string refreshToken, int employeID, string ip, string imie)
+    public async Task<ApiResult<RefeshTokenResponse>> RefreshTokenAsync(string refreshToken,string accessToken, int employeID, string ip, string imie)
     {
         var response = new ApiResult<RefeshTokenResponse>()
         {
@@ -136,15 +137,27 @@ public class AuthService : IAuthService
             throw new ArgumentException("Vui lòng nhập đủ thông tin.", nameof(refreshToken));
         }
 
+        if (employeID <= 0)
+        {
+            throw new ArgumentException("Thông tin không được xác thực.", nameof(refreshToken));
+        }
+
         try
         {
             // Implement refresh token logic here
             var tokenInfo = await _authRepository.GetTokenInfo(employeID);
             if (tokenInfo != null)
             {
-                if(tokenInfo.RefreshToken.Equals(refreshToken, StringComparison.OrdinalIgnoreCase) ==false)
+                if(tokenInfo.RefreshToken.Equals(AESHelper.HashPassword(refreshToken), StringComparison.OrdinalIgnoreCase) ==false)
                 {
-                    LoggerHelper.Debug($"Token {refreshToken} employeID {employeID} not equals");
+                    LoggerHelper.Debug($"RefreshToken {refreshToken} employeID {employeID} not equals");
+                    response.Code = ResponseCodeEnum.InvalidToken.Value();
+                    response.Message = $"Phiên đăng nhập Không tồn tại.";
+                    return response;
+                }
+                if (tokenInfo.AccessToken.Equals(AESHelper.HashPassword(accessToken), StringComparison.OrdinalIgnoreCase) == false)
+                {
+                    LoggerHelper.Debug($"AccessToken {accessToken} employeID {employeID} not equals");
                     response.Code = ResponseCodeEnum.InvalidToken.Value();
                     response.Message = $"Phiên đăng nhập Không tồn tại.";
                     return response;
@@ -172,10 +185,11 @@ public class AuthService : IAuthService
                 }
 
                 // Xử lý tạo accessToken mới
-                var accessToken = JwtHelper.GenerateAccessToken(tokenInfo.Id, tokenInfo.Role, tokenInfo.CompanyId, _jwtSettings);
+                var accessTokenToClient = JwtHelper.GenerateAccessToken(tokenInfo.Id, tokenInfo.Role, tokenInfo.CompanyId , tokenInfo.AccessToken, _jwtSettings);
+
                 response.Data = new RefeshTokenResponse()
                 {
-                    AccessToken = accessToken,
+                    AccessToken = accessTokenToClient,
                 };
                 response.Code = ResponseCodeEnum.Success.Value();
                 response.Message = "Thành công";

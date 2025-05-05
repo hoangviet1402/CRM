@@ -9,7 +9,7 @@ namespace Shared.Helpers
 {
     public class JwtHelper
     {
-        public static string GenerateAccessToken(int employeeId, int role, int companyId, JwtSettings settings)
+        public static string GenerateAccessToken(int employeeId, int role, int companyId,string accessToken, JwtSettings settings)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -19,6 +19,7 @@ namespace Shared.Helpers
                 new Claim("EmployeeId", employeeId.ToString()),
                 new Claim(ClaimTypes.Role, role.ToString()),
                 new Claim("CompanyId", companyId.ToString()),
+                new Claim("AccessToken", accessToken),                
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // ID cho token
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             };

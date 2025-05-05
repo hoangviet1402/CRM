@@ -13,6 +13,11 @@ public static class AuthorizationInforExtensions
         return context.Items["EmployeeId"] as int? ?? 0;
     }
 
+    public static string GetAccessToken(this HttpContext context)
+    {
+        return context.Items["AccessToken"] as string ?? string.Empty;
+    }
+
     /// <summary>
     /// Lấy CompanyId từ context, trả về 0 nếu null
     /// </summary>

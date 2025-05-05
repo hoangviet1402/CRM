@@ -34,12 +34,12 @@ public class JwtMiddleware
         try
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
             var parameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
+                IssuerSigningKey = key,
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ClockSkew = TimeSpan.Zero
@@ -50,13 +50,14 @@ public class JwtMiddleware
             // Lấy thông tin claims
             var employeeId = principal.Claims.FirstOrDefault(c => c.Type == "EmployeeId")?.Value;
             var companyId = principal.Claims.FirstOrDefault(c => c.Type == "CompanyId")?.Value;
+            var accessToken = principal.Claims.FirstOrDefault(c => c.Type == "AccessToken")?.Value;
             var role = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-            if (employeeId != null && companyId != null && role != null)
+            if (employeeId != null && companyId != null && role != null && string.IsNullOrEmpty(accessToken) == false)
             {
                 // Kiểm tra token trong database
                 var storedToken = await authRepository.GetTokenInfo(int.Parse(employeeId));
-                if (storedToken != null && storedToken.EmployeeIsActive && storedToken.CompanyIsActive)
+                if (storedToken != null && storedToken.EmployeeIsActive && storedToken.CompanyIsActive && storedToken.AccessToken.Equals(AESHelper.HashPassword(accessToken)))
                 {
                     context.Items["EmployeeId"] = int.Parse(employeeId);
                     context.Items["CompanyId"] = int.Parse(companyId);
