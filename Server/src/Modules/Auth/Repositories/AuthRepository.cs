@@ -1,5 +1,4 @@
 using System.Data;
-using System.Reflection.PortableExecutable;
 using AuthModule.DTOs;
 using AuthModule.Entities;
 using Infrastructure.DbContext;
@@ -65,7 +64,7 @@ public class AuthRepository : IAuthRepository
                 await connection.CloseAsync();
         }
     }
-    public async Task<int> UpdateOrInsertEmployeeToken(int employeeId, string accessToken, string refreshToken, int lifeTime, string ip, string imie)
+    public async Task<int> InsertEmployeeToken(int employeeId, string accessToken, string refreshToken, int lifeTime, string ip, string imie)
     {
         var connection = _context.Database.GetDbConnection();
         var result = 0;
@@ -103,6 +102,80 @@ public class AuthRepository : IAuthRepository
 
         return result;
     }
+
+    public async Task<int> RevokeEmployeeToken(int employeeId, string ip, string imie)
+    {
+        var connection = _context.Database.GetDbConnection();
+        var result = 0;
+
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        try
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = "Ins_Employee_RevokeToken";
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.Add(new SqlParameter("@EmployeeId", SqlDbType.Int) { Value = employeeId });
+            command.Parameters.Add(new SqlParameter("@Ip", SqlDbType.VarChar, 100) { Value = ip });
+            command.Parameters.Add(new SqlParameter("@Imie", SqlDbType.VarChar, 100) { Value = imie });
+            command.Parameters.Add(new SqlParameter("@OutResult", SqlDbType.Int) { Direction = ParameterDirection.Output });
+
+            await command.ExecuteNonQueryAsync();
+            result = Convert.ToInt32(command.Parameters["@OutResult"].Value);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"UpdateOrInsertEmployeesToken Exception.", ex);
+            throw;
+        }
+        finally
+        {
+            if (connection.State == ConnectionState.Open)
+                await connection.CloseAsync();
+        }
+
+        return result;
+    }
+
+    public async Task<int> UpdateEmployeeAccessToken(int employeeId, string accessToken, string ip, string imie)
+    {
+        var connection = _context.Database.GetDbConnection();
+        var result = 0;
+
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        try
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = "Ins_Employee_UpdateAccessToken";
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.Add(new SqlParameter("@EmployeeId", SqlDbType.Int) { Value = employeeId });
+            command.Parameters.Add(new SqlParameter("@AccessToken", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(accessToken) });        
+            command.Parameters.Add(new SqlParameter("@Ip", SqlDbType.VarChar, 100) { Value = ip });
+            command.Parameters.Add(new SqlParameter("@Imie", SqlDbType.VarChar, 100) { Value = imie });
+            command.Parameters.Add(new SqlParameter("@OutResult", SqlDbType.Int) { Direction = ParameterDirection.Output });
+
+            await command.ExecuteNonQueryAsync();
+            result = Convert.ToInt32(command.Parameters["@OutResult"].Value);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"UpdateOrInsertEmployeesToken Exception.", ex);
+            throw;
+        }
+        finally
+        {
+            if (connection.State == ConnectionState.Open)
+                await connection.CloseAsync();
+        }
+
+        return result;
+    }
+
     public async Task<GetTokenInfoEntities> GetTokenInfo(int employeeID)
     {
         var connection = _context.Database.GetDbConnection();

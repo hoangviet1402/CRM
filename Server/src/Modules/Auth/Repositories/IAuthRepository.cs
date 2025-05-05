@@ -17,6 +17,8 @@ public interface IAuthRepository
     /// <param name="ip"></param>
     /// <param name="imie"></param>
     /// <returns></returns>
-    Task<int> UpdateOrInsertEmployeeToken(int userId, string accessToken, string refreshToken, int lifeTime, string ip, string imie);
+    Task<int> InsertEmployeeToken(int userId, string accessToken, string refreshToken, int lifeTime, string ip, string imie);
+    Task<int> RevokeEmployeeToken(int employeeId, string ip, string imie);
+    Task<int> UpdateEmployeeAccessToken(int employeeId, string accessToken, string ip, string imie);
     Task<GetTokenInfoEntities> GetTokenInfo(int userId);
 } 

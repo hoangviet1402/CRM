@@ -1,16 +1,11 @@
-using System.Numerics;
 using AuthModule.DTOs;
+using AuthModule.Extensions;
+using AuthModule.Middleware;
 using AuthModule.Services;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Helpers;
 using Shared.Result;
 using Shared.Utils;
-using Shared.Enums;
-using System.Threading.Tasks;
-using Shared.Helpers;
-using AuthModule.Extensions;
-using System.Net;
-using AuthModule.Middleware;
-using System.Text;
 
 namespace AuthModule.Controllers;
 

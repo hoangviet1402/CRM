@@ -1,18 +1,9 @@
-using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using AuthModule.DTOs;
-using AuthModule.Entities;
 using AuthModule.Repositories;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Shared.Enums;
 using Shared.Helpers;
 using Shared.Result;
-using Shared.Settings;
-using Shared.Utils;
 
 namespace AuthModule.Services;
 
@@ -20,13 +11,11 @@ public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
     private readonly IConfiguration _configuration;
-    private readonly JwtSettings _jwtSettings;
 
     public AuthService(IAuthRepository authRepository, IConfiguration configuration)
     {
         _authRepository = authRepository;
         _configuration = configuration;
-        _jwtSettings = configuration.GetSection("Jwt").Get<JwtSettings>();
     }
 
     public async Task<ApiResult<AuthResponse>> LoginAsync(string email, string password, string ip, string imie)
@@ -82,9 +71,9 @@ public class AuthService : IAuthService
                 return response;
             }
 
-            // Xử lý token int employeeId, string role, int companyId, JwtSettings settings
-            var accessTokenToServer = JwtHelper.GenerateRefreshToken();
-            var accessTokenToClient = JwtHelper.GenerateAccessToken(employees.EmployeeId, employees.Role.GetValueOrDefault(0), employees.CompanyId.GetValueOrDefault(0), accessTokenToServer, _jwtSettings);
+            // Xử lý token int employeeId, string role, int companyId, IConfiguration configuration
+            var jwtID = JwtHelper.GenerateRefreshToken();
+            var accessToken = JwtHelper.GenerateAccessToken(employees.EmployeeId, employees.Role.GetValueOrDefault(0), employees.CompanyId.GetValueOrDefault(0), jwtID, _configuration);
             var refreshToken = JwtHelper.GenerateRefreshToken();
             int lifeTime = 30;
             var configValue = _configuration["Token:RefreshTokenLifeTime"];
@@ -92,13 +81,13 @@ public class AuthService : IAuthService
             {
                 lifeTime = parsedLifeTime;
             }
-            var isUpdateOrInsertAccountToken =  await _authRepository.UpdateOrInsertEmployeeToken(employees.EmployeeId, accessTokenToServer, refreshToken,  lifeTime, ip , imie);
+            var isUpdateOrInsertAccountToken =  await _authRepository.InsertEmployeeToken(employees.EmployeeId, jwtID, refreshToken,  lifeTime, ip , imie);
 
             if(isUpdateOrInsertAccountToken > 0)
             {
                 response.Data = new AuthResponse()
                 {
-                    AccessToken = accessTokenToClient,
+                    AccessToken = accessToken,
                     RefreshToken = refreshToken,
                 };
                 response.Code = ResponseCodeEnum.Success.Value();
@@ -155,7 +144,7 @@ public class AuthService : IAuthService
                     response.Message = $"Phiên đăng nhập Không tồn tại.";
                     return response;
                 }
-                if (tokenInfo.AccessToken.Equals(AESHelper.HashPassword(accessToken), StringComparison.OrdinalIgnoreCase) == false)
+                else if(tokenInfo.AccessToken.Equals(AESHelper.HashPassword(accessToken), StringComparison.OrdinalIgnoreCase) == false)
                 {
                     LoggerHelper.Debug($"AccessToken {accessToken} employeID {employeID} not equals");
                     response.Code = ResponseCodeEnum.InvalidToken.Value();
@@ -185,31 +174,44 @@ public class AuthService : IAuthService
                 }
 
                 // Xử lý tạo accessToken mới
-                var accessTokenToClient = JwtHelper.GenerateAccessToken(tokenInfo.Id, tokenInfo.Role, tokenInfo.CompanyId , tokenInfo.AccessToken, _jwtSettings);
+                var newJwtID = JwtHelper.GenerateRefreshToken();
+                var newAccessToken = JwtHelper.GenerateAccessToken(tokenInfo.Id, tokenInfo.Role, tokenInfo.CompanyId , tokenInfo.AccessToken, _configuration);
 
-                response.Data = new RefeshTokenResponse()
+                var isUpdateAccessToken = await _authRepository.UpdateEmployeeAccessToken(tokenInfo.Id, newJwtID, ip, imie);
+
+                if (isUpdateAccessToken > 0)
                 {
-                    AccessToken = accessTokenToClient,
-                };
-                response.Code = ResponseCodeEnum.Success.Value();
-                response.Message = "Thành công";
-                return response;
+                    response.Data = new RefeshTokenResponse()
+                    {
+                        AccessToken = newAccessToken,
+                    };
+                    response.Code = ResponseCodeEnum.Success.Value();
+                    response.Message = "Thành công";
+                    return response;
+                }
+                else
+                {
+                    LoggerHelper.Debug($"RefreshTokenAsync fail tokenInfo.Id {tokenInfo.Id} refreshToken {refreshToken}");
+                    response.Code = ResponseCodeEnum.AccountLocked.Value();
+                    response.Message = $"Không tạo được token.";
+                    return response;
+                }  
             }
             else
             {
                 LoggerHelper.Debug($"Không tồn tại {refreshToken} employeID {employeID}");
-                response.Code = ResponseCodeEnum.DataNotFound.Value();
-                response.Message = $"Không tồn tại.";
+                response.Code = ResponseCodeEnum.InvalidToken.Value();
+                response.Message = $"Phiên đăng nhập Không tồn tại.";
                 return response;
             }
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"RefreshTokenAsync Exception  {refreshToken} employeID {employeID}", ex);
+            LoggerHelper.Error($"RefreshTokenAsync Exception {refreshToken}", ex);
             response.Code = ResponseCodeEnum.SystemError.Value();
             response.Message = ResponseCodeEnum.SystemError.Text();
             return response;
-        }     
+        }
     }
 
     public async Task<ApiResult<bool>> LogoutAsync(string refreshToken, int employeID, string ip, string imie)
@@ -233,7 +235,7 @@ public class AuthService : IAuthService
             var employees = await _authRepository.GetTokenInfo(employeID);
             if (employees != null && employees.RefreshToken.Equals(refreshToken, StringComparison.OrdinalIgnoreCase))
             {
-                var isUpdateOrInsertAccountToken = await _authRepository.UpdateOrInsertEmployeeToken(employees.Id, "", "", 0, ip, imie);
+                var isUpdateOrInsertAccountToken = await _authRepository.RevokeEmployeeToken(employees.Id, ip, imie);
                 if (isUpdateOrInsertAccountToken > 0)
                 {
                     response.Data = true;
