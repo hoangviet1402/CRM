@@ -6,7 +6,7 @@ namespace EmployeeModule.Repositories;
 
 public interface IEmployeeRepository
 {
-    Task<int> EmployeeRegister(string fullname, string phone, string email, string password, int companyId, int role);
+    Task<int> EmployeeRegister(string fullname, string employeesCode, string phone, string email, string password, int companyId, int role);
 
     Task<EmployeeEntity?> GetEmployeeById(int id, int companyId);
 } 

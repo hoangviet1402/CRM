@@ -77,7 +77,7 @@ public class EmployeeService : IEmployeeService
         try
         {
 
-            var existingUser = await _employeeRepository.EmployeeRegister(fullname, phone, email, password, companyId, role);
+            var existingUser = await _employeeRepository.EmployeeRegister(fullname, employeeCode, phone, email, password, companyId, role);
             response.Data = existingUser;
             switch (existingUser)
             {

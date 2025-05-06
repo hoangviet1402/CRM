@@ -175,9 +175,9 @@ public class AuthService : IAuthService
 
                 // Xử lý tạo accessToken mới
                 var newJwtID = JwtHelper.GenerateRefreshToken();
-                var newAccessToken = JwtHelper.GenerateAccessToken(tokenInfo.Id, tokenInfo.Role, tokenInfo.CompanyId , tokenInfo.JwtID, _configuration);
+                var newAccessToken = JwtHelper.GenerateAccessToken(tokenInfo.EmployeeId, tokenInfo.Role, tokenInfo.CompanyId , tokenInfo.JwtID, _configuration);
 
-                var isUpdateAccessToken = await _authRepository.UpdateEmployeeJwtID(tokenInfo.Id, newJwtID, ip, imie);
+                var isUpdateAccessToken = await _authRepository.UpdateEmployeeJwtID(tokenInfo.EmployeeId, newJwtID, ip, imie);
 
                 if (isUpdateAccessToken > 0)
                 {
@@ -191,7 +191,7 @@ public class AuthService : IAuthService
                 }
                 else
                 {
-                    LoggerHelper.Debug($"RefreshTokenAsync fail tokenInfo.Id {tokenInfo.Id} refreshToken {refreshToken}");
+                    LoggerHelper.Debug($"RefreshTokenAsync fail tokenInfo.Id {tokenInfo.EmployeeId} refreshToken {refreshToken}");
                     response.Code = ResponseCodeEnum.AccountLocked.Value();
                     response.Message = $"Không tạo được token.";
                     return response;
@@ -235,7 +235,7 @@ public class AuthService : IAuthService
             var employees = await _authRepository.GetTokenInfo(employeID);
             if (employees != null && employees.RefreshToken.Equals(refreshToken, StringComparison.OrdinalIgnoreCase))
             {
-                var isUpdateOrInsertAccountToken = await _authRepository.RevokeEmployeeToken(employees.Id, ip, imie);
+                var isUpdateOrInsertAccountToken = await _authRepository.RevokeEmployeeToken(employees.EmployeeId, ip, imie);
                 if (isUpdateOrInsertAccountToken > 0)
                 {
                     response.Data = true;

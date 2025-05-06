@@ -198,14 +198,16 @@ public class AuthRepository : IAuthRepository
                 result = new GetTokenInfoEntities
                 {
                     Id = reader.GetSafeInt32("Id"),
+                    EmployeeId = reader.GetSafeInt32("EmployeeId"),
+                    EmployeeIsActive = reader.GetSafeBoolean("EmployeeIsActive"),
                     JwtID = reader.GetSafeString("JwtID"),
                     RefreshToken = reader.GetSafeString("RefreshToken"),
                     Expires = reader.GetSafeDateTime("Expires"),
                     CreatedAt = reader.GetSafeDateTime("CreatedAt"),
-                    CreatedByIp = reader.GetSafeString("CreatedByIp"),
+                    CreatedByIp = reader.GetSafeString("Ip"),
                     CompanyId = reader.GetSafeInt32("CompanyId"),
                     CompanyIsActive = reader.GetSafeBoolean("CompanyIsActive"),
-                    EmployeeIsActive = reader.GetSafeBoolean("EmployeeIsActive"),
+                    
                 };
             }
         }

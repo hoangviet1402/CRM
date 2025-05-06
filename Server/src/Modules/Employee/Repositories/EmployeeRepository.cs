@@ -19,7 +19,7 @@ public class EmployeeRepository : IEmployeeRepository
         _context = context;
     }
 
-    public async Task<int> EmployeeRegister(string fullname, string phone, string email, string password, int companyId, int role)
+    public async Task<int> EmployeeRegister(string fullname,string employeesCode, string phone, string email, string password, int companyId, int role)
     {
         var connection = _context.Database.GetDbConnection();
         var response = 0;
@@ -34,6 +34,7 @@ public class EmployeeRepository : IEmployeeRepository
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new SqlParameter("@FullName", SqlDbType.NVarChar, 100) { Value = fullname });
+            command.Parameters.Add(new SqlParameter("@EmployeesCode", SqlDbType.NVarChar, 20) { Value = employeesCode });
             command.Parameters.Add(new SqlParameter("@Phone", SqlDbType.NVarChar, 20) { Value = phone });
             command.Parameters.Add(new SqlParameter("@Email", SqlDbType.NVarChar, 100) { Value = email });
             command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = AESHelper.HashPassword(password) });

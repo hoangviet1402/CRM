@@ -5,6 +5,8 @@ namespace AuthModule.DTOs;
 public class GetTokenInfoEntities
 {
     public int Id { get; set; }
+    public int EmployeeId { get; set; }
+
     public bool EmployeeIsActive { get; set; }
     public string Email { get; set; }
     public int CompanyId { get; set; }    
