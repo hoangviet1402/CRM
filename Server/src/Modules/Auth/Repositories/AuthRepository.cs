@@ -2,6 +2,7 @@ using System.Data;
 using AuthModule.DTOs;
 using AuthModule.Entities;
 using Infrastructure.DbContext;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Shared.Entities;
@@ -17,11 +18,10 @@ public class AuthRepository : IAuthRepository
     {
         _context = context;
     }
-
-    public async Task<LoginEntities> Login(string email, string password)
+    public async Task<List<LoginResultEntities>> Login(string accountName, bool isUsePhone, string password)
     {
         var connection = _context.Database.GetDbConnection();
-        var response = new LoginEntities();
+        var response = new List<LoginResultEntities>();
 
         if (connection.State != ConnectionState.Open)
             await connection.OpenAsync();
@@ -32,30 +32,47 @@ public class AuthRepository : IAuthRepository
             command.CommandText = "Ins_Employee_Login";
             command.CommandType = CommandType.StoredProcedure;
 
-            command.Parameters.Add(new SqlParameter("@Email", SqlDbType.NVarChar, 100) { Value = email });
+            command.Parameters.Add(new SqlParameter("@AccountName", SqlDbType.NVarChar, 100) { Value = accountName });
+            command.Parameters.Add(new SqlParameter("@IsUsePhone", SqlDbType.Bit) { Value = isUsePhone });
             command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = AESHelper.HashPassword(password) });
 
             using var result = await command.ExecuteReaderAsync();
-            if (await result.ReadAsync())
+            if (result != null)
             {
-                if (result != null && result.GetSafeInt32("Id") > 0)
+                while (await result.ReadAsync())
                 {
-                    response = new LoginEntities()
+                    if (result != null && result.GetSafeInt32("Id") > 0)
                     {
-                        EmployeeId = result.GetSafeInt32("Id"),// result.GetInt32(result.GetOrdinal("Id")),                       
-                        Email = result.GetSafeString("Email"),                        
-                        Role = result.GetSafeInt32("Role"),
-                        CreatedAt = result.GetSafeDateTime("CreatedAt"),
-                        IsActive = result.GetSafeBoolean("IsActive"),
-                        CompanyId = result.GetSafeInt32("CompanyId"),
-                        CompanyIsActive = result.GetSafeBoolean("CompanyIsActive"),
-                    };
+                        response.Add(new LoginResultEntities()
+                        {
+                            EmployeeId = result.GetSafeInt32("EmployeeId"),
+                            FullName = result.GetSafeString("FullName"),
+                            Phone = result.GetSafeString("Phone"),
+                            Email = result.GetSafeString("Email"),
+                            PasswordHash = result.GetSafeString("PasswordHash"),
+                            Role = result.GetSafeInt32("Role"),
+                            CreatedAt = result.GetSafeDateTime("CreatedAt"),
+                            IsActive = result.GetSafeBoolean("IsActive"),
+                            IsNewUser = result.GetSafeInt32("IsNewUser"),
+                            NeedSetPassword = result.GetSafeInt32("NeedSetPassword"),
+                            NeedSetCompany = result.GetSafeInt32("NeedSetCompany"),
+                            TotalCompany = result.GetSafeInt32("TotalCompany"),
+
+                            CompanyName = result.GetSafeString("CompanyName"),
+                            Alias = result.GetSafeString("Alias"),
+                            Prefix = result.GetSafeString("Prefix"),
+                            CreateDate = result.GetSafeDateTime("CreateDate"),
+                            TotalEmployees = result.GetSafeInt32("TotalEmployees"),
+                            CompanyIsActive = result.GetSafeBoolean("CompanyIsActive")
+                        });
+                    }
                 }
-            }            
+            }
             return response;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            LoggerHelper.Error($"Login Exception.", ex);
             throw;
         }
         finally
@@ -102,7 +119,6 @@ public class AuthRepository : IAuthRepository
 
         return result;
     }
-
     public async Task<int> RevokeEmployeeToken(int employeeId, string ip, string imie)
     {
         var connection = _context.Database.GetDbConnection();
@@ -138,7 +154,6 @@ public class AuthRepository : IAuthRepository
 
         return result;
     }
-
     public async Task<int> UpdateEmployeeJwtID(int employeeId, string jwtID, string ip, string imie)
     {
         var connection = _context.Database.GetDbConnection();
@@ -175,7 +190,6 @@ public class AuthRepository : IAuthRepository
 
         return result;
     }
-
     public async Task<GetTokenInfoEntities> GetTokenInfo(int employeeID)
     {
         var connection = _context.Database.GetDbConnection();

@@ -24,89 +24,11 @@ public static class EnumHelper
     {
         return enumValue switch
         {
-            ResponseCodeEnum code => GetResponseCodeText(code),
             ResponseResultEnum result => GetResponseResultText(result),
             _ => enumValue.ToString()
         };
     }
 
-    /// <summary>
-    /// Lấy mô tả tiếng Việt cho ResponseCodeEnum
-    /// </summary>
-    private static string GetResponseCodeText(ResponseCodeEnum code)
-    {
-        return code switch
-        {
-            // Success Codes (2xx)
-            ResponseCodeEnum.Success => "Thành công",
-            ResponseCodeEnum.Created => "Đã tạo thành công",
-            ResponseCodeEnum.Accepted => "Đã được chấp nhận",
-            ResponseCodeEnum.NoContent => "Không có nội dung",
-            
-            // Client Error Codes (4xx)
-            ResponseCodeEnum.BadRequest => "Yêu cầu không hợp lệ",
-            ResponseCodeEnum.Unauthorized => "Chưa xác thực",
-            ResponseCodeEnum.Forbidden => "Không có quyền truy cập",
-            ResponseCodeEnum.NotFound => "Không tìm thấy",
-            ResponseCodeEnum.MethodNotAllowed => "Phương thức không được phép",
-            ResponseCodeEnum.Conflict => "Xung đột dữ liệu",
-            ResponseCodeEnum.ValidationError => "Lỗi xác thực dữ liệu",
-            ResponseCodeEnum.TooManyRequests => "Quá nhiều yêu cầu",
-            
-            // Server Error Codes (5xx)
-            ResponseCodeEnum.InternalServerError => "Lỗi hệ thống",
-            ResponseCodeEnum.NotImplemented => "Chưa được triển khai",
-            ResponseCodeEnum.BadGateway => "Lỗi gateway",
-            ResponseCodeEnum.ServiceUnavailable => "Dịch vụ không khả dụng",
-            
-            // Custom Business Codes (1xxx)
-            ResponseCodeEnum.ValidationFailed => "Xác thực dữ liệu thất bại",
-            ResponseCodeEnum.DuplicateEntry => "Dữ liệu đã tồn tại",
-            ResponseCodeEnum.InvalidCredentials => "Thông tin đăng nhập không hợp lệ",
-            ResponseCodeEnum.ExpiredToken => "Token đã hết hạn",
-            ResponseCodeEnum.InsufficientPermissions => "Không đủ quyền truy cập",
-            ResponseCodeEnum.ResourceLocked => "Tài nguyên đang bị khóa",
-            ResponseCodeEnum.DependencyError => "Lỗi phụ thuộc",
-            ResponseCodeEnum.BusinessRuleViolation => "Vi phạm quy tắc nghiệp vụ",
-            
-            // Integration Error Codes (2xxx)
-            ResponseCodeEnum.ExternalServiceError => "Lỗi dịch vụ bên ngoài",
-            ResponseCodeEnum.DatabaseError => "Lỗi cơ sở dữ liệu",
-            ResponseCodeEnum.CacheError => "Lỗi bộ nhớ đệm",
-            ResponseCodeEnum.MessageQueueError => "Lỗi hàng đợi tin nhắn",
-            ResponseCodeEnum.FileSystemError => "Lỗi hệ thống tệp",
-            ResponseCodeEnum.NetworkError => "Lỗi mạng",
-            
-            // Data Error Codes (3xxx)
-            ResponseCodeEnum.DataNotFound => "Không tìm thấy dữ liệu",
-            ResponseCodeEnum.DataValidationFailed => "Xác thực dữ liệu thất bại",
-            ResponseCodeEnum.DataCorrupted => "Dữ liệu bị hỏng",
-            ResponseCodeEnum.DataTypeError => "Lỗi kiểu dữ liệu",
-            ResponseCodeEnum.DataConflict => "Xung đột dữ liệu",
-            
-            // Security Error Codes (4xxx)
-            ResponseCodeEnum.SecurityViolation => "Vi phạm bảo mật",
-            ResponseCodeEnum.InvalidToken => "Token không hợp lệ",
-            ResponseCodeEnum.AccountLocked => "Tài khoản bị khóa",
-            ResponseCodeEnum.PasswordExpired => "Mật khẩu đã hết hạn",
-            ResponseCodeEnum.InvalidSession => "Phiên không hợp lệ",
-            
-            // File Operation Codes (5xxx)
-            ResponseCodeEnum.FileNotFound => "Không tìm thấy tệp",
-            ResponseCodeEnum.FileAccessDenied => "Từ chối truy cập tệp",
-            ResponseCodeEnum.FileTooLarge => "Tệp quá lớn",
-            ResponseCodeEnum.InvalidFileType => "Loại tệp không hợp lệ",
-            ResponseCodeEnum.FileUploadFailed => "Tải lên tệp thất bại",
-            
-            // Batch Operation Codes (6xxx)
-            ResponseCodeEnum.BatchProcessingFailed => "Xử lý hàng loạt thất bại",
-            ResponseCodeEnum.PartialSuccess => "Thành công một phần",
-            ResponseCodeEnum.BatchValidationFailed => "Xác thực hàng loạt thất bại",
-            ResponseCodeEnum.BatchSizeLimitExceeded => "Vượt quá giới hạn kích thước lô",
-            
-            _ => code.ToString()
-        };
-    }
 
     /// <summary>
     /// Lấy mô tả tiếng Việt cho ResponseResultEnum

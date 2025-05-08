@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: true
----
----
 description: Rule cho việc thực thi Stored Procedure:
 - Pattern 1: SP đơn giản (không output params)
 - Pattern 2: SP phức tạp (có output params/nhiều result sets)

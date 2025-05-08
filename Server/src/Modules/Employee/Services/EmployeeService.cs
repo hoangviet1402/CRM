@@ -1,10 +1,12 @@
 using AutoMapper;
+using AutoMapper.Execution;
 using EmployeeModule.DTOs;
 using EmployeeModule.Entities;
 using EmployeeModule.Repositories;
 using Shared.Enums;
 using Shared.Helpers;
 using Shared.Result;
+using Shared.Utils;
 
 namespace EmployeeModule.Services;
 
@@ -31,71 +33,52 @@ public class EmployeeService : IEmployeeService
         return newEmployeeId;
     }
 
-
-    public async Task<ApiResult<int>> CreateEmployeeAsync(string fullname, string phone, string email, string password,string employeeCode, int companyId, int role)
+    public async Task<ApiResult<EmployeeCreate_ResultEntities>> CreateEmployeeAsync(string fullname, string phone, string email, string password,string employeeCode, int companyId, int role)
     {
-        var response = new ApiResult<int>()
+        var response = new ApiResult<EmployeeCreate_ResultEntities>()
         {
-            Data = 0,
-            Code = ResponseCodeEnum.SystemMaintenance.Value(),
-            Message = ResponseCodeEnum.SystemMaintenance.Text()
+            Data = new EmployeeCreate_ResultEntities(),
+            Code = ResponseResultEnum.ServiceUnavailable.Value(),
+            Message = ResponseResultEnum.ServiceUnavailable.Text()
         };
 
         #region Validate input 
-        if (string.IsNullOrWhiteSpace(fullname))
+        if (string.IsNullOrEmpty(fullname))
         {
-            throw new ArgumentException("Vui lòng nhập họ tên.", nameof(fullname));
-        }
-
-        if (string.IsNullOrWhiteSpace(phone))
-        {
-            throw new ArgumentException("Vui lòng nhập phone.", nameof(phone));
-        }
-
-        if (string.IsNullOrWhiteSpace(email))
-        {
-            throw new ArgumentException("Vui lòng nhập email.", nameof(email));
-        }
-
-        if (string.IsNullOrWhiteSpace(password))
-        {
-            throw new ArgumentException("Vui lòng nhập mật khẩu.", nameof(password));
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = "Vui lòng nhập họ tên.";
+            return response;
         }
 
         if (companyId <= 0)
         {
-            throw new ArgumentException("Vui lòng chọn công ty của nhân viên.", nameof(companyId));
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = "Vui lòng chọn công ty của nhân viên.";
+            return response;
         }
-
-        if (role <= 0)
-        {
-            throw new ArgumentException("Vui lòng phân quyền cho nhân viên này.", nameof(role));
-        }
-
         #endregion
 
         try
         {
+            if (string.IsNullOrEmpty(phone))
+            {
+                phone = Helper.GenerateUniqueNumber(15);
+            }
+
+            if (string.IsNullOrEmpty(email))
+            {
+                email = $"{phone}@mail.com";
+            }
+
+            if (role <= 0)
+            {
+                role = UserRole.Employees.Value();
+            }
 
             var existingUser = await _employeeRepository.EmployeeRegister(fullname, employeeCode, phone, email, password, companyId, role);
             response.Data = existingUser;
-            switch (existingUser)
+            switch (existingUser.EmployeeAccountId)
             {
-                case -1:
-                    LoggerHelper.Warning($"Registration failed -1: email {email} already exists :fullname {fullname},phone {phone},password {password},companyId {companyId},role {role}");
-                    response.Code = ResponseResultEnum.AlreadyExists.Value();
-                    response.Message = "Tài khoản email này đã tồn tại trong công ty.";
-                    break;
-                case -2:
-                    LoggerHelper.Warning($"Registration failed -2: email {email} already exists :fullname {fullname},phone {phone},password {password},companyId {companyId},role {role}");
-                    response.Code = ResponseResultEnum.NoData.Value();
-                    response.Message = "Công ty được chọn không tồn tại hoặc đã bị khóa.";
-                    break;
-                case -3:
-                    LoggerHelper.Warning($"Registration failed -3: email {email} already exists :fullname {fullname},phone {phone},password {password},companyId {companyId},role {role}");
-                    response.Code = ResponseResultEnum.NoData.Value();
-                    response.Message = "Công ty được chọn chưa tạo mã định danh cho nhân viên, vui lòng nhập tay.";
-                    break;
                 case 0:
                     LoggerHelper.Warning($"Registration failed 0: email {email} already exists :fullname {fullname},phone {phone},password {password},companyId {companyId},role {role}");
                     response.Code = ResponseResultEnum.Failed.Value();

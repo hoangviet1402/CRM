@@ -5,7 +5,7 @@ using Shared.Helpers;
 
 namespace EmployeeModule.Controllers;
 
-[Authorize]
+
 [ApiController]
 [Route("api/[controller]")]
 public class EmployeesController : ControllerBase
@@ -22,6 +22,7 @@ public class EmployeesController : ControllerBase
     /// </summary>
     /// <param name="id">Employee id</param>
     /// <returns>Employee information</returns>
+    [Authorize]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(EmployeeDto), 200)]
     [ProducesResponseType(404)]
@@ -54,7 +55,7 @@ public class EmployeesController : ControllerBase
     /// </summary>
     /// <param name="request">Employee information</param>
     /// <returns>Id of the newly created employee</returns>
-    [HttpPost]
+    [HttpPost("CreateEmployee")]
     [ProducesResponseType(201)] // Created
     [ProducesResponseType(typeof(ValidationProblemDetails), 400)] // Bad Request
     public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeRequest request)
@@ -76,4 +77,6 @@ public class EmployeesController : ControllerBase
             return StatusCode(200,new { message = "Đã xảy ra lỗi trong quá trình tạo nhân viên mới." });
         }
     }
+
+
 } 

@@ -4,18 +4,18 @@ namespace EmployeeModule.DTOs;
 
 public class CreateEmployeeRequest
 {
-    [JsonProperty("fname")]
+    //[JsonProperty("fname")]
     public string FullName { get; set; } = string.Empty;
-    [JsonProperty("ecode")]
+    //[JsonProperty("ecode")]
     public string EmployeeCode { get; set; } = string.Empty;
-    [JsonProperty("email")]
+    //[JsonProperty("email")]
     public string Email { get; set; } = string.Empty;
-    [JsonProperty("phone")]
+    //[JsonProperty("phone")]
     public string Phone { get; set; } = string.Empty;
-    [JsonProperty("pass")]
+    //[JsonProperty("pass")]
     public string Password { get; set; } = string.Empty;
-    [JsonProperty("comid")]
+    //[JsonProperty("comid")]
     public int CompanyId { get; set; } = 0;
-    [JsonProperty("role")]
+    //[JsonProperty("role")]
     public int Role { get; set; } = 0;
 }

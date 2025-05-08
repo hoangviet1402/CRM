@@ -67,14 +67,6 @@ public static class AuthorizationInforExtensions
     }
 
     /// <summary>
-    /// Kiểm tra user có phải là BranchManager không
-    /// </summary>
-    public static bool IsBranchManager(this HttpContext context)
-    {
-        return context.HasRole((int)UserRole.BranchManager);
-    }
-
-    /// <summary>
     /// Kiểm tra user có phải là Employee không
     /// </summary>
     public static bool IsEmployee(this HttpContext context)

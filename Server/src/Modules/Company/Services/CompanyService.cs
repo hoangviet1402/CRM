@@ -22,8 +22,8 @@ public class CompanyService : ICompanyService
         var response = new ApiResult<int>()
         {
             Data = 0,
-            Code = ResponseCodeEnum.SystemMaintenance.Value(),
-            Message = ResponseCodeEnum.SystemMaintenance.Text()
+            Code = ResponseResultEnum.ServiceUnavailable.Value(),
+            Message = ResponseResultEnum.ServiceUnavailable.Text()
         };
 
         if (string.IsNullOrEmpty(request.FullName))

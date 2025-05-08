@@ -6,19 +6,12 @@ namespace Shared.Enums;
 public enum UserRole
 {
     /// <summary>
-    /// Quản trị viên hệ thống
+    /// tài khoảnđầu tiên tạo tài khoản cho công ty
     /// </summary>
     SystemAdmin = 1,
 
-    
     /// <summary>
-    /// Quản lý chi nhánh
+    /// quyền măc định khi thêm nhân viên
     /// </summary>
-    BranchManager = 2,
-
-    
-    /// <summary>
-    /// Khách hàng
-    /// </summary>
-    Employees = 3
+    Employees = 10
 } 

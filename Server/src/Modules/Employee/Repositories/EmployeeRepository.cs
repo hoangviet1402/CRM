@@ -19,34 +19,42 @@ public class EmployeeRepository : IEmployeeRepository
         _context = context;
     }
 
-    public async Task<int> EmployeeRegister(string fullname,string employeesCode, string phone, string email, string password, int companyId, int role)
+    public async Task<EmployeeCreate_ResultEntities> EmployeeRegister(string fullname,string employeesCode, string phone, string email, string password, int companyId, int role)
     {
         var connection = _context.Database.GetDbConnection();
-        var response = 0;
-
+        var response = new EmployeeCreate_ResultEntities();
         if (connection.State != ConnectionState.Open)
             await connection.OpenAsync();
 
         try
         {
             using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Employee_Register";
+            command.CommandText = "Ins_Employee_Create";
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new SqlParameter("@FullName", SqlDbType.NVarChar, 100) { Value = fullname });
             command.Parameters.Add(new SqlParameter("@EmployeesCode", SqlDbType.NVarChar, 20) { Value = employeesCode });
             command.Parameters.Add(new SqlParameter("@Phone", SqlDbType.NVarChar, 20) { Value = phone });
             command.Parameters.Add(new SqlParameter("@Email", SqlDbType.NVarChar, 100) { Value = email });
-            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = AESHelper.HashPassword(password) });
+            command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = string.IsNullOrEmpty(password) ? "" : AESHelper.HashPassword(password) });
             command.Parameters.Add(new SqlParameter("@CompanyId", SqlDbType.Int) { Value = companyId });
             command.Parameters.Add(new SqlParameter("@Role", SqlDbType.Int) { Value = role });
-            command.Parameters.Add(new SqlParameter("@EmployeeId", SqlDbType.Int) { Direction = ParameterDirection.Output });
+            command.Parameters.Add(new SqlParameter("@EmployeeAccountId", SqlDbType.Int) { Direction = ParameterDirection.Output });
+            command.Parameters.Add(new SqlParameter("@IsNewUser", SqlDbType.Int) { Direction = ParameterDirection.Output });
+            command.Parameters.Add(new SqlParameter("@NeedSetPassword", SqlDbType.Int) { Direction = ParameterDirection.Output });
+            command.Parameters.Add(new SqlParameter("@NeedSetCompany", SqlDbType.Int) { Direction = ParameterDirection.Output });
 
             await command.ExecuteNonQueryAsync();
-            response = Convert.ToInt32(command.Parameters["@EmployeesId"].Value);
+
+            response.EmployeeAccountId = Convert.ToInt32(command.Parameters["@EmployeeAccountId"].Value);
+            response.IsNewUser = Convert.ToInt32(command.Parameters["@IsNewUser"].Value);
+            response.NeedSetPassword = Convert.ToInt32(command.Parameters["@NeedSetPassword"].Value);
+            response.NeedSetCompany = Convert.ToInt32(command.Parameters["@NeedSetCompany"].Value);
+
         }
-        catch (Exception)
+        catch (Exception ex )
         {
+            LoggerHelper.Error($"EmployeeRegister Exception.", ex);
             throw;
         }
         finally
@@ -57,7 +65,6 @@ public class EmployeeRepository : IEmployeeRepository
 
         return response;
     }
-
 
     public async Task<EmployeeEntity?> GetEmployeeById(int id, int companyId)
     {

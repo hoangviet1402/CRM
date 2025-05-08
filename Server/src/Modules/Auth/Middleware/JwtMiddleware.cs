@@ -66,7 +66,7 @@ public class JwtMiddleware
                     context.Items["EmployeeId"] = int.Parse(employeeId);
                     context.Items["CompanyId"] = int.Parse(companyId);
                     context.Items["JwtID"] = jti;
-                    context.Items["Role"] = role;
+                    context.Items["Role"] = int.Parse(role);
                 }
                 
             }

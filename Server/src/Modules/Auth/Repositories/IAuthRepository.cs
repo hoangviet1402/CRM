@@ -6,7 +6,7 @@ namespace AuthModule.Repositories;
 
 public interface IAuthRepository
 {
-    Task<LoginEntities> Login(string email, string password);
+    Task<List<LoginResultEntities>> Login(string email, bool isUsePhone, string password);
     /// <summary>
     /// 
     /// </summary>

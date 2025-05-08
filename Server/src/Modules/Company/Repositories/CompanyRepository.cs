@@ -1,7 +1,11 @@
+using System.Net;
+using System.Data;
 using Infrastructure.DbContext;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Shared.Helpers;
+using Shared.Extensions;
+using Company.Entities;
 
 namespace Company.Repositories;
 
@@ -12,31 +16,6 @@ public class CompanyRepository : ICompanyRepository
     public CompanyRepository(ApplicationDbContext context)
     {
         _context = context;
-    }
-
-    public async Task<IEnumerable<Entities.Company>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Entities.Company?> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Entities.Company> CreateAsync(Entities.Company company)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Entities.Company> UpdateAsync(Entities.Company company)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<bool> DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<int> CreateCompanyAsync(string fullName, string address)
@@ -75,4 +54,51 @@ public class CompanyRepository : ICompanyRepository
 
         return companyId;
     }
-} 
+
+    public async Task<IEnumerable<EmployeeCompany>> GetEmployeeCompanyAsync(int employeeId)
+    {
+        var connection = _context.Database.GetDbConnection();
+        var result = new List<EmployeeCompany>();
+
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        try
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = "Ins_Company_GetEmployeeID";
+            command.CommandType = CommandType.StoredProcedure;
+
+            // Add parameters
+            command.Parameters.Add(new SqlParameter("@EmployeeID", SqlDbType.Int) { Value = employeeId });
+
+            // Execute and handle result
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                result.Add(new EmployeeCompany
+                {
+                    Id = reader.GetSafeInt32("Id"),
+                    EmployeesAccountId = reader.GetSafeInt32("EmployeesAccountId"),
+                    CompanyId = reader.GetSafeInt32("CompanyId"),
+                    FullName = reader.GetSafeString("FullName"),
+                    Alias = reader.GetSafeString("Alias"),
+                    Prefix = reader.GetSafeString("Prefix"),
+                    IsActive = reader.GetSafeBoolean("IsActive")
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"GetEmployeeCompany Exception.", ex);
+            throw;
+        }
+        finally
+        {
+            if (connection.State == ConnectionState.Open)
+                await connection.CloseAsync();
+        }
+
+        return result;
+    }
+}

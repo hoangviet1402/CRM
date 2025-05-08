@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: true
----
----
 description: Rule cho việc tạo module/tính năng mới trong dự án:
 - Cấu trúc thư mục chuẩn (Controllers, Services, Repositories, DTOs, Entities)
 - Quy tắc đặt tên namespace

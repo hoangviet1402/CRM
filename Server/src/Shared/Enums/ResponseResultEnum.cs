@@ -22,13 +22,17 @@ public enum ResponseResultEnum
     InvalidCredentials = 22,
     AccountLocked = 23,
     SessionExpired = 24,
+    InvalidToken = 25,
     
+
     // Authorization Results
     Forbidden = 30,
     InsufficientPermissions = 31,
     ResourceAccessDenied = 32,
     LicenseRequired = 33,
-    
+    InvalidSession = 34,
+    InvalidRole = 35,
+
     // Resource Results
     NotFound = 40,
     AlreadyExists = 41,
@@ -83,5 +87,8 @@ public enum ResponseResultEnum
     PendingApproval = 111,
     Rejected = 112,
     OnHold = 113,
-    InProgress = 114
+    InProgress = 114,
+
+
+
 } 

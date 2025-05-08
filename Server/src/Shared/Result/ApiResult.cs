@@ -8,13 +8,12 @@ public class ApiResult<T>
     public int Code { get; set; }
     public T? Data { get; set; }
     public string? Message { get; set; }
-    public List<string> Errors { get; set; } = new();
 
     public static ApiResult<T> Success(T data, string message = "")
     {
         return new ApiResult<T>
         {
-            Code = ResponseCodeEnum.Success.Value(),
+            Code = ResponseResultEnum.Success.Value(),
             Data = data,
             Message = message
         };
@@ -25,8 +24,7 @@ public class ApiResult<T>
         return new ApiResult<T>
         {
             Code = code,
-            Message = message,
-            Errors = errors ?? new List<string>()
+            Message = message
         };
     }
 } 

@@ -27,11 +27,9 @@ public class AuthController : ControllerBase
         try
         {
             var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
-            var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
-            
-            var result = await _authService.LoginAsync(request.Email, request.Password, ip, userAgent);
-
-             return Ok(result);
+            var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();            
+            var resultUser= await _authService.LoginAsync(request.AccountName, request.IsUsePhone, request.Password, ip, userAgent);           
+             return Ok(resultUser);
         }
         catch (ArgumentException ex)
         {
