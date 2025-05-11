@@ -53,10 +53,11 @@ public class AuthController : ControllerBase
         {
             var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
-            var employeID = HttpContext.GetEmployeeId();
+            var companyId = HttpContext.GetCompanyId();
+            var accountId = HttpContext.GetAccountId();
             var jwtID = HttpContext.GetJwtID();
 
-            var result = await _authService.RefreshTokenAsync(refreshToken, jwtID, employeID ,ip, userAgent);
+            var result = await _authService.RefreshTokenAsync(refreshToken, jwtID, accountId, companyId, ip, userAgent);
 
             return Ok(result);
         }
@@ -82,9 +83,64 @@ public class AuthController : ControllerBase
         {
             var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
-            var employeID = HttpContext.GetEmployeeId();
+            var companyId = HttpContext.GetCompanyId();
+            var accountId = HttpContext.GetAccountId();
 
-            var result = await _authService.LogoutAsync(refreshToken, employeID, ip, userAgent);
+            var result = await _authService.LogoutAsync(refreshToken, accountId, companyId, ip, userAgent);
+
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            LoggerHelper.Warning($"Login Tham số không hợp lệ. Lỗi: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"GetEmployee ID: Exception.", ex);
+            return StatusCode(500,
+                new { message = "Đã xảy ra lỗi trong quá trình Login (-1)." });
+        }
+    }
+
+    [Authorize]
+    [HttpPost("createpass")]
+    [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
+    public async Task<IActionResult> CreatePass([FromBody] int employeeAccountMapId, string newPass, string comfirmPass)
+    {
+        try
+        {
+            var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
+            var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
+
+            var result = await _authService.CreatePassFornewEmployeeAsync(employeeAccountMapId, newPass, comfirmPass);
+
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            LoggerHelper.Warning($"Login Tham số không hợp lệ. Lỗi: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"GetEmployee ID: Exception.", ex);
+            return StatusCode(500,
+                new { message = "Đã xảy ra lỗi trong quá trình Login (-1)." });
+        }
+    }
+
+    [Authorize]
+    [HttpPost("changepass")]
+    [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
+    public async Task<IActionResult> ChangePass([FromBody] int employeeAccountMapId, string newPass, string oldPass)
+    {
+        try
+        {
+            var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
+            var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
+
+            var result = await _authService.CreatePassFornewEmployeeAsync(employeeAccountMapId, newPass, oldPass);
 
             return Ok(result);
         }

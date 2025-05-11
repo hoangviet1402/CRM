@@ -13,6 +13,12 @@ public static class AuthorizationInforExtensions
         return context.Items["EmployeeId"] as int? ?? 0;
     }
 
+    public static int GetAccountId(this HttpContext context)
+    {
+        return context.Items["AccountId"] as int? ?? 0;
+    }
+    
+
     public static string GetJwtID(this HttpContext context)
     {
         return context.Items["JwtID"] as string ?? string.Empty;

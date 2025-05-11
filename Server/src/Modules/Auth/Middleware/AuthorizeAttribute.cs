@@ -24,11 +24,12 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         // Convert EmployeeId to int
+        var accountId = TryConvertToInt(context.HttpContext.Items["AccountId"]);
         var employeeId = TryConvertToInt(context.HttpContext.Items["EmployeeId"]);
         var companyId = TryConvertToInt(context.HttpContext.Items["CompanyId"]);
         var userRole = TryConvertToInt(context.HttpContext.Items["Role"]);
 
-        if (employeeId <= 0 || companyId <= 0 || userRole <= 0)
+        if (accountId <= 0 || companyId <= 0 || userRole <= 0)
         {
             // Không được xác thực
             context.Result = new JsonResult(new { message = "Unauthorized" })

@@ -23,7 +23,8 @@ public enum ResponseResultEnum
     AccountLocked = 23,
     SessionExpired = 24,
     InvalidToken = 25,
-    
+    InvalidPass = 26,
+
 
     // Authorization Results
     Forbidden = 30,
@@ -89,6 +90,11 @@ public enum ResponseResultEnum
     OnHold = 113,
     InProgress = 114,
 
-
+    //Company
+    CompanyLocked = 200,
+    MoreThanOneCompany = 201,
+    //Employees    
+    EmployeesLocked = 300,
+    EmployeesNeedSetPass = 301,
 
 } 

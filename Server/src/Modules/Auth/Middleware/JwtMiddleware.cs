@@ -55,15 +55,18 @@ public class JwtMiddleware
             // Lấy thông tin claims
             var employeeId = principal.Claims.FirstOrDefault(c => c.Type == "EmployeeId")?.Value;
             var companyId = principal.Claims.FirstOrDefault(c => c.Type == "CompanyId")?.Value;
+            var accountId = principal.Claims.FirstOrDefault(c => c.Type == "AccountId")?.Value;
             var role = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-            if (employeeId != null && companyId != null && role != null && string.IsNullOrEmpty(jti) == false)
+            if (accountId != null && companyId != null && role != null && string.IsNullOrEmpty(jti) == false)
             {
                 // Kiểm tra token trong database
-                var storedToken = await authRepository.GetTokenInfo(int.Parse(employeeId));
-                if (storedToken != null && storedToken.EmployeeIsActive && storedToken.CompanyIsActive && storedToken.JwtID.Equals(AESHelper.HashPassword(jti)))
+                var storedToken = await authRepository.GetTokenInfo(int.Parse(accountId), int.Parse(companyId));
+                if (storedToken != null && storedToken.IsActive  && storedToken.AccountIsActive && storedToken.CompanyIsActive && storedToken.JwtID.Equals(AESHelper.HashPassword(jti)))
                 {
-                    context.Items["EmployeeId"] = int.Parse(employeeId);
+
+                    context.Items["AccountId"] = int.Parse(accountId);
+                    context.Items["EmployeeId"] = int.Parse(employeeId ?? "0");
                     context.Items["CompanyId"] = int.Parse(companyId);
                     context.Items["JwtID"] = jti;
                     context.Items["Role"] = int.Parse(role);
