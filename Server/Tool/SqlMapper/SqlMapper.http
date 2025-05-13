@@ -1,0 +1,6 @@
+@SqlMapper_HostAddress = http://localhost:5225
+
+GET {{SqlMapper_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
