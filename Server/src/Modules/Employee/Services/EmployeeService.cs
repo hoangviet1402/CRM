@@ -62,7 +62,7 @@ public class EmployeeService : IEmployeeService
         {
             if (string.IsNullOrEmpty(phone))
             {
-                phone = Helper.GenerateUniqueNumber(15);
+                phone = Helper.GenerateUniqueNumber(11);
             }
 
             if (string.IsNullOrEmpty(email))

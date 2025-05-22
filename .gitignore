@@ -17,3 +17,5 @@
 /Server/src/Shared/bin
 /Server/src/Shared/bin
 /Logs
+Server/src/Shared/bin/Debug/net6.0/Shared.dll
+Server/src/Shared/bin/Debug/net6.0/Shared.pdb

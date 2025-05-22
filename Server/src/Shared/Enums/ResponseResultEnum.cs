@@ -19,11 +19,10 @@ public enum ResponseResultEnum
     // Authentication Results
     Unauthorized = 20,
     TokenExpired = 21,
-    InvalidCredentials = 22,
-    AccountLocked = 23,
-    SessionExpired = 24,
-    InvalidToken = 25,
-    InvalidPass = 26,
+    InvalidCredentials = 22,    
+    SessionExpired = 23,
+    InvalidToken = 24,
+    InvalidPass = 25,
 
 
     // Authorization Results
@@ -97,4 +96,8 @@ public enum ResponseResultEnum
     EmployeesLocked = 300,
     EmployeesNeedSetPass = 301,
 
+    //Account    
+    AccountNotExist = 400,
+    AccountLocked = 401,
+    AccountNeedSetPass = 402,
 } 
