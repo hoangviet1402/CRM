@@ -2,54 +2,49 @@ using System.Net;
 using System.Data;
 using Infrastructure.DbContext;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Shared.Helpers;
 using Shared.Extensions;
 using Company.Entities;
+using Infrastructure.StoredProcedureMapperModule;
 
 namespace Company.Repositories;
 
 public class CompanyRepository : ICompanyRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DatabaseConnection _dbConnection;
+    private readonly StoredProcedureMapperModule _storedProcedureMapper;
 
-    public CompanyRepository(ApplicationDbContext context)
+    public CompanyRepository(DatabaseConnection dbConnection)
     {
-        _context = context;
+        _dbConnection = dbConnection;
+        _storedProcedureMapper = new StoredProcedureMapperModule();
     }
 
     public async Task<int> CreateCompanyAsync(string fullName, string address)
     {
-        var connection = _context.Database.GetDbConnection();
+        using var connection = _dbConnection.CreateConnection("Default");
         var companyId = 0;
-
-        if (connection.State != System.Data.ConnectionState.Open)
-            await connection.OpenAsync();
 
         try
         {
-            using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Company_Create";
-            command.CommandType = System.Data.CommandType.StoredProcedure;
+            var parameters = new Dictionary<string, object>
+            {
+                { "@FullName", fullName },
+                { "@Addess", address }
+            };
 
-            // Add parameters
-            command.Parameters.Add(new SqlParameter("@FullName", System.Data.SqlDbType.NVarChar, 100) { Value = fullName });
-            command.Parameters.Add(new SqlParameter("@Addess", System.Data.SqlDbType.NVarChar, 250) { Value = address });
-            command.Parameters.Add(new SqlParameter("@CompanyId", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output });
+            var outputParameters = new Dictionary<string, object>();
+            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Company_Create", parameters, outputParameters);
 
-            // Execute
-            await command.ExecuteNonQueryAsync();
-            companyId = Convert.ToInt32(command.Parameters["@CompanyId"].Value);
+            if (success && outputParameters.ContainsKey("@CompanyId"))
+            {
+                companyId = Convert.ToInt32(outputParameters["@CompanyId"]);
+            }
         }
         catch (Exception ex)
         {
             LoggerHelper.Error("CreateCompany Exception.", ex);
             throw;
-        }
-        finally
-        {
-            if (connection.State == System.Data.ConnectionState.Open)
-                await connection.CloseAsync();
         }
 
         return companyId;
@@ -57,46 +52,39 @@ public class CompanyRepository : ICompanyRepository
 
     public async Task<IEnumerable<EmployeeCompany>> GetEmployeeCompanyAsync(int employeeId)
     {
-        var connection = _context.Database.GetDbConnection();
+        using var connection = _dbConnection.CreateConnection("Default");
         var result = new List<EmployeeCompany>();
-
-        if (connection.State != ConnectionState.Open)
-            await connection.OpenAsync();
 
         try
         {
-            using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Company_GetEmployeeID";
-            command.CommandType = CommandType.StoredProcedure;
-
-            // Add parameters
-            command.Parameters.Add(new SqlParameter("@EmployeeID", SqlDbType.Int) { Value = employeeId });
-
-            // Execute and handle result
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            var parameters = new Dictionary<string, object>
             {
-                result.Add(new EmployeeCompany
+                { "@EmployeeID", employeeId }
+            };
+
+            var dataTable = await _storedProcedureMapper.ExecuteStoredProcedureWithResultAsync(connection, "Ins_Company_GetEmployeeID", parameters);
+
+            if (dataTable != null)
+            {
+                foreach (DataRow row in dataTable.Rows)
                 {
-                    Id = reader.GetSafeInt32("Id"),
-                    EmployeesAccountId = reader.GetSafeInt32("EmployeesAccountId"),
-                    CompanyId = reader.GetSafeInt32("CompanyId"),
-                    FullName = reader.GetSafeString("FullName"),
-                    Alias = reader.GetSafeString("Alias"),
-                    Prefix = reader.GetSafeString("Prefix"),
-                    IsActive = reader.GetSafeBoolean("IsActive")
-                });
+                    result.Add(new EmployeeCompany
+                    {
+                        Id = row.GetSafeInt32("Id"),
+                        EmployeesAccountId = row.GetSafeInt32("EmployeesAccountId"),
+                        CompanyId = row.GetSafeInt32("CompanyId"),
+                        FullName = row.GetSafeString("FullName"),
+                        Alias = row.GetSafeString("Alias"),
+                        Prefix = row.GetSafeString("Prefix"),
+                        IsActive = row.GetSafeBoolean("IsActive")
+                    });
+                }
             }
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"GetEmployeeCompany Exception.", ex);
             throw;
-        }
-        finally
-        {
-            if (connection.State == ConnectionState.Open)
-                await connection.CloseAsync();
         }
 
         return result;

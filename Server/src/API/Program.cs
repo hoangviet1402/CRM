@@ -2,7 +2,6 @@ using Company;
 using Education;
 using EmployeeModule;
 using Infrastructure.DbContext;
-using Microsoft.EntityFrameworkCore;
 using Shared.Helpers;
 using AuthModule;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +20,14 @@ builder.Services.AddControllers()
         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
     });
 
-// Configure DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Configure Database Connections
+var connectionStrings = new Dictionary<string, string>
+{
+    { "Default", builder.Configuration.GetConnectionString("DefaultConnection") },
+    { "Secondary", builder.Configuration.GetConnectionString("SecondaryConnection") },
+    { "Reporting", builder.Configuration.GetConnectionString("ReportingConnection") }
+};
+builder.Services.AddSingleton(new DatabaseConnection(connectionStrings));
 
 // Add modules
 builder.Services.AddEmployeeModule();

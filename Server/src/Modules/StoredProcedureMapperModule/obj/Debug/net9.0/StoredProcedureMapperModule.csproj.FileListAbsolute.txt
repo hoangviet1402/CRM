@@ -1,0 +1,13 @@
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\bin\Debug\net9.0\StoredProcedureMapperModule.deps.json
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\bin\Debug\net9.0\StoredProcedureMapperModule.dll
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\bin\Debug\net9.0\StoredProcedureMapperModule.pdb
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\obj\Debug\net9.0\StoredProcedureMapperModule.csproj.AssemblyReference.cache
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\obj\Debug\net9.0\StoredProcedureMapperModule.GeneratedMSBuildEditorConfig.editorconfig
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\obj\Debug\net9.0\StoredProcedureMapperModule.AssemblyInfoInputs.cache
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\obj\Debug\net9.0\StoredProcedureMapperModule.AssemblyInfo.cs
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\obj\Debug\net9.0\StoredProcedureMapperModule.csproj.CoreCompileInputs.cache
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\obj\Debug\net9.0\StoredProcedureMapperModule.sourcelink.json
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\obj\Debug\net9.0\StoredProcedureMapperModule.dll
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\obj\Debug\net9.0\refint\StoredProcedureMapperModule.dll
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\obj\Debug\net9.0\StoredProcedureMapperModule.pdb
+D:\BANCA\Server\src\Modules\StoredProcedureMapperModule\obj\Debug\net9.0\ref\StoredProcedureMapperModule.dll

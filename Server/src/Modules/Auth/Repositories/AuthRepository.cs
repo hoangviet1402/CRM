@@ -2,311 +2,277 @@ using System.Data;
 using AuthModule.DTOs;
 using AuthModule.Entities;
 using Infrastructure.DbContext;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Shared.Entities;
 using Shared.Helpers;
+using Infrastructure.StoredProcedureMapperModule;
 
 namespace AuthModule.Repositories;
 
 public class AuthRepository : IAuthRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DatabaseConnection _dbConnection;
+    private readonly StoredProcedureMapperModule _storedProcedureMapper;
 
-    public AuthRepository(ApplicationDbContext context)
+    public AuthRepository(DatabaseConnection dbConnection)
     {
-        _context = context;
+        _dbConnection = dbConnection;
+        _storedProcedureMapper = new StoredProcedureMapperModule();
     }
 
     public async Task<LoginResultEntities> Login(string accountName, bool isUsePhone, string password)
     {
-        var connection = _context.Database.GetDbConnection();
+        using var connection = _dbConnection.CreateConnection("Default");
         var response = new LoginResultEntities();
-
-        if (connection.State != ConnectionState.Open)
-            await connection.OpenAsync();
 
         try
         {
-            using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Account_Login";
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.Add(new SqlParameter("@AccountName", SqlDbType.NVarChar, 100) { Value = accountName });
-            command.Parameters.Add(new SqlParameter("@IsUsePhone", SqlDbType.Bit) { Value = isUsePhone });
-            //command.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 256) { Value = AESHelper.HashPassword(password) });
-            using var result = await command.ExecuteReaderAsync();
-            if (await result.ReadAsync())
+            var parameters = new Dictionary<string, object>
             {
-                if (result != null && result.GetSafeInt32("Id") > 0)
+                { "@AccountName", accountName },
+                { "@IsUsePhone", isUsePhone }
+            };
+
+            var result = await _storedProcedureMapper.ExecuteStoredProcedureWithResultAsync(connection, "Ins_Account_Login", parameters);
+
+            if (result != null && result.Rows.Count > 0)
+            {
+                var row = result.Rows[0];
+                response = new LoginResultEntities
                 {
-                    response= new LoginResultEntities()
-                    {
-                        AccountId = result.GetSafeInt32("EmployeeId"),
-
-                        Phone = result.GetSafeString("Phone"),
-                        Email = result.GetSafeString("Email"),
-
-                        CreatedAt = result.GetSafeDateTime("CreatedAt"),
-                        IsActive = result.GetSafeBoolean("IsActive"),
-                        TotalCompany = result.GetSafeInt32("IsNewUser")
-                    };
-                }
+                    AccountId = row.GetSafeInt32("EmployeeId"),
+                    Phone = row.GetSafeString("Phone"),
+                    Email = row.GetSafeString("Email"),
+                    CreatedAt = row.GetSafeDateTime("CreatedAt"),
+                    IsActive = row.GetSafeBoolean("IsActive"),
+                    TotalCompany = row.GetSafeInt32("IsNewUser")
+                };
             }
-            return response;
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"Login Exception.", ex);
             throw;
         }
-        finally
-        {
-            if (connection.State == ConnectionState.Open)
-                await connection.CloseAsync();
-        }
-    }
-    public async Task<int> UpdatePass(int employeeAccountMapId, string newPass,string oldPass, int needSetPassword)
-    {
-        var connection = _context.Database.GetDbConnection();
-        var result = 0;
 
-        if (connection.State != ConnectionState.Open)
-            await connection.OpenAsync();
+        return response;
+    }
+
+    public async Task<int> UpdatePass(int employeeAccountMapId, string newPass, string oldPass, int needSetPassword)
+    {
+        using var connection = _dbConnection.CreateConnection();
+        var result = 0;
 
         try
         {
-            using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Account_UpdatePass";
-            command.CommandType = CommandType.StoredProcedure;
+            var parameters = new Dictionary<string, object>
+            {
+                { "@EmployeeAccountMapId", employeeAccountMapId },
+                { "@Pass", AESHelper.HashPassword(newPass) },
+                { "@OldPass", needSetPassword == 0 ? AESHelper.HashPassword(oldPass) : "" },
+                { "@NeedSetPassword", needSetPassword }
+            };
 
-            command.Parameters.Add(new SqlParameter("@EmployeeAccountMapId", SqlDbType.Int) { Value = employeeAccountMapId });
-            command.Parameters.Add(new SqlParameter("@Pass", SqlDbType.VarChar, 258) { Value = AESHelper.HashPassword(newPass) });
-            command.Parameters.Add(new SqlParameter("@OldPass", SqlDbType.VarChar, 258) { Value = needSetPassword == 0 ? AESHelper.HashPassword(oldPass) : "" });
-            command.Parameters.Add(new SqlParameter("@NeedSetPassword", SqlDbType.Int) { Value = needSetPassword });
-            
-            command.Parameters.Add(new SqlParameter("@OutResult", SqlDbType.Int) { Direction = ParameterDirection.Output });
+            var outputParameters = new Dictionary<string, object>();
+            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Account_UpdatePass", parameters, outputParameters);
 
-            await command.ExecuteNonQueryAsync();
-            result = Convert.ToInt32(command.Parameters["@OutResult"].Value);
+            if (success)
+            {
+                result = outputParameters.GetSafeInt32("@OutResult");
+            }
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"UpdateOrInsertEmployeesToken Exception.", ex);
+            LoggerHelper.Error($"UpdatePass Exception.", ex);
             throw;
-        }
-        finally
-        {
-            if (connection.State == ConnectionState.Open)
-                await connection.CloseAsync();
         }
 
         return result;
     }
+
     public async Task<List<CompanyAccountMapEntities>> GetCompanyByAccountId(int accountId)
     {
-        var connection = _context.Database.GetDbConnection();
+        using var connection = _dbConnection.CreateConnection();
         var response = new List<CompanyAccountMapEntities>();
-
-        if (connection.State != ConnectionState.Open)
-            await connection.OpenAsync();
 
         try
         {
-            using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Account_GetAllCompany";
-            command.CommandType = CommandType.StoredProcedure;
+            var parameters = new Dictionary<string, object>
+            {
+                { "@AccountId", accountId }
+            };
 
-            command.Parameters.Add(new SqlParameter("@AccountId", SqlDbType.Int) { Value = accountId });
+            var result = await _storedProcedureMapper.ExecuteStoredProcedureWithResultAsync(connection, "Ins_Account_GetAllCompany", parameters);
 
-            using var result = await command.ExecuteReaderAsync();
             if (result != null)
             {
-                while (await result.ReadAsync())
+                foreach (DataRow row in result.Rows)
                 {
-                    if (result != null && result.GetSafeInt32("EmployeeAccountMapId") > 0)
+                    if (row.GetSafeInt32("EmployeeAccountMapId") > 0)
                     {
-                        response.Add(new CompanyAccountMapEntities()
+                        response.Add(new CompanyAccountMapEntities
                         {
-                            EmployeeAccountMapId = result.GetSafeInt32("EmployeeAccountMapId"),
-                            AccountId = result.GetSafeInt32("AccountId"),
-                            CompanyId = result.GetSafeInt32("CompanyId"),
-                            EmployeesInfoId = result.GetSafeInt32("EmployeesInfoId"),
-                            EmployeesFullName = result.GetSafeString("EmployeesFullName"),
-                            Role = result.GetSafeInt32("Role"),
-                            IsActive = result.GetSafeBoolean("IsActive"),
-                            PasswordHash = result.GetSafeString("PasswordHash"),
-                            IsNewUser = result.GetSafeBoolean("IsNewUser"),
-                            NeedSetPassword = result.GetSafeBoolean("NeedSetPassword"),
-                            CreatedAt = result.GetSafeDateTime("CreatedAt"),
-                            CompanyFullName = result.GetSafeString("CompanyFullName"),
-                            CompanyAlias = result.GetSafeString("Alias"),
-                            CompanyPrefix = result.GetSafeString("Prefix"),
-                            CompanyCreateDate = result.GetSafeDateTime("CompanyCreateDate"),
-                            TotalEmployees = result.GetSafeInt32("TotalEmployees"),
-                            CompanyIsActive = result.GetSafeBoolean("CompanyIsActive"),
-                            CreateStep = result.GetSafeInt32("CreateStep")
+                            EmployeeAccountMapId = row.GetSafeInt32("EmployeeAccountMapId"),
+                            AccountId = row.GetSafeInt32("AccountId"),
+                            CompanyId = row.GetSafeInt32("CompanyId"),
+                            EmployeesInfoId = row.GetSafeInt32("EmployeesInfoId"),
+                            EmployeesFullName = row.GetSafeString("EmployeesFullName"),
+                            Role = row.GetSafeInt32("Role"),
+                            IsActive = row.GetSafeBoolean("IsActive"),
+                            PasswordHash = row.GetSafeString("PasswordHash"),
+                            IsNewUser = row.GetSafeBoolean("IsNewUser"),
+                            NeedSetPassword = row.GetSafeBoolean("NeedSetPassword"),
+                            CreatedAt = row.GetSafeDateTime("CreatedAt"),
+                            CompanyFullName = row.GetSafeString("CompanyFullName"),
+                            CompanyAlias = row.GetSafeString("Alias"),
+                            CompanyPrefix = row.GetSafeString("Prefix"),
+                            CompanyCreateDate = row.GetSafeDateTime("CompanyCreateDate"),
+                            TotalEmployees = row.GetSafeInt32("TotalEmployees"),
+                            CompanyIsActive = row.GetSafeBoolean("CompanyIsActive"),
+                            CreateStep = row.GetSafeInt32("CreateStep")
                         });
                     }
                 }
             }
-            return response;
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"GetCompanyByAccountId Exception.", ex);
             throw;
         }
-        finally
-        {
-            if (connection.State == ConnectionState.Open)
-                await connection.CloseAsync();
-        }
+
+        return response;
     }
+
     public async Task<int> InsertEmployeeToken(int employeeAccountMapId, string jwtID, string refreshToken, int lifeTime, string ip, string imie)
     {
-        var connection = _context.Database.GetDbConnection();
+        using var connection = _dbConnection.CreateConnection();
         var result = 0;
-
-        if (connection.State != ConnectionState.Open)
-            await connection.OpenAsync();
 
         try
         {
-            using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Account_InsertTokens";
-            command.CommandType = CommandType.StoredProcedure;
+            var parameters = new Dictionary<string, object>
+            {
+                { "@EmployeeAccountMapId", employeeAccountMapId },
+                { "@JwtID", AESHelper.HashPassword(jwtID) },
+                { "@RefreshToken", AESHelper.HashPassword(refreshToken) },
+                { "@LifeTime", lifeTime },
+                { "@Ip", ip },
+                { "@Imie", imie }
+            };
 
-            command.Parameters.Add(new SqlParameter("@EmployeeAccountMapId", SqlDbType.Int) { Value = employeeAccountMapId });
-            command.Parameters.Add(new SqlParameter("@JwtID", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(jwtID) });
-            command.Parameters.Add(new SqlParameter("@RefreshToken", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(refreshToken) });
-            command.Parameters.Add(new SqlParameter("@LifeTime", SqlDbType.Int) { Value = lifeTime });
-            command.Parameters.Add(new SqlParameter("@Ip", SqlDbType.VarChar, 100) { Value = ip });
-            command.Parameters.Add(new SqlParameter("@Imie", SqlDbType.VarChar, 100) { Value = imie });
-            command.Parameters.Add(new SqlParameter("@OutResult", SqlDbType.Int) { Direction = ParameterDirection.Output });
+            var outputParameters = new Dictionary<string, object>();
+            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Account_InsertTokens", parameters, outputParameters);
 
-            await command.ExecuteNonQueryAsync();
-            result = Convert.ToInt32(command.Parameters["@OutResult"].Value);
+            if (success)
+            {
+                result = outputParameters.GetSafeInt32("@OutResult");
+            }
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"UpdateOrInsertEmployeesToken Exception.", ex);
+            LoggerHelper.Error($"InsertEmployeeToken Exception.", ex);
             throw;
-        }
-        finally
-        {
-            if (connection.State == ConnectionState.Open)
-                await connection.CloseAsync();
         }
 
         return result;
     }
+
     public async Task<int> RevokeEmployeeToken(int tokenId, string ip, string imie)
     {
-        var connection = _context.Database.GetDbConnection();
+        using var connection = _dbConnection.CreateConnection();
         var result = 0;
-
-        if (connection.State != ConnectionState.Open)
-            await connection.OpenAsync();
 
         try
         {
-            using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Account_RevokeToken";
-            command.CommandType = CommandType.StoredProcedure;
+            var parameters = new Dictionary<string, object>
+            {
+                { "@Id", tokenId },
+                { "@Ip", ip },
+                { "@Imie", imie }
+            };
 
-            command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int) { Value = tokenId });
-            command.Parameters.Add(new SqlParameter("@Ip", SqlDbType.VarChar, 100) { Value = ip });
-            command.Parameters.Add(new SqlParameter("@Imie", SqlDbType.VarChar, 100) { Value = imie });
-            command.Parameters.Add(new SqlParameter("@OutResult", SqlDbType.Int) { Direction = ParameterDirection.Output });
+            var outputParameters = new Dictionary<string, object>();
+            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Account_RevokeToken", parameters, outputParameters);
 
-            await command.ExecuteNonQueryAsync();
-            result = Convert.ToInt32(command.Parameters["@OutResult"].Value);
+            if (success)
+            {
+                result = outputParameters.GetSafeInt32("@OutResult");
+            }
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"UpdateOrInsertEmployeesToken Exception.", ex);
+            LoggerHelper.Error($"RevokeEmployeeToken Exception.", ex);
             throw;
-        }
-        finally
-        {
-            if (connection.State == ConnectionState.Open)
-                await connection.CloseAsync();
         }
 
         return result;
     }
+
     public async Task<int> UpdateEmployeeJwtID(int tokenId, string jwtID, string ip, string imie)
     {
-        var connection = _context.Database.GetDbConnection();
+        using var connection = _dbConnection.CreateConnection();
         var result = 0;
-
-        if (connection.State != ConnectionState.Open)
-            await connection.OpenAsync();
 
         try
         {
-            using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Account_UpdateToken_JwtID";
-            command.CommandType = CommandType.StoredProcedure;
+            var parameters = new Dictionary<string, object>
+            {
+                { "@Id", tokenId },
+                { "@JwtID", AESHelper.HashPassword(jwtID) },
+                { "@Ip", ip },
+                { "@Imie", imie }
+            };
 
-            command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int) { Value = tokenId });
-            command.Parameters.Add(new SqlParameter("@JwtID", SqlDbType.NVarChar, 258) { Value = AESHelper.HashPassword(jwtID) });        
-            command.Parameters.Add(new SqlParameter("@Ip", SqlDbType.VarChar, 100) { Value = ip });
-            command.Parameters.Add(new SqlParameter("@Imie", SqlDbType.VarChar, 100) { Value = imie });
-            command.Parameters.Add(new SqlParameter("@OutResult", SqlDbType.Int) { Direction = ParameterDirection.Output });
+            var outputParameters = new Dictionary<string, object>();
+            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Account_UpdateToken_JwtID", parameters, outputParameters);
 
-            await command.ExecuteNonQueryAsync();
-            result = Convert.ToInt32(command.Parameters["@OutResult"].Value);
+            if (success)
+            {
+                result = outputParameters.GetSafeInt32("@OutResult");
+            }
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"UpdateOrInsertEmployeesToken Exception.", ex);
+            LoggerHelper.Error($"UpdateEmployeeJwtID Exception.", ex);
             throw;
-        }
-        finally
-        {
-            if (connection.State == ConnectionState.Open)
-                await connection.CloseAsync();
         }
 
         return result;
     }
+
     public async Task<AccountTokenInfoEntities> GetTokenInfo(int accountId, int companyId)
     {
-        var connection = _context.Database.GetDbConnection();
-        AccountTokenInfoEntities result = new AccountTokenInfoEntities();
-
-        if (connection.State != ConnectionState.Open)
-            await connection.OpenAsync();
+        using var connection = _dbConnection.CreateConnection();
+        var result = new AccountTokenInfoEntities();
 
         try
         {
-            using var command = connection.CreateCommand();
-            command.CommandText = "Ins_Account_GetTokensByEmployeeID";
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.Add(new SqlParameter("@AccountId", SqlDbType.Int) { Value = accountId });
-            command.Parameters.Add(new SqlParameter("@CompanyId", SqlDbType.Int) { Value = companyId });
-
-            using var reader = await command.ExecuteReaderAsync();
-            if (await reader.ReadAsync())
+            var parameters = new Dictionary<string, object>
             {
+                { "@AccountId", accountId },
+                { "@CompanyId", companyId }
+            };
+
+            var dataTable = await _storedProcedureMapper.ExecuteStoredProcedureWithResultAsync(connection, "Ins_Account_GetTokensByEmployeeID", parameters);
+
+            if (dataTable != null && dataTable.Rows.Count > 0)
+            {
+                var row = dataTable.Rows[0];
                 result = new AccountTokenInfoEntities
                 {
-                    Id = reader.GetSafeInt32("Id"),
-                    JwtID = reader.GetSafeString("JwtID"),
-                    RefreshToken = reader.GetSafeString("RefreshToken"),
-                    Expires = reader.GetSafeDateTime("Expires"),
-                    Ip = reader.GetSafeString("Ip"),
-                    IsActive = reader.GetSafeBoolean("IsActive"),
-                    Role = reader.GetSafeInt32("Role"),
-                    AccountId = reader.GetSafeInt32("AccountId"),
-                    CompanyId = reader.GetSafeInt32("CompanyId"),
-                    EmployeesInfoId = reader.GetSafeInt32("EmployeesInfoId"),
-                    CompanyIsActive = reader.GetSafeBoolean("CompanyIsActive"),
-                    AccountIsActive = reader.GetSafeBoolean("AccountIsActive")
+                    Id = row.GetSafeInt32("Id"),
+                    JwtID = row.GetSafeString("JwtID"),
+                    RefreshToken = row.GetSafeString("RefreshToken"),
+                    Expires = row.GetSafeDateTime("Expires"),
+                    Ip = row.GetSafeString("Ip"),
+                    IsActive = row.GetSafeBoolean("IsActive"),
+                    Role = row.GetSafeInt32("Role"),
+                    AccountId = row.GetSafeInt32("AccountId"),
+                    CompanyId = row.GetSafeInt32("CompanyId"),
+                    EmployeesInfoId = row.GetSafeInt32("EmployeesInfoId"),
+                    CompanyIsActive = row.GetSafeBoolean("CompanyIsActive"),
+                    AccountIsActive = row.GetSafeBoolean("AccountIsActive")
                 };
             }
         }
@@ -314,11 +280,6 @@ public class AuthRepository : IAuthRepository
         {
             LoggerHelper.Error($"GetTokenInfo Exception.", ex);
             throw;
-        }
-        finally
-        {
-            if (connection.State == ConnectionState.Open)
-                await connection.CloseAsync();
         }
 
         return result;

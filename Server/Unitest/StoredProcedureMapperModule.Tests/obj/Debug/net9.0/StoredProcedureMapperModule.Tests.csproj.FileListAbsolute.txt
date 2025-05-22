@@ -1,0 +1,8 @@
+D:\BANCA\Server\Unitest\StoredProcedureMapperModule.Tests\bin\Debug\net9.0\.msCoverageSourceRootsMapping_StoredProcedureMapperModule.Tests
+D:\BANCA\Server\Unitest\StoredProcedureMapperModule.Tests\bin\Debug\net9.0\CoverletSourceRootsMapping_StoredProcedureMapperModule.Tests
+D:\BANCA\Server\Unitest\StoredProcedureMapperModule.Tests\obj\Debug\net9.0\StoredProcedureMapperModule.Tests.csproj.AssemblyReference.cache
+D:\BANCA\Server\Unitest\StoredProcedureMapperModule.Tests\obj\Debug\net9.0\StoredProcedureMapperModule.Tests.GeneratedMSBuildEditorConfig.editorconfig
+D:\BANCA\Server\Unitest\StoredProcedureMapperModule.Tests\obj\Debug\net9.0\StoredProcedureMapperModule.Tests.AssemblyInfoInputs.cache
+D:\BANCA\Server\Unitest\StoredProcedureMapperModule.Tests\obj\Debug\net9.0\StoredProcedureMapperModule.Tests.AssemblyInfo.cs
+D:\BANCA\Server\Unitest\StoredProcedureMapperModule.Tests\obj\Debug\net9.0\StoredProcedureMapperModule.Tests.csproj.CoreCompileInputs.cache
+D:\BANCA\Server\Unitest\StoredProcedureMapperModule.Tests\obj\Debug\net9.0\StoredProcedureMapperModule.Tests.sourcelink.json

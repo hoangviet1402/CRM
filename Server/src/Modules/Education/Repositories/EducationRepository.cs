@@ -1,14 +1,16 @@
 using Infrastructure.DbContext;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure.StoredProcedureMapperModule;
 
 namespace Education.Repositories;
 
 public class EducationRepository : IEducationRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DatabaseConnection _dbConnection;
+    private readonly StoredProcedureMapperModule _storedProcedureMapper;
 
-    public EducationRepository(ApplicationDbContext context)
+    public EducationRepository(DatabaseConnection dbConnection)
     {
-        _context = context;
+        _dbConnection = dbConnection;
+        _storedProcedureMapper = new StoredProcedureMapperModule();
     }
 } 
