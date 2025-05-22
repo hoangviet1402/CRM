@@ -18,7 +18,40 @@ public class AuthRepository : IAuthRepository
     {
         _context = context;
     }
+    public async Task<int> RegisterAccount(string phone,string email, string fullname)
+    {
+        var connection = _context.Database.GetDbConnection();
+        var result = 0;
 
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        try
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = "Ins_Account_Register";
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.Add(new SqlParameter("@Phone", SqlDbType.NVarChar, 100) { Value = phone });
+            command.Parameters.Add(new SqlParameter("@Email", SqlDbType.NVarChar, 250) { Value = email });
+            command.Parameters.Add(new SqlParameter("@FullName", SqlDbType.NVarChar, 200) { Value = fullname });
+            command.Parameters.Add(new SqlParameter("@OutResult", SqlDbType.Int) { Direction = ParameterDirection.Output });
+
+            await command.ExecuteNonQueryAsync();
+            result = Convert.ToInt32(command.Parameters["@OutResult"].Value);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"RegisterAccount Exception.", ex);
+            throw;
+        }
+        finally
+        {
+            if (connection.State == ConnectionState.Open)
+                await connection.CloseAsync();
+        }
+    }
     public async Task<LoginResultEntities> Login(string accountName, bool isUsePhone, string password)
     {
         var connection = _context.Database.GetDbConnection();
@@ -43,7 +76,7 @@ public class AuthRepository : IAuthRepository
                 {
                     response= new LoginResultEntities()
                     {
-                        AccountId = result.GetSafeInt32("EmployeeId"),
+                        AccountId = result.GetSafeInt32("AccountId"),
 
                         Phone = result.GetSafeString("Phone"),
                         Email = result.GetSafeString("Email"),

@@ -37,5 +37,10 @@ namespace Shared.Utils
             
             return result;
         }
+
+        public static string GenerateUniqueString(int length = 11)
+        {
+            return Guid.NewGuid().ToString("N");
+        }
     }
 }

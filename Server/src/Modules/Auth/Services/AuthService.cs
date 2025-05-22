@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Shared.Enums;
 using Shared.Helpers;
 using Shared.Result;
+using Shared.Utils;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace AuthModule.Services;
 
@@ -18,7 +19,6 @@ public class AuthService : IAuthService
         _authRepository = authRepository;
         _configuration = configuration;
     }
-
     public async Task<ApiResult<AuthResponse>> LoginAsync(string accountName, bool isUsePhone, string password, string ip, string imie)
     {
         var response = new ApiResult<AuthResponse>()
@@ -41,7 +41,6 @@ public class AuthService : IAuthService
             }
             return response;
         }
-        
 
         try
         {
@@ -50,7 +49,7 @@ public class AuthService : IAuthService
             if(authdata == null || authdata.AccountId <= 0)
             {
                 LoggerHelper.Warning($"LoginAsync {accountName} không tồn tại");
-                response.Code = ResponseResultEnum.NoData.Value();
+                response.Code = ResponseResultEnum.AccountNotExist.Value();
                 response.Message = $"Tài khoản {accountName} không tồn tại";
                 return response;
             }
@@ -166,8 +165,6 @@ public class AuthService : IAuthService
                             return response;
                         }
                     }
-
-
                 }
 
                 return response;
@@ -197,7 +194,6 @@ public class AuthService : IAuthService
             return response;
         }
     }
-
     public async Task<ApiResult<RefeshTokenResponse>> RefreshTokenAsync(string refreshToken,string jwtID, int accountId, int companyId, string ip, string imie)
     {
         var response = new ApiResult<RefeshTokenResponse>()
@@ -304,7 +300,6 @@ public class AuthService : IAuthService
             return response;
         }
     }
-
     public async Task<ApiResult<bool>> LogoutAsync(string refreshToken, int accountId, int companyId, string ip, string imie)
     {
         var response = new ApiResult<bool>()
@@ -357,7 +352,6 @@ public class AuthService : IAuthService
             return response;
         }
     }
-
     public async Task<ApiResult<bool>> CreatePassFornewEmployeeAsync(int employeeAccountMapId, string newPass , string comfirmPass)
     {
         var response = new ApiResult<bool>()
@@ -414,8 +408,6 @@ public class AuthService : IAuthService
             return response;
         }
     }
-
-
     public async Task<ApiResult<bool>> ChangePass(int employeeAccountMapId, string newPass, string oldPass)
     {
         var response = new ApiResult<bool>()
@@ -467,6 +459,65 @@ public class AuthService : IAuthService
         catch (Exception ex)
         {
             LoggerHelper.Error($"UpdatePassAsync Exception  {employeeAccountMapId} int newPass {newPass}, int comfirmPass {oldPass}", ex);
+            response.Code = ResponseResultEnum.SystemError.Value();
+            response.Message = ResponseResultEnum.SystemError.Text();
+            return response;
+        }
+    }
+    public async Task<ApiResult<int>> RegisterAccount(string accountName, string fullname, bool isUsePhone)
+    {
+        var response = new ApiResult<int>()
+        {
+            Code = ResponseResultEnum.ServiceUnavailable.Value(),
+            Message = ResponseResultEnum.ServiceUnavailable.Text()
+        };
+
+        // Validate input (có thể thêm FluentValidation ở đây)
+        if (string.IsNullOrEmpty(accountName))
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = "Vui lòng nhập thông tin đăng ký.";
+            return response;
+        }
+
+        try
+        {
+            string phone = "";
+            string email = "";
+            if (string.IsNullOrEmpty(fullname))
+            {
+                fullname = Helper.GenerateUniqueString(15);
+            }
+
+            if(isUsePhone == true)
+            {
+                phone = accountName;
+                email = $"{accountName}@mail.com";
+            }
+            else
+            {
+                email = accountName;
+                phone = Helper.GenerateUniqueNumber(11);
+            }
+
+            // Implement refresh token logic here
+            var accountId = await _authRepository.RegisterAccount(phone,email , fullname);
+            if (accountId > 0)
+            {
+                response.Data = accountId;
+                response.Code = ResponseResultEnum.Success.Value();
+                return response;
+            }
+            else
+            {
+                response.Code = ResponseResultEnum.InvalidData.Value();
+                response.Message = $"Sai thông tin.";
+                return response;
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"RegisterAccount Exception accountName {accountName} int fullname {fullname}, int isUsePhone {isUsePhone}", ex);
             response.Code = ResponseResultEnum.SystemError.Value();
             response.Message = ResponseResultEnum.SystemError.Text();
             return response;
