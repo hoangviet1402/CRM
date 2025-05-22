@@ -20,6 +20,37 @@ public class AuthRepository : IAuthRepository
         _storedProcedureMapper = new StoredProcedureMapperModule();
     }
 
+    public async Task<int> RegisterAccount(string phone, string email, string fullname)
+    {
+        using var connection = _dbConnection.CreateConnection("Default");
+        var result = 0;
+
+        try
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "@Phone", phone },
+                { "@Email", email },
+                { "@FullName", fullname }
+            };
+
+            var outputParameters = new Dictionary<string, object>();
+            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Account_Register", parameters, outputParameters);
+
+            if (success)
+            {
+                result = outputParameters.GetSafeInt32("@OutResult");
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"RegisterAccount Exception.", ex);
+            throw;
+        }
+
+        return result;
+    }
+
     public async Task<LoginResultEntities> Login(string accountName, bool isUsePhone, string password)
     {
         using var connection = _dbConnection.CreateConnection("Default");
