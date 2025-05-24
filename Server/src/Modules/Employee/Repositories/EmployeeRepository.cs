@@ -1,6 +1,7 @@
 using EmployeeModule.DTOs;
 using EmployeeModule.Entities;
 using Infrastructure.DbContext;
+using Infrastructure.Repositories;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Shared.Result;
@@ -10,20 +11,15 @@ using Infrastructure.StoredProcedureMapperModule;
 
 namespace EmployeeModule.Repositories;
 
-public class EmployeeRepository : IEmployeeRepository
+public class EmployeeRepository : BaseRepository, IEmployeeRepository
 {
-    private readonly DatabaseConnection _dbConnection;
-    private readonly StoredProcedureMapperModule _storedProcedureMapper;
-
     public EmployeeRepository(DatabaseConnection dbConnection)
+        : base(dbConnection, "TanCa")
     {
-        _dbConnection = dbConnection;
-        _storedProcedureMapper = new StoredProcedureMapperModule();
     }
 
     public async Task<EmployeeCreate_ResultEntities> EmployeeRegister(string fullname, string employeesCode, string phone, string email, string password, int companyId, int role)
     {
-        using var connection = _dbConnection.CreateConnection("Default");
         var response = new EmployeeCreate_ResultEntities();
 
         try
@@ -40,7 +36,10 @@ public class EmployeeRepository : IEmployeeRepository
             };
 
             var outputParameters = new Dictionary<string, object>();
-            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Employee_Create", parameters, outputParameters);
+            var success = await ExecuteWithConnection(async connection =>
+            {
+                return await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Employee_Create", parameters, outputParameters);
+            });
 
             if (success)
             {
@@ -53,7 +52,6 @@ public class EmployeeRepository : IEmployeeRepository
         catch (Exception ex)
         {
             LoggerHelper.Error($"EmployeeRegister Exception.", ex);
-            throw;
         }
 
         return response;
@@ -61,7 +59,6 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<EmployeeEntity?> GetEmployeeById(int id, int companyId)
     {
-        using var connection = _dbConnection.CreateConnection("Default");
         EmployeeEntity? result = null;
 
         try
@@ -72,7 +69,7 @@ public class EmployeeRepository : IEmployeeRepository
                 { "@CompanyId", companyId }
             };
 
-            var dataTable = await _storedProcedureMapper.ExecuteStoredProcedureWithResultAsync(connection, "Ins_Employee_GetById", parameters);
+            var dataTable = await ExecuteStoredProcedureWithResultAsync("Ins_Employee_GetById", parameters);
 
             if (dataTable != null && dataTable.Rows.Count > 0)
             {
@@ -90,7 +87,6 @@ public class EmployeeRepository : IEmployeeRepository
         catch (Exception ex)
         {
             LoggerHelper.Error($"GetEmployeeById Exception.", ex);
-            throw;
         }
 
         return result;

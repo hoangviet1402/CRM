@@ -2,6 +2,7 @@ using System.Data;
 using AuthModule.DTOs;
 using AuthModule.Entities;
 using Infrastructure.DbContext;
+using Infrastructure.Repositories;
 using Microsoft.Data.SqlClient;
 using Shared.Entities;
 using Shared.Helpers;
@@ -9,22 +10,18 @@ using Infrastructure.StoredProcedureMapperModule;
 
 namespace AuthModule.Repositories;
 
-public class AuthRepository : IAuthRepository
+public class AuthRepository : BaseRepository, IAuthRepository
 {
-    private readonly DatabaseConnection _dbConnection;
     private readonly StoredProcedureMapperModule _storedProcedureMapper;
 
     public AuthRepository(DatabaseConnection dbConnection)
+        : base(dbConnection, "TanCa")
     {
-        _dbConnection = dbConnection;
         _storedProcedureMapper = new StoredProcedureMapperModule();
     }
 
     public async Task<int> RegisterAccount(string phone, string email, string fullname)
     {
-        using var connection = _dbConnection.CreateConnection("Default");
-        var result = 0;
-
         try
         {
             var parameters = new Dictionary<string, object>
@@ -34,26 +31,17 @@ public class AuthRepository : IAuthRepository
                 { "@FullName", fullname }
             };
 
-            var outputParameters = new Dictionary<string, object>();
-            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Account_Register", parameters, outputParameters);
-
-            if (success)
-            {
-                result = outputParameters.GetSafeInt32("@OutResult");
-            }
+            return await ExecuteStoredProcedureAsync("Ins_Account_Register", parameters);
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"RegisterAccount Exception.", ex);
-            throw;
+            return 0;
         }
-
-        return result;
     }
 
     public async Task<LoginResultEntities> Login(string accountName, bool isUsePhone, string password)
     {
-        using var connection = _dbConnection.CreateConnection("Default");
         var response = new LoginResultEntities();
 
         try
@@ -64,7 +52,7 @@ public class AuthRepository : IAuthRepository
                 { "@IsUsePhone", isUsePhone }
             };
 
-            var result = await _storedProcedureMapper.ExecuteStoredProcedureWithResultAsync(connection, "Ins_Account_Login", parameters);
+            var result = await ExecuteStoredProcedureWithResultAsync("Ins_Account_Login", parameters);
 
             if (result != null && result.Rows.Count > 0)
             {
@@ -83,7 +71,6 @@ public class AuthRepository : IAuthRepository
         catch (Exception ex)
         {
             LoggerHelper.Error($"Login Exception.", ex);
-            throw;
         }
 
         return response;
@@ -91,9 +78,6 @@ public class AuthRepository : IAuthRepository
 
     public async Task<int> UpdatePass(int employeeAccountMapId, string newPass, string oldPass, int needSetPassword)
     {
-        using var connection = _dbConnection.CreateConnection();
-        var result = 0;
-
         try
         {
             var parameters = new Dictionary<string, object>
@@ -104,26 +88,17 @@ public class AuthRepository : IAuthRepository
                 { "@NeedSetPassword", needSetPassword }
             };
 
-            var outputParameters = new Dictionary<string, object>();
-            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Account_UpdatePass", parameters, outputParameters);
-
-            if (success)
-            {
-                result = outputParameters.GetSafeInt32("@OutResult");
-            }
+            return await ExecuteStoredProcedureAsync("Ins_Account_UpdatePass", parameters);
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"UpdatePass Exception.", ex);
-            throw;
+            return 0;
         }
-
-        return result;
     }
 
     public async Task<List<CompanyAccountMapEntities>> GetCompanyByAccountId(int accountId)
     {
-        using var connection = _dbConnection.CreateConnection();
         var response = new List<CompanyAccountMapEntities>();
 
         try
@@ -133,7 +108,7 @@ public class AuthRepository : IAuthRepository
                 { "@AccountId", accountId }
             };
 
-            var result = await _storedProcedureMapper.ExecuteStoredProcedureWithResultAsync(connection, "Ins_Account_GetAllCompany", parameters);
+            var result = await ExecuteStoredProcedureWithResultAsync("Ins_Account_GetAllCompany", parameters);
 
             if (result != null)
             {
@@ -169,7 +144,6 @@ public class AuthRepository : IAuthRepository
         catch (Exception ex)
         {
             LoggerHelper.Error($"GetCompanyByAccountId Exception.", ex);
-            throw;
         }
 
         return response;
@@ -177,9 +151,6 @@ public class AuthRepository : IAuthRepository
 
     public async Task<int> InsertEmployeeToken(int employeeAccountMapId, string jwtID, string refreshToken, int lifeTime, string ip, string imie)
     {
-        using var connection = _dbConnection.CreateConnection();
-        var result = 0;
-
         try
         {
             var parameters = new Dictionary<string, object>
@@ -192,28 +163,17 @@ public class AuthRepository : IAuthRepository
                 { "@Imie", imie }
             };
 
-            var outputParameters = new Dictionary<string, object>();
-            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Account_InsertTokens", parameters, outputParameters);
-
-            if (success)
-            {
-                result = outputParameters.GetSafeInt32("@OutResult");
-            }
+            return await ExecuteStoredProcedureAsync("Ins_Account_InsertTokens", parameters);
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"InsertEmployeeToken Exception.", ex);
-            throw;
+            return 0;
         }
-
-        return result;
     }
 
     public async Task<int> RevokeEmployeeToken(int tokenId, string ip, string imie)
     {
-        using var connection = _dbConnection.CreateConnection();
-        var result = 0;
-
         try
         {
             var parameters = new Dictionary<string, object>
@@ -223,28 +183,17 @@ public class AuthRepository : IAuthRepository
                 { "@Imie", imie }
             };
 
-            var outputParameters = new Dictionary<string, object>();
-            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Account_RevokeToken", parameters, outputParameters);
-
-            if (success)
-            {
-                result = outputParameters.GetSafeInt32("@OutResult");
-            }
+            return await ExecuteStoredProcedureAsync("Ins_Account_RevokeToken", parameters);
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"RevokeEmployeeToken Exception.", ex);
-            throw;
+            return 0;
         }
-
-        return result;
     }
 
     public async Task<int> UpdateEmployeeJwtID(int tokenId, string jwtID, string ip, string imie)
     {
-        using var connection = _dbConnection.CreateConnection();
-        var result = 0;
-
         try
         {
             var parameters = new Dictionary<string, object>
@@ -255,26 +204,17 @@ public class AuthRepository : IAuthRepository
                 { "@Imie", imie }
             };
 
-            var outputParameters = new Dictionary<string, object>();
-            var success = await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Account_UpdateToken_JwtID", parameters, outputParameters);
-
-            if (success)
-            {
-                result = outputParameters.GetSafeInt32("@OutResult");
-            }
+            return await ExecuteStoredProcedureAsync("Ins_Account_UpdateToken_JwtID", parameters);
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"UpdateEmployeeJwtID Exception.", ex);
-            throw;
+            return 0;
         }
-
-        return result;
     }
 
     public async Task<AccountTokenInfoEntities> GetTokenInfo(int accountId, int companyId)
     {
-        using var connection = _dbConnection.CreateConnection();
         var result = new AccountTokenInfoEntities();
 
         try
@@ -285,7 +225,7 @@ public class AuthRepository : IAuthRepository
                 { "@CompanyId", companyId }
             };
 
-            var dataTable = await _storedProcedureMapper.ExecuteStoredProcedureWithResultAsync(connection, "Ins_Account_GetTokensByEmployeeID", parameters);
+            var dataTable = await ExecuteStoredProcedureWithResultAsync("Ins_Account_GetTokensByEmployeeID", parameters);
 
             if (dataTable != null && dataTable.Rows.Count > 0)
             {
@@ -310,7 +250,6 @@ public class AuthRepository : IAuthRepository
         catch (Exception ex)
         {
             LoggerHelper.Error($"GetTokenInfo Exception.", ex);
-            throw;
         }
 
         return result;

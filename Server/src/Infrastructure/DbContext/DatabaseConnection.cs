@@ -11,8 +11,12 @@ public class DatabaseConnection
         _connectionStrings = connectionStrings;
     }
 
-    public SqlConnection CreateConnection(string databaseName = "Default")
+    public SqlConnection CreateConnection(string databaseName)
     {
+        if (string.IsNullOrEmpty(databaseName))
+        {
+            throw new ArgumentException($"database '{databaseName}' not NullOrEmpty.");
+        }
         if (!_connectionStrings.ContainsKey(databaseName))
         {
             throw new ArgumentException($"Connection string for database '{databaseName}' not found.");
