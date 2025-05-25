@@ -1,17 +1,16 @@
 using EmployeeModule.DTOs;
 using EmployeeModule.Entities;
 using Infrastructure.DbContext;
-using Infrastructure.Repositories;
+using Infrastructure.StoredProcedureMapperModule;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Shared.Result;
 using Shared.Helpers;
 using Shared.Enums;
-using Infrastructure.StoredProcedureMapperModule;
 
 namespace EmployeeModule.Repositories;
 
-public class EmployeeRepository : BaseRepository, IEmployeeRepository
+public class EmployeeRepository : StoredProcedureMapperModule, IEmployeeRepository
 {
     public EmployeeRepository(DatabaseConnection dbConnection)
         : base(dbConnection, "TanCa")
@@ -36,10 +35,7 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
             };
 
             var outputParameters = new Dictionary<string, object>();
-            var success = await ExecuteWithConnection(async connection =>
-            {
-                return await _storedProcedureMapper.ExecuteStoredProcedureAsync(connection, "Ins_Employee_Create", parameters, outputParameters);
-            });
+            var success = await ExecuteStoredProcedureAsync<bool>("Ins_Employee_Create", parameters, outputParameters);
 
             if (success)
             {
@@ -69,7 +65,7 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
                 { "@CompanyId", companyId }
             };
 
-            var dataTable = await ExecuteStoredProcedureWithResultAsync("Ins_Employee_GetById", parameters);
+            var dataTable = await ExecuteStoredProcedureAsync<DataTable>("Ins_Employee_GetById", parameters);
 
             if (dataTable != null && dataTable.Rows.Count > 0)
             {

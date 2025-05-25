@@ -19,7 +19,7 @@ public class AuthResponse
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public AuthCompanyResponse? Company { get; set; }
 
-    public List<AuthCompanyResponse>? Companys { get; set; }
+    public List<AuthCompanyResponse>? ListCompanies { get; set; }
 }
 
 public class AuthUserResponse

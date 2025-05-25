@@ -1,23 +1,20 @@
-using System.Data;
+﻿using System.Data;
 using AuthModule.DTOs;
 using AuthModule.Entities;
+using Azure;
 using Infrastructure.DbContext;
-using Infrastructure.Repositories;
+using Infrastructure.StoredProcedureMapperModule;
 using Microsoft.Data.SqlClient;
 using Shared.Entities;
 using Shared.Helpers;
-using Infrastructure.StoredProcedureMapperModule;
 
 namespace AuthModule.Repositories;
 
-public class AuthRepository : BaseRepository, IAuthRepository
+public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
 {
-    private readonly StoredProcedureMapperModule _storedProcedureMapper;
-
     public AuthRepository(DatabaseConnection dbConnection)
         : base(dbConnection, "TanCa")
     {
-        _storedProcedureMapper = new StoredProcedureMapperModule();
     }
 
     public async Task<int> RegisterAccount(string phone, string email, string fullname)
@@ -31,7 +28,13 @@ public class AuthRepository : BaseRepository, IAuthRepository
                 { "@FullName", fullname }
             };
 
-            return await ExecuteStoredProcedureAsync("Ins_Account_Register", parameters);
+            var outputParameters = new Dictionary<string, object>
+            {
+                { "@OutResult", 0 } 
+            };
+
+            await ExecuteStoredProcedureAsync<int>("Ins_Account_Register", parameters, outputParameters);
+            return outputParameters.GetSafeInt32("@OutResult");
         }
         catch (Exception ex)
         {
@@ -40,10 +43,8 @@ public class AuthRepository : BaseRepository, IAuthRepository
         }
     }
 
-    public async Task<LoginResultEntities> Login(string accountName, bool isUsePhone, string password)
+    public async Task<LoginResultEntities?> Login(string accountName, bool isUsePhone, string password)
     {
-        var response = new LoginResultEntities();
-
         try
         {
             var parameters = new Dictionary<string, object>
@@ -52,28 +53,13 @@ public class AuthRepository : BaseRepository, IAuthRepository
                 { "@IsUsePhone", isUsePhone }
             };
 
-            var result = await ExecuteStoredProcedureWithResultAsync("Ins_Account_Login", parameters);
-
-            if (result != null && result.Rows.Count > 0)
-            {
-                var row = result.Rows[0];
-                response = new LoginResultEntities
-                {
-                    AccountId = row.GetSafeInt32("EmployeeId"),
-                    Phone = row.GetSafeString("Phone"),
-                    Email = row.GetSafeString("Email"),
-                    CreatedAt = row.GetSafeDateTime("CreatedAt"),
-                    IsActive = row.GetSafeBoolean("IsActive"),
-                    TotalCompany = row.GetSafeInt32("IsNewUser")
-                };
-            }
+            return await ExecuteStoredProcedureAsync<LoginResultEntities>("Ins_Account_Login", parameters);
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"Login Exception.", ex);
+            return new LoginResultEntities();
         }
-
-        return response;
     }
 
     public async Task<int> UpdatePass(int employeeAccountMapId, string newPass, string oldPass, int needSetPassword)
@@ -87,8 +73,14 @@ public class AuthRepository : BaseRepository, IAuthRepository
                 { "@OldPass", needSetPassword == 0 ? AESHelper.HashPassword(oldPass) : "" },
                 { "@NeedSetPassword", needSetPassword }
             };
-
-            return await ExecuteStoredProcedureAsync("Ins_Account_UpdatePass", parameters);
+            
+            var outputParameters = new Dictionary<string, object>
+            {
+                { "@OutResult", 0 } 
+            };
+            
+            await ExecuteStoredProcedureAsync<int>("Ins_Account_UpdatePass", parameters, outputParameters);
+            return outputParameters.GetSafeInt32("@OutResult");
         }
         catch (Exception ex)
         {
@@ -99,8 +91,6 @@ public class AuthRepository : BaseRepository, IAuthRepository
 
     public async Task<List<CompanyAccountMapEntities>> GetCompanyByAccountId(int accountId)
     {
-        var response = new List<CompanyAccountMapEntities>();
-
         try
         {
             var parameters = new Dictionary<string, object>
@@ -108,45 +98,13 @@ public class AuthRepository : BaseRepository, IAuthRepository
                 { "@AccountId", accountId }
             };
 
-            var result = await ExecuteStoredProcedureWithResultAsync("Ins_Account_GetAllCompany", parameters);
-
-            if (result != null)
-            {
-                foreach (DataRow row in result.Rows)
-                {
-                    if (row.GetSafeInt32("EmployeeAccountMapId") > 0)
-                    {
-                        response.Add(new CompanyAccountMapEntities
-                        {
-                            EmployeeAccountMapId = row.GetSafeInt32("EmployeeAccountMapId"),
-                            AccountId = row.GetSafeInt32("AccountId"),
-                            CompanyId = row.GetSafeInt32("CompanyId"),
-                            EmployeesInfoId = row.GetSafeInt32("EmployeesInfoId"),
-                            EmployeesFullName = row.GetSafeString("EmployeesFullName"),
-                            Role = row.GetSafeInt32("Role"),
-                            IsActive = row.GetSafeBoolean("IsActive"),
-                            PasswordHash = row.GetSafeString("PasswordHash"),
-                            IsNewUser = row.GetSafeBoolean("IsNewUser"),
-                            NeedSetPassword = row.GetSafeBoolean("NeedSetPassword"),
-                            CreatedAt = row.GetSafeDateTime("CreatedAt"),
-                            CompanyFullName = row.GetSafeString("CompanyFullName"),
-                            CompanyAlias = row.GetSafeString("Alias"),
-                            CompanyPrefix = row.GetSafeString("Prefix"),
-                            CompanyCreateDate = row.GetSafeDateTime("CompanyCreateDate"),
-                            TotalEmployees = row.GetSafeInt32("TotalEmployees"),
-                            CompanyIsActive = row.GetSafeBoolean("CompanyIsActive"),
-                            CreateStep = row.GetSafeInt32("CreateStep")
-                        });
-                    }
-                }
-            }
+            return await ExecuteStoredProcedureListAsync<CompanyAccountMapEntities>("Ins_Account_GetAllCompany", parameters);
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"GetCompanyByAccountId Exception.", ex);
+            return new List<CompanyAccountMapEntities>();
         }
-
-        return response;
     }
 
     public async Task<int> InsertEmployeeToken(int employeeAccountMapId, string jwtID, string refreshToken, int lifeTime, string ip, string imie)
@@ -163,7 +121,13 @@ public class AuthRepository : BaseRepository, IAuthRepository
                 { "@Imie", imie }
             };
 
-            return await ExecuteStoredProcedureAsync("Ins_Account_InsertTokens", parameters);
+            var outputParameters = new Dictionary<string, object>
+            {
+                { "@OutResult", 0 } 
+            };
+
+            await ExecuteStoredProcedureAsync<int>("Ins_Account_InsertTokens", parameters, outputParameters);
+            return outputParameters.GetSafeInt32("@OutResult");
         }
         catch (Exception ex)
         {
@@ -183,7 +147,13 @@ public class AuthRepository : BaseRepository, IAuthRepository
                 { "@Imie", imie }
             };
 
-            return await ExecuteStoredProcedureAsync("Ins_Account_RevokeToken", parameters);
+            var outputParameters = new Dictionary<string, object>
+            {
+                { "@OutResult", 0 }
+            };
+
+            await ExecuteStoredProcedureAsync<int>("Ins_Account_RevokeToken", parameters, outputParameters);
+            return outputParameters.GetSafeInt32("@OutResult");
         }
         catch (Exception ex)
         {
@@ -204,7 +174,13 @@ public class AuthRepository : BaseRepository, IAuthRepository
                 { "@Imie", imie }
             };
 
-            return await ExecuteStoredProcedureAsync("Ins_Account_UpdateToken_JwtID", parameters);
+            var outputParameters = new Dictionary<string, object>
+            {
+                { "@OutResult", 0 }
+            };
+
+            await ExecuteStoredProcedureAsync<int>("Ins_Account_UpdateToken_JwtID", parameters, outputParameters);
+            return outputParameters.GetSafeInt32("@OutResult");
         }
         catch (Exception ex)
         {
@@ -215,8 +191,6 @@ public class AuthRepository : BaseRepository, IAuthRepository
 
     public async Task<AccountTokenInfoEntities> GetTokenInfo(int accountId, int companyId)
     {
-        var result = new AccountTokenInfoEntities();
-
         try
         {
             var parameters = new Dictionary<string, object>
@@ -225,33 +199,12 @@ public class AuthRepository : BaseRepository, IAuthRepository
                 { "@CompanyId", companyId }
             };
 
-            var dataTable = await ExecuteStoredProcedureWithResultAsync("Ins_Account_GetTokensByEmployeeID", parameters);
-
-            if (dataTable != null && dataTable.Rows.Count > 0)
-            {
-                var row = dataTable.Rows[0];
-                result = new AccountTokenInfoEntities
-                {
-                    Id = row.GetSafeInt32("Id"),
-                    JwtID = row.GetSafeString("JwtID"),
-                    RefreshToken = row.GetSafeString("RefreshToken"),
-                    Expires = row.GetSafeDateTime("Expires"),
-                    Ip = row.GetSafeString("Ip"),
-                    IsActive = row.GetSafeBoolean("IsActive"),
-                    Role = row.GetSafeInt32("Role"),
-                    AccountId = row.GetSafeInt32("AccountId"),
-                    CompanyId = row.GetSafeInt32("CompanyId"),
-                    EmployeesInfoId = row.GetSafeInt32("EmployeesInfoId"),
-                    CompanyIsActive = row.GetSafeBoolean("CompanyIsActive"),
-                    AccountIsActive = row.GetSafeBoolean("AccountIsActive")
-                };
-            }
+            return await ExecuteStoredProcedureAsync<AccountTokenInfoEntities>("Ins_Account_GetTokensByEmployeeID", parameters);
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"GetTokenInfo Exception.", ex);
+            return null;
         }
-
-        return result;
     }
 } 

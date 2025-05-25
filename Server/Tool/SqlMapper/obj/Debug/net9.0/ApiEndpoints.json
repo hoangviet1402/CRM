@@ -1,0 +1,70 @@
+[
+  {
+    "ContainingType": "SqlMapper.Controllers.ModelGeneratorController",
+    "Method": "GenerateModel",
+    "RelativePath": "api/ModelGenerator/generate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "procedureName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "className",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SqlMapper.Controllers.ModelGeneratorController",
+    "Method": "GenerateAndSaveModel",
+    "RelativePath": "api/ModelGenerator/generate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "procedureName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "className",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SqlMapper.Controllers.TestController",
+    "Method": "TestConnection",
+    "RelativePath": "api/Test/connection",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SqlMapper.Controllers.TestController",
+    "Method": "ListStoredProcedures",
+    "RelativePath": "api/Test/procedures",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "database",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

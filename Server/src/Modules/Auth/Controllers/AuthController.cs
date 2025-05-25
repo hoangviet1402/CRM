@@ -107,14 +107,14 @@ public class AuthController : ControllerBase
     [Authorize]
     [HttpPost("createpass")]
     [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
-    public async Task<IActionResult> CreatePass([FromBody] int employeeAccountMapId, string newPass, string comfirmPass)
+    public async Task<IActionResult> CreatePass([FromBody] CreatePassRequest request)
     {
         try
         {
             var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
-            var result = await _authService.CreatePassFornewEmployeeAsync(employeeAccountMapId, newPass, comfirmPass);
+            var result = await _authService.CreatePassFornewEmployeeAsync(request.EmployeeAccountMapId, request.NewPass, request.ComfirmPass);
 
             return Ok(result);
         }
@@ -134,14 +134,14 @@ public class AuthController : ControllerBase
     [Authorize]
     [HttpPost("changepass")]
     [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
-    public async Task<IActionResult> ChangePass([FromBody] int employeeAccountMapId, string newPass, string oldPass)
+    public async Task<IActionResult> ChangePass([FromBody] ChangePassRequest request)
     {
         try
         {
             var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
-            var result = await _authService.CreatePassFornewEmployeeAsync(employeeAccountMapId, newPass, oldPass);
+            var result = await _authService.CreatePassFornewEmployeeAsync(request.EmployeeAccountMapId, request.NewPass, request.OldPass);
 
             return Ok(result);
         }

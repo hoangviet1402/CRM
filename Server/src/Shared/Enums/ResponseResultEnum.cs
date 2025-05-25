@@ -92,6 +92,7 @@ public enum ResponseResultEnum
     //Company
     CompanyLocked = 200,
     MoreThanOneCompany = 201,
+    CompanyNoData = 202,
     //Employees    
     EmployeesLocked = 300,
     EmployeesNeedSetPass = 301,

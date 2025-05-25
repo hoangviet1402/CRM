@@ -8,8 +8,9 @@ namespace Shared.Helpers
 {
     public class JwtHelper
     {
-        public static string  GenerateAccessToken(int accountId, int employeeId, int companyId, int role ,string jwtID, IConfiguration configuration)
+        public static string  GenerateAccessToken(int accountId, int employeeId, int companyId, int role , IConfiguration configuration,out string jwtID)
         {
+            jwtID = GenerateRefreshToken();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
