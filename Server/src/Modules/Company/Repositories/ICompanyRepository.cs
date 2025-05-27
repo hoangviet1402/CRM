@@ -19,4 +19,6 @@ public interface ICompanyRepository
     Task<List<int>> CreateBranchesOptimizedAsync(int companyId, List<string> branchNames);
 
     Task<List<DepartmentCreatedResult>> CreateDepartmentsInAllBranchesOptimizedAsync(int companyId, List<string> departmentNames);
+
+    Task<int> UpdateCompanyStepAsync(int createStep, int companyId);
 } 

@@ -21,4 +21,24 @@ public enum CompanyStatusEnum
     Locked = 3,
 
     
-} 
+}
+
+public enum CompanyStep
+{
+    /// <summary>
+    /// Đang hoạt động
+    /// </summary>
+    Begin = 0,
+
+    /// <summary>
+    /// Đã ngừng hoạt động
+    /// </summary>
+    Branch = 1,
+
+    /// <summary>
+    /// Đã bị khóa
+    /// </summary>
+    Department = 2,
+
+
+}

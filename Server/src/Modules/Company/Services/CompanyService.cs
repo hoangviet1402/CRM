@@ -95,6 +95,7 @@ public class CompanyService : ICompanyService
             
             if (branchId > 0)
             {
+                var result = await _companyRepository.UpdateCompanyStepAsync(CompanyStep.Branch.Value(), request.CompanyId);
                 response.Data = branchId;
                 response.Code = ResponseResultEnum.Success.Value();
                 response.Message = "Tạo chi nhánh thành công";
@@ -151,6 +152,7 @@ public class CompanyService : ICompanyService
             
             if (departmentId > 0)
             {
+                var result = await _companyRepository.UpdateCompanyStepAsync(CompanyStep.Department.Value(), request.CompanyId);
                 response.Data = departmentId;
                 response.Code = ResponseResultEnum.Success.Value();
                 response.Message = "Tạo phòng ban thành công";
