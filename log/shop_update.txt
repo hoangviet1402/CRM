@@ -1,0 +1,48 @@
+shop/update
+{"first_step_modal_off":1}
+
+
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "id": "68373dc417928693880c1c36",
+        "name": "Shop th\u1ee9c \u0103n cho m\u00e8o",
+        "alias": "ahihihoho",
+        "username": "ahihihoho",
+        "address_lat": null,
+        "address_lng": null,
+        "tel": null,
+        "address": "H\u1ed3 Ch\u00ed Minh, Vi\u1ec7t Nam",
+        "description": null,
+        "package": [],
+        "created_at": "2025-05-28 23:45:56",
+        "website": null,
+        "email": "vietnguyenhuy.1402@gmail.com",
+        "type_of_business": null,
+        "tax_code": null,
+        "bank_account": null,
+        "bank": null,
+        "founded_date": null,
+        "scale": null,
+        "charter_capital": null,
+        "logo": null,
+        "brand_logo": null,
+        "code": null,
+        "phone": "198919891989",
+        "r_gold": 0,
+        "y_gold": 0,
+        "is_shopee": false,
+        "recruitment_template_id": null,
+        "employee_excel_version": null,
+        "tutorial": {
+            "c1": 0,
+            "c2": 0,
+            "c3": 0
+        },
+        "get_started_step": -1
+    }
+}

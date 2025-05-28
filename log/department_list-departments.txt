@@ -6,22 +6,21 @@
     "from_cache": null,
     "data": {
         "meta": {
-            "total": 3,
-            "count": 3,
+            "total": 5,
+            "count": 5,
             "per_page": 15,
             "current_page": 1,
             "total_pages": 1
         },
         "items": [
             {
-                "id": "68368cad3a7e3e6f8d05ce8d",
+                "id": "6837408d57560cb88f013755",
                 "name": "Gi\u00e1m \u0111\u1ed1c",
-                "created_at": "2025-05-28 11:10:21",
-                "shop_id": "68367a7892895b12ca0e6108",
+                "created_at": "2025-05-28 23:57:49",
+                "shop_id": "68373dc417928693880c1c36",
                 "description": null,
                 "branch_ids": [
-                    "68368ac7f57e0abc7c0d83cf",
-                    "68368ac7cda17b102d071343"
+                    "6837404b56b1750b0906c78c"
                 ],
                 "parent_id": null,
                 "sort_index": 0,
@@ -31,29 +30,23 @@
                 "is_head": null,
                 "branches": [
                     {
-                        "id": "68368ac7f57e0abc7c0d83cf",
-                        "name": "Chi nh\u00e1nh 2",
-                        "color": null
-                    },
-                    {
-                        "id": "68368ac7cda17b102d071343",
+                        "id": "6837404b56b1750b0906c78c",
                         "name": "Chi nh\u00e1nh 1",
                         "color": null
                     }
                 ],
-                "key": "68368cad3a7e3e6f8d05ce8d",
-                "value": "68368cad3a7e3e6f8d05ce8d",
+                "key": "6837408d57560cb88f013755",
+                "value": "6837408d57560cb88f013755",
                 "title": "Gi\u00e1m \u0111\u1ed1c"
             },
             {
-                "id": "68368cad5c69997aa80a94c9",
+                "id": "6837408d028ba3294204aa8b",
                 "name": "Marketing",
-                "created_at": "2025-05-28 11:10:21",
-                "shop_id": "68367a7892895b12ca0e6108",
+                "created_at": "2025-05-28 23:57:49",
+                "shop_id": "68373dc417928693880c1c36",
                 "description": null,
                 "branch_ids": [
-                    "68368ac7f57e0abc7c0d83cf",
-                    "68368ac7cda17b102d071343"
+                    "6837404b56b1750b0906c78c"
                 ],
                 "parent_id": null,
                 "sort_index": 0,
@@ -63,29 +56,75 @@
                 "is_head": null,
                 "branches": [
                     {
-                        "id": "68368ac7f57e0abc7c0d83cf",
-                        "name": "Chi nh\u00e1nh 2",
-                        "color": null
-                    },
-                    {
-                        "id": "68368ac7cda17b102d071343",
+                        "id": "6837404b56b1750b0906c78c",
                         "name": "Chi nh\u00e1nh 1",
                         "color": null
                     }
                 ],
-                "key": "68368cad5c69997aa80a94c9",
-                "value": "68368cad5c69997aa80a94c9",
+                "key": "6837408d028ba3294204aa8b",
+                "value": "6837408d028ba3294204aa8b",
                 "title": "Marketing"
             },
             {
-                "id": "68368cadd87f4be03d034222",
-                "name": "Nh\u00e2n s\u1ef1",
-                "created_at": "2025-05-28 11:10:21",
-                "shop_id": "68367a7892895b12ca0e6108",
+                "id": "6837408d0a256f32d606acf2",
+                "name": "Viet",
+                "created_at": "2025-05-28 23:57:49",
+                "shop_id": "68373dc417928693880c1c36",
                 "description": null,
                 "branch_ids": [
-                    "68368ac7f57e0abc7c0d83cf",
-                    "68368ac7cda17b102d071343"
+                    "6837404b56b1750b0906c78c"
+                ],
+                "parent_id": null,
+                "sort_index": 0,
+                "parent": null,
+                "code": "VIET",
+                "alias": "viet",
+                "is_head": null,
+                "branches": [
+                    {
+                        "id": "6837404b56b1750b0906c78c",
+                        "name": "Chi nh\u00e1nh 1",
+                        "color": null
+                    }
+                ],
+                "key": "6837408d0a256f32d606acf2",
+                "value": "6837408d0a256f32d606acf2",
+                "title": "Viet"
+            },
+            {
+                "id": "6837408df327c083c3052510",
+                "name": "B\u00e1n h\u00e0ng",
+                "created_at": "2025-05-28 23:57:49",
+                "shop_id": "68373dc417928693880c1c36",
+                "description": null,
+                "branch_ids": [
+                    "6837404b56b1750b0906c78c"
+                ],
+                "parent_id": null,
+                "sort_index": 0,
+                "parent": null,
+                "code": "BAN_HANG",
+                "alias": "ban-hang",
+                "is_head": null,
+                "branches": [
+                    {
+                        "id": "6837404b56b1750b0906c78c",
+                        "name": "Chi nh\u00e1nh 1",
+                        "color": null
+                    }
+                ],
+                "key": "6837408df327c083c3052510",
+                "value": "6837408df327c083c3052510",
+                "title": "B\u00e1n h\u00e0ng"
+            },
+            {
+                "id": "6837408d90c06827560334e2",
+                "name": "Nh\u00e2n s\u1ef1",
+                "created_at": "2025-05-28 23:57:49",
+                "shop_id": "68373dc417928693880c1c36",
+                "description": null,
+                "branch_ids": [
+                    "6837404b56b1750b0906c78c"
                 ],
                 "parent_id": null,
                 "sort_index": 0,
@@ -95,18 +134,13 @@
                 "is_head": null,
                 "branches": [
                     {
-                        "id": "68368ac7f57e0abc7c0d83cf",
-                        "name": "Chi nh\u00e1nh 2",
-                        "color": null
-                    },
-                    {
-                        "id": "68368ac7cda17b102d071343",
+                        "id": "6837404b56b1750b0906c78c",
                         "name": "Chi nh\u00e1nh 1",
                         "color": null
                     }
                 ],
-                "key": "68368cadd87f4be03d034222",
-                "value": "68368cadd87f4be03d034222",
+                "key": "6837408d90c06827560334e2",
+                "value": "6837408d90c06827560334e2",
                 "title": "Nh\u00e2n s\u1ef1"
             }
         ]

@@ -1,3 +1,4 @@
+
 {
     "error_code": 0,
     "message": [
@@ -5,14 +6,13 @@
     ],
     "from_cache": null,
     "data": {
-        "id": "68368cad3a7e3e6f8d05ce8d",
+        "id": "6837408d57560cb88f013755",
         "name": "Gi\u00e1m \u0111\u1ed1c",
-        "created_at": "2025-05-28 11:10:21",
-        "shop_id": "68367a7892895b12ca0e6108",
+        "created_at": "2025-05-28 23:57:49",
+        "shop_id": "68373dc417928693880c1c36",
         "description": null,
         "branch_ids": [
-            "68368ac7f57e0abc7c0d83cf",
-            "68368ac7cda17b102d071343"
+            "6837404b56b1750b0906c78c"
         ],
         "parent_id": null,
         "sort_index": 0,
@@ -20,8 +20,10 @@
         "code": "GIAM_DOC",
         "alias": "giam-doc",
         "is_head": null,
-        "key": "68368cad3a7e3e6f8d05ce8d",
-        "value": "68368cad3a7e3e6f8d05ce8d",
+        "key": "6837408d57560cb88f013755",
+        "value": "6837408d57560cb88f013755",
         "title": "Gi\u00e1m \u0111\u1ed1c"
     }
 }
+
+{"branch_ids":["6837404b56b1750b0906c78c"],"branchs":[{"value":"6837404b56b1750b0906c78c","label":"Chi nhánh 1"}],"code":"","name":"Giám đốc","is_onboarding":1}

@@ -1,0 +1,33 @@
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "id": "6837404b56b1750b0906c78c",
+        "name": "Chi nh\u00e1nh 1",
+        "region": {
+            "id": "68373e5c55cb0e966e03039e",
+            "name": "Shop th\u1ee9c \u0103n cho m\u00e8o"
+        },
+        "address_lat": 10.80437,
+        "address_lng": 106.71927,
+        "country": "",
+        "province": "",
+        "district": "",
+        "tel": null,
+        "address": "H\u1ed3 Ch\u00ed Minh, Vi\u1ec7t Nam",
+        "description": null,
+        "is_headquarter": null,
+        "created_at": "2025-05-28 23:56:43",
+        "alias": "chi-nhanh-1",
+        "color": null,
+        "code": "CHI_NHANH_1",
+        "sort_index": 0,
+        "phone_code": 84
+    }
+}
+
+
+{"name":"Chi nhánh 1","address":"Hồ Chí Minh, Việt Nam","region_id":"68373e5c55cb0e966e03039e","is_onboarding":1,"address_lat":10.80437,"address_lng":106.71927}

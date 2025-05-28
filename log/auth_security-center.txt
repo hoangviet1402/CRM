@@ -23,4 +23,27 @@
     }
 }
 
+--- 1
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "items": [],
+        "item_to_optimize": 2,
+        "score": 20,
+        "security_level": "V\u1eeba",
+        "status": {
+            "color": "#FF7940",
+            "status_color": [
+                "#FF7940",
+                "#FFF8F6",
+                "#EAECF0"
+            ]
+        }
+    }
+}
+
 /auth/security-center

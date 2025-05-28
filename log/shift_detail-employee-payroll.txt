@@ -1,0 +1,36 @@
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "user_id": "68067c8863a075rP4",
+        "phone": "+84365618300",
+        "username": "+84365618300",
+        "organization_id": "68067c8863a075rP4",
+        "branch_id": "68067d09bfee45b5ac056bbc",
+        "position": "",
+        "identification": "0001",
+        "name": "Vi\u1ec7t Nguy\u1ec5n",
+        "region": "TapHoaMeo",
+        "branch_name": "Chi nh\u00e1nh 1",
+        "department": "",
+        "total_salary": 0,
+        "salary_type": "",
+        "real_working_hour": 0,
+        "real_working_minute": 0,
+        "salary": 1000,
+        "created_date": "2025-05-28 23:51:22",
+        "is_confirm": 0,
+        "payroll": [],
+        "payroll_name": "L\u01b0\u01a1ng nh\u00e2n vi\u00ean: 26-05-2025-01-06-2025",
+        "first_day": "26-05-2025",
+        "last_day": "01-06-2025",
+        "shifts": [],
+        "total_task_hours": 0,
+        "real_task_hours": 0
+    }
+}
+
+first_day=2025-05-26&last_day=2025-06-01&is_shift=1&is_status_shift=1&user_id=68067c8863a075rP4&shop_id=68067c880f2c7c10a004b979
