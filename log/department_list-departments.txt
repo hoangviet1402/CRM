@@ -1,0 +1,114 @@
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "meta": {
+            "total": 3,
+            "count": 3,
+            "per_page": 15,
+            "current_page": 1,
+            "total_pages": 1
+        },
+        "items": [
+            {
+                "id": "68368cad3a7e3e6f8d05ce8d",
+                "name": "Gi\u00e1m \u0111\u1ed1c",
+                "created_at": "2025-05-28 11:10:21",
+                "shop_id": "68367a7892895b12ca0e6108",
+                "description": null,
+                "branch_ids": [
+                    "68368ac7f57e0abc7c0d83cf",
+                    "68368ac7cda17b102d071343"
+                ],
+                "parent_id": null,
+                "sort_index": 0,
+                "parent": null,
+                "code": "GIAM_DOC",
+                "alias": "giam-doc",
+                "is_head": null,
+                "branches": [
+                    {
+                        "id": "68368ac7f57e0abc7c0d83cf",
+                        "name": "Chi nh\u00e1nh 2",
+                        "color": null
+                    },
+                    {
+                        "id": "68368ac7cda17b102d071343",
+                        "name": "Chi nh\u00e1nh 1",
+                        "color": null
+                    }
+                ],
+                "key": "68368cad3a7e3e6f8d05ce8d",
+                "value": "68368cad3a7e3e6f8d05ce8d",
+                "title": "Gi\u00e1m \u0111\u1ed1c"
+            },
+            {
+                "id": "68368cad5c69997aa80a94c9",
+                "name": "Marketing",
+                "created_at": "2025-05-28 11:10:21",
+                "shop_id": "68367a7892895b12ca0e6108",
+                "description": null,
+                "branch_ids": [
+                    "68368ac7f57e0abc7c0d83cf",
+                    "68368ac7cda17b102d071343"
+                ],
+                "parent_id": null,
+                "sort_index": 0,
+                "parent": null,
+                "code": "MARKETING",
+                "alias": "marketing",
+                "is_head": null,
+                "branches": [
+                    {
+                        "id": "68368ac7f57e0abc7c0d83cf",
+                        "name": "Chi nh\u00e1nh 2",
+                        "color": null
+                    },
+                    {
+                        "id": "68368ac7cda17b102d071343",
+                        "name": "Chi nh\u00e1nh 1",
+                        "color": null
+                    }
+                ],
+                "key": "68368cad5c69997aa80a94c9",
+                "value": "68368cad5c69997aa80a94c9",
+                "title": "Marketing"
+            },
+            {
+                "id": "68368cadd87f4be03d034222",
+                "name": "Nh\u00e2n s\u1ef1",
+                "created_at": "2025-05-28 11:10:21",
+                "shop_id": "68367a7892895b12ca0e6108",
+                "description": null,
+                "branch_ids": [
+                    "68368ac7f57e0abc7c0d83cf",
+                    "68368ac7cda17b102d071343"
+                ],
+                "parent_id": null,
+                "sort_index": 0,
+                "parent": null,
+                "code": "NHAN_SU",
+                "alias": "nhan-su",
+                "is_head": null,
+                "branches": [
+                    {
+                        "id": "68368ac7f57e0abc7c0d83cf",
+                        "name": "Chi nh\u00e1nh 2",
+                        "color": null
+                    },
+                    {
+                        "id": "68368ac7cda17b102d071343",
+                        "name": "Chi nh\u00e1nh 1",
+                        "color": null
+                    }
+                ],
+                "key": "68368cadd87f4be03d034222",
+                "value": "68368cadd87f4be03d034222",
+                "title": "Nh\u00e2n s\u1ef1"
+            }
+        ]
+    }
+}

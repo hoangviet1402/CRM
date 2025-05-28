@@ -1,0 +1,183 @@
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": [
+        {
+            "id": "5c7df9a00b088879497e7928",
+            "key": "lich",
+            "title": "L\u1ecbch",
+            "url": "\/calendar",
+            "icon": "icmn",
+            "api_route_name": ""
+        },
+        {
+            "id": "5db99a990bcc980ce62ff886",
+            "key": "tuyen-dung",
+            "title": "Tuy\u1ec3n d\u1ee5ng",
+            "url": "\/recruitment\/position\/list",
+            "icon": "icmn icmn-user-plus",
+            "api_route_name": ""
+        },
+        {
+            "id": "5b779af0b39c33055e3a07b3",
+            "key": "nhan-su",
+            "title": "Nh\u00e2n s\u1ef1",
+            "url": "\/personnel\/employees",
+            "icon": "icmn",
+            "api_route_name": "",
+            "sub_menu": [
+                {
+                    "id": "5fa4c09669f22e50f12eba32",
+                    "key": "nhan-vien-1620097422",
+                    "title": "Nh\u00e2n vi\u00ean",
+                    "url": "\/personnel\/employees",
+                    "icon": "",
+                    "api_route_name": ""
+                },
+                {
+                    "id": "5fa4c0cdc1339623845b7807",
+                    "key": "hop-dong",
+                    "title": "H\u1ee3p \u0111\u1ed3ng",
+                    "url": "\/personnel\/contracts",
+                    "icon": "",
+                    "api_route_name": ""
+                },
+                {
+                    "id": "5fa4c0f43fce88556f3f7463",
+                    "key": "bao-hiem",
+                    "title": "B\u1ea3o hi\u1ec3m",
+                    "url": "\/personnel\/insurance",
+                    "icon": "",
+                    "api_route_name": ""
+                },
+                {
+                    "id": "5fa4c16e315f4f1de5154fc1",
+                    "key": "tai-san",
+                    "title": "T\u00e0i s\u1ea3n",
+                    "url": "\/asset\/item",
+                    "icon": "",
+                    "api_route_name": ""
+                }
+            ]
+        },
+        {
+            "id": "5b73b070b39c334f664cea88",
+            "key": "cham-cong",
+            "title": "Ch\u1ea5m c\u00f4ng",
+            "url": "\/working-day\/timekeeping",
+            "icon": "icmn",
+            "api_route_name": ""
+        },
+        {
+            "id": "5c7df8190b08886b3b67adb3",
+            "key": "request",
+            "title": "Y\u00eau c\u1ea7u",
+            "url": "\/personnel\/request",
+            "icon": "icmn",
+            "api_route_name": ""
+        },
+        {
+            "id": "5b85236edd8e8421a0002e9c",
+            "key": "tien-luong",
+            "title": "Ti\u1ec1n l\u01b0\u01a1ng",
+            "url": "\/salary\/salary-table",
+            "icon": "icmn",
+            "api_route_name": ""
+        },
+        {
+            "id": "66876e224769946c5112be48",
+            "key": "dao-tao",
+            "title": "\u0110\u00e0o t\u1ea1o",
+            "url": "\/e-learning",
+            "icon": "icmn",
+            "api_route_name": ""
+        },
+        {
+            "id": "5ecdd4c52fa2eb38224d58d7",
+            "key": "giao-viec",
+            "title": "Giao vi\u1ec7c",
+            "url": "\/task",
+            "icon": "",
+            "api_route_name": "",
+            "sub_menu": [
+                {
+                    "id": "5fa4cb11aa667a3e5903c4b2",
+                    "key": "viec-cua-toi",
+                    "title": "Vi\u1ec7c c\u1ee7a t\u00f4i",
+                    "url": "\/task\/group\/private",
+                    "icon": "",
+                    "api_route_name": ""
+                },
+                {
+                    "id": "5fa4caf910cfb267f0496a7c",
+                    "key": "thanh-vien",
+                    "title": "Th\u00e0nh vi\u00ean",
+                    "url": "\/task\/users",
+                    "icon": "",
+                    "api_route_name": ""
+                },
+                {
+                    "id": "5fa4cac61de08e513d7f395c",
+                    "key": "du-an",
+                    "title": "D\u1ef1 \u00e1n",
+                    "url": "\/task",
+                    "icon": "",
+                    "api_route_name": ""
+                }
+            ]
+        },
+        {
+            "id": "5b89610ddd8e8409090fb267",
+            "key": "them",
+            "title": "Th\u00eam",
+            "url": "",
+            "icon": "icmn icmn-stats-bars",
+            "api_route_name": "",
+            "children": [
+                {
+                    "id": "61b05a82455385246b07ca5f",
+                    "key": "bao-cao",
+                    "title": "B\u00e1o c\u00e1o",
+                    "url": "\/my-report",
+                    "icon": "",
+                    "api_route_name": ""
+                },
+                {
+                    "id": "5b89610ddd8e8409090fb26b",
+                    "key": "nhan-tai",
+                    "title": "Nh\u00e2n t\u00e0i",
+                    "url": "\/talent\/assessment",
+                    "icon": "",
+                    "api_route_name": ""
+                },
+                {
+                    "id": "5df347ea8fdc9b0333852310",
+                    "key": "sub-them-truyen-thong",
+                    "title": "Truy\u1ec1n th\u00f4ng",
+                    "url": "\/company\/announcement",
+                    "icon": "",
+                    "api_route_name": ""
+                },
+                {
+                    "id": "5c999443dd8e8445006fbad5",
+                    "key": "kpi",
+                    "title": "KPI",
+                    "url": "\/kpi\/kpi-evaluation",
+                    "icon": "",
+                    "api_route_name": ""
+                },
+                {
+                    "id": "61c004173689066b30716f0e",
+                    "key": "okr-kpi-beta",
+                    "title": "OKR",
+                    "url": "\/okr-bsc",
+                    "icon": "",
+                    "api_route_name": ""
+                }
+            ]
+        }
+    ]
+}

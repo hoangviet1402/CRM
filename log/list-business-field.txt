@@ -1,0 +1,1541 @@
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": [
+        {
+            "id": "63db2f01f9edc77d561d17ac",
+            "name": "Kh\u00e1c (Ch\u01b0a ph\u00e2n lo\u1ea1i \u0111\u01b0\u1ee3c)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 63,
+            "alias": "khac-chua-phan-loai-duoc"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17ab",
+            "name": "Y t\u1ebf",
+            "value": "",
+            "type": "business_field",
+            "index_num": 62,
+            "alias": "y-te"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17aa",
+            "name": "Xu\u1ea5t nh\u1eadp kh\u1ea9u",
+            "value": "",
+            "type": "business_field",
+            "index_num": 61,
+            "alias": "xuat-nhap-khau"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a9",
+            "name": "Xu\u1ea5t b\u1ea3n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 60,
+            "alias": "xuat-ban"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a8",
+            "name": "X\u1eed l\u00fd ch\u1ea5t th\u1ea3i",
+            "value": "",
+            "type": "business_field",
+            "index_num": 59,
+            "alias": "xu-ly-chat-thai"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a7",
+            "name": "X\u00e2y d\u1ef1ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 58,
+            "alias": "xay-dung"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a6",
+            "name": "V\u1eadn chuy\u1ec3n (Logistic)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 57,
+            "alias": "van-chuyen-logistic"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a5",
+            "name": "Th\u1ef1c ph\u1ea9m (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 56,
+            "alias": "thuc-pham-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a4",
+            "name": "Th\u1eddi trang (B\u00e1n l\u1ebb)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 55,
+            "alias": "thoi-trang-ban-le"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a3",
+            "name": "Thi\u1ebft k\u1ebf n\u1ed9i th\u1ea5t",
+            "value": "",
+            "type": "business_field",
+            "index_num": 54,
+            "alias": "thiet-ke-noi-that"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a2",
+            "name": "T\u00e0i ch\u00ednh",
+            "value": "",
+            "type": "business_field",
+            "index_num": 53,
+            "alias": "tai-chinh"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a1",
+            "name": "Spa, l\u00e0m \u0111\u1eb9p",
+            "value": "",
+            "type": "business_field",
+            "index_num": 52,
+            "alias": "spa-lam-dep"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a0",
+            "name": "S\u1ea3n Xu\u1ea5t",
+            "value": "",
+            "type": "business_field",
+            "index_num": 51,
+            "alias": "san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179f",
+            "name": "Qu\u00e1n tr\u00e0 s\u1eefa",
+            "value": "",
+            "type": "business_field",
+            "index_num": 50,
+            "alias": "quan-tra-sua"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179e",
+            "name": "Qu\u00e1n Sinh t\u1ed1, Kem",
+            "value": "",
+            "type": "business_field",
+            "index_num": 49,
+            "alias": "quan-sinh-to-kem"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179d",
+            "name": "Qu\u00e1n Rau m\u00e1, Yaua\u2026",
+            "value": "",
+            "type": "business_field",
+            "index_num": 48,
+            "alias": "quan-rau-ma-yaua"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179c",
+            "name": "Qu\u00e1n nh\u1eadu",
+            "value": "",
+            "type": "business_field",
+            "index_num": 47,
+            "alias": "quan-nhau"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179b",
+            "name": "Qu\u00e1n cafe",
+            "value": "",
+            "type": "business_field",
+            "index_num": 46,
+            "alias": "quan-cafe"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179a",
+            "name": "Qu\u00e1n \u0103n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 45,
+            "alias": "quan-an"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1799",
+            "name": "Ph\u00e2n ph\u1ed1i",
+            "value": "",
+            "type": "business_field",
+            "index_num": 44,
+            "alias": "phan-phoi"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1798",
+            "name": "N\u00f4ng nghi\u1ec7p",
+            "value": "",
+            "type": "business_field",
+            "index_num": 43,
+            "alias": "nong-nghiep"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1797",
+            "name": "Nhi\u1ec7t l\u1ea1nh",
+            "value": "",
+            "type": "business_field",
+            "index_num": 42,
+            "alias": "nhiet-lanh"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1796",
+            "name": "Nh\u00e2n s\u1ef1",
+            "value": "",
+            "type": "business_field",
+            "index_num": 41,
+            "alias": "nhan-su"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1795",
+            "name": "Nh\u00e0 h\u00e0ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 40,
+            "alias": "nha-hang"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1794",
+            "name": "Ng\u00e2n h\u00e0ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 39,
+            "alias": "ngan-hang"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1793",
+            "name": "Ki\u1ebfn tr\u00fac",
+            "value": "",
+            "type": "business_field",
+            "index_num": 38,
+            "alias": "kien-truc"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1792",
+            "name": "Ki\u1ec3m to\u00e1n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 37,
+            "alias": "kiem-toan"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1791",
+            "name": "Kho v\u1eadn",
+            "value": "",
+            "type": "business_field",
+            "index_num": 36,
+            "alias": "kho-van"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1790",
+            "name": "Kh\u00e1ch s\u1ea1n\/Resort",
+            "value": "",
+            "type": "business_field",
+            "index_num": 35,
+            "alias": "khach-sanresort"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178f",
+            "name": "Karaoke",
+            "value": "",
+            "type": "business_field",
+            "index_num": 34,
+            "alias": "karaoke"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178e",
+            "name": "IT-Th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed",
+            "value": "",
+            "type": "business_field",
+            "index_num": 33,
+            "alias": "itthuong-mai-dien-tu"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178d",
+            "name": "IT-Ph\u1ea7n m\u1ec1m",
+            "value": "",
+            "type": "business_field",
+            "index_num": 32,
+            "alias": "itphan-mem"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178c",
+            "name": "IT-Ph\u1ea7n c\u1ee9ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 31,
+            "alias": "itphan-cung"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178b",
+            "name": "IT-Online Media, Truy\u1ec1n th\u00f4ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 30,
+            "alias": "itonline-media-truyen-thong"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178a",
+            "name": "IT- Vi\u1ec5n Th\u00f4ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 29,
+            "alias": "it-vien-thong"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1789",
+            "name": "IT- M\u1ea1ng Internet",
+            "value": "",
+            "type": "business_field",
+            "index_num": 28,
+            "alias": "it-mang-internet"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1787",
+            "name": "In \u1ea5n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 26,
+            "alias": "in-an"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1786",
+            "name": "H\u00e0ng kh\u00f4ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 25,
+            "alias": "hang-khong"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1785",
+            "name": "H\u00e0ng h\u1ea3i",
+            "value": "",
+            "type": "business_field",
+            "index_num": 24,
+            "alias": "hang-hai"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1784",
+            "name": "G\u1ed7 (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 23,
+            "alias": "go-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1783",
+            "name": "Giao nh\u1eadn",
+            "value": "",
+            "type": "business_field",
+            "index_num": 22,
+            "alias": "giao-nhan"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1782",
+            "name": "Gi\u00e1o d\u1ee5c- \u0110\u00e0o t\u1ea1o- Tr\u01b0\u1eddng h\u1ecdc",
+            "value": "",
+            "type": "business_field",
+            "index_num": 21,
+            "alias": "giao-duc-dao-tao-truong-hoc"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1781",
+            "name": "D\u01b0\u1ee3c Ph\u1ea9m",
+            "value": "",
+            "type": "business_field",
+            "index_num": 20,
+            "alias": "duoc-pham"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1780",
+            "name": "Du l\u1ecbch",
+            "value": "",
+            "type": "business_field",
+            "index_num": 19,
+            "alias": "du-lich"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177f",
+            "name": "\u0110i\u1ec7n t\u1eed",
+            "value": "",
+            "type": "business_field",
+            "index_num": 18,
+            "alias": "dien-tu"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177e",
+            "name": "\u0110i\u1ec7n tho\u1ea1i (B\u00e1n l\u1ebb)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 17,
+            "alias": "dien-thoai-ban-le"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177d",
+            "name": "\u0110i\u1ec7n l\u1ea1nh",
+            "value": "",
+            "type": "business_field",
+            "index_num": 16,
+            "alias": "dien-lanh"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177c",
+            "name": "\u0110i\u1ec7n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 15,
+            "alias": "dien"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177b",
+            "name": "D\u1ecbch v\u1ee5 kh\u00e1ch h\u00e0ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 14,
+            "alias": "dich-vu-khach-hang"
+        },
+        {
+            "id": "63db2f01f9edc77d561d176d",
+            "name": "B\u00e1n l\u1ebb",
+            "value": "",
+            "type": "business_field",
+            "index_num": 0,
+            "alias": "ban-le"
+        },
+        {
+            "id": "63db2f01f9edc77d561d176e",
+            "name": "B\u00e1n s\u1ec9",
+            "value": "",
+            "type": "business_field",
+            "index_num": 1,
+            "alias": "ban-si"
+        },
+        {
+            "id": "63db2f01f9edc77d561d176f",
+            "name": "B\u00e1o ch\u00ed",
+            "value": "",
+            "type": "business_field",
+            "index_num": 2,
+            "alias": "bao-chi"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1770",
+            "name": "B\u1ea3o hi\u1ec3m",
+            "value": "",
+            "type": "business_field",
+            "index_num": 3,
+            "alias": "bao-hiem"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1771",
+            "name": "B\u1ea3o tr\u00ec & S\u1eeda ch\u1eefa",
+            "value": "",
+            "type": "business_field",
+            "index_num": 4,
+            "alias": "bao-tri-sua-chua"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1772",
+            "name": "B\u1ea3o v\u1ec7",
+            "value": "",
+            "type": "business_field",
+            "index_num": 5,
+            "alias": "bao-ve"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1773",
+            "name": "B\u1ea5t \u0111\u1ed9ng s\u1ea3n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 6,
+            "alias": "bat-dong-san"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1774",
+            "name": "Ch\u0103m s\u00f3c s\u1ee9c kh\u1ecfe",
+            "value": "",
+            "type": "business_field",
+            "index_num": 7,
+            "alias": "cham-soc-suc-khoe"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1775",
+            "name": "Ch\u1ee9ng kho\u00e1n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 8,
+            "alias": "chung-khoan"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1776",
+            "name": "C\u01a1 kh\u00ed (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 9,
+            "alias": "co-khi-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1777",
+            "name": "C\u00f4ng ngh\u1ec7 cao (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 10,
+            "alias": "cong-nghe-cao-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1778",
+            "name": "Da gi\u00e0y (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 11,
+            "alias": "da-giay-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1779",
+            "name": "\u0110\u1ea7u t\u01b0",
+            "value": "",
+            "type": "business_field",
+            "index_num": 12,
+            "alias": "dau-tu"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177a",
+            "name": "D\u1ec7t may (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 13,
+            "alias": "det-may-san-xuat"
+        }
+    ]
+}
+
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": [
+        {
+            "id": "63db2f01f9edc77d561d17ac",
+            "name": "Kh\u00e1c (Ch\u01b0a ph\u00e2n lo\u1ea1i \u0111\u01b0\u1ee3c)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 63,
+            "alias": "khac-chua-phan-loai-duoc"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17ab",
+            "name": "Y t\u1ebf",
+            "value": "",
+            "type": "business_field",
+            "index_num": 62,
+            "alias": "y-te"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17aa",
+            "name": "Xu\u1ea5t nh\u1eadp kh\u1ea9u",
+            "value": "",
+            "type": "business_field",
+            "index_num": 61,
+            "alias": "xuat-nhap-khau"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a9",
+            "name": "Xu\u1ea5t b\u1ea3n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 60,
+            "alias": "xuat-ban"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a8",
+            "name": "X\u1eed l\u00fd ch\u1ea5t th\u1ea3i",
+            "value": "",
+            "type": "business_field",
+            "index_num": 59,
+            "alias": "xu-ly-chat-thai"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a7",
+            "name": "X\u00e2y d\u1ef1ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 58,
+            "alias": "xay-dung"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a6",
+            "name": "V\u1eadn chuy\u1ec3n (Logistic)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 57,
+            "alias": "van-chuyen-logistic"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a5",
+            "name": "Th\u1ef1c ph\u1ea9m (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 56,
+            "alias": "thuc-pham-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a4",
+            "name": "Th\u1eddi trang (B\u00e1n l\u1ebb)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 55,
+            "alias": "thoi-trang-ban-le"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a3",
+            "name": "Thi\u1ebft k\u1ebf n\u1ed9i th\u1ea5t",
+            "value": "",
+            "type": "business_field",
+            "index_num": 54,
+            "alias": "thiet-ke-noi-that"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a2",
+            "name": "T\u00e0i ch\u00ednh",
+            "value": "",
+            "type": "business_field",
+            "index_num": 53,
+            "alias": "tai-chinh"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a1",
+            "name": "Spa, l\u00e0m \u0111\u1eb9p",
+            "value": "",
+            "type": "business_field",
+            "index_num": 52,
+            "alias": "spa-lam-dep"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a0",
+            "name": "S\u1ea3n Xu\u1ea5t",
+            "value": "",
+            "type": "business_field",
+            "index_num": 51,
+            "alias": "san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179f",
+            "name": "Qu\u00e1n tr\u00e0 s\u1eefa",
+            "value": "",
+            "type": "business_field",
+            "index_num": 50,
+            "alias": "quan-tra-sua"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179e",
+            "name": "Qu\u00e1n Sinh t\u1ed1, Kem",
+            "value": "",
+            "type": "business_field",
+            "index_num": 49,
+            "alias": "quan-sinh-to-kem"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179d",
+            "name": "Qu\u00e1n Rau m\u00e1, Yaua\u2026",
+            "value": "",
+            "type": "business_field",
+            "index_num": 48,
+            "alias": "quan-rau-ma-yaua"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179c",
+            "name": "Qu\u00e1n nh\u1eadu",
+            "value": "",
+            "type": "business_field",
+            "index_num": 47,
+            "alias": "quan-nhau"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179b",
+            "name": "Qu\u00e1n cafe",
+            "value": "",
+            "type": "business_field",
+            "index_num": 46,
+            "alias": "quan-cafe"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179a",
+            "name": "Qu\u00e1n \u0103n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 45,
+            "alias": "quan-an"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1799",
+            "name": "Ph\u00e2n ph\u1ed1i",
+            "value": "",
+            "type": "business_field",
+            "index_num": 44,
+            "alias": "phan-phoi"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1798",
+            "name": "N\u00f4ng nghi\u1ec7p",
+            "value": "",
+            "type": "business_field",
+            "index_num": 43,
+            "alias": "nong-nghiep"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1797",
+            "name": "Nhi\u1ec7t l\u1ea1nh",
+            "value": "",
+            "type": "business_field",
+            "index_num": 42,
+            "alias": "nhiet-lanh"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1796",
+            "name": "Nh\u00e2n s\u1ef1",
+            "value": "",
+            "type": "business_field",
+            "index_num": 41,
+            "alias": "nhan-su"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1795",
+            "name": "Nh\u00e0 h\u00e0ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 40,
+            "alias": "nha-hang"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1794",
+            "name": "Ng\u00e2n h\u00e0ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 39,
+            "alias": "ngan-hang"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1793",
+            "name": "Ki\u1ebfn tr\u00fac",
+            "value": "",
+            "type": "business_field",
+            "index_num": 38,
+            "alias": "kien-truc"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1792",
+            "name": "Ki\u1ec3m to\u00e1n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 37,
+            "alias": "kiem-toan"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1791",
+            "name": "Kho v\u1eadn",
+            "value": "",
+            "type": "business_field",
+            "index_num": 36,
+            "alias": "kho-van"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1790",
+            "name": "Kh\u00e1ch s\u1ea1n\/Resort",
+            "value": "",
+            "type": "business_field",
+            "index_num": 35,
+            "alias": "khach-sanresort"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178f",
+            "name": "Karaoke",
+            "value": "",
+            "type": "business_field",
+            "index_num": 34,
+            "alias": "karaoke"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178e",
+            "name": "IT-Th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed",
+            "value": "",
+            "type": "business_field",
+            "index_num": 33,
+            "alias": "itthuong-mai-dien-tu"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178d",
+            "name": "IT-Ph\u1ea7n m\u1ec1m",
+            "value": "",
+            "type": "business_field",
+            "index_num": 32,
+            "alias": "itphan-mem"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178c",
+            "name": "IT-Ph\u1ea7n c\u1ee9ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 31,
+            "alias": "itphan-cung"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178b",
+            "name": "IT-Online Media, Truy\u1ec1n th\u00f4ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 30,
+            "alias": "itonline-media-truyen-thong"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178a",
+            "name": "IT- Vi\u1ec5n Th\u00f4ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 29,
+            "alias": "it-vien-thong"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1789",
+            "name": "IT- M\u1ea1ng Internet",
+            "value": "",
+            "type": "business_field",
+            "index_num": 28,
+            "alias": "it-mang-internet"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1787",
+            "name": "In \u1ea5n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 26,
+            "alias": "in-an"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1786",
+            "name": "H\u00e0ng kh\u00f4ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 25,
+            "alias": "hang-khong"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1785",
+            "name": "H\u00e0ng h\u1ea3i",
+            "value": "",
+            "type": "business_field",
+            "index_num": 24,
+            "alias": "hang-hai"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1784",
+            "name": "G\u1ed7 (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 23,
+            "alias": "go-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1783",
+            "name": "Giao nh\u1eadn",
+            "value": "",
+            "type": "business_field",
+            "index_num": 22,
+            "alias": "giao-nhan"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1782",
+            "name": "Gi\u00e1o d\u1ee5c- \u0110\u00e0o t\u1ea1o- Tr\u01b0\u1eddng h\u1ecdc",
+            "value": "",
+            "type": "business_field",
+            "index_num": 21,
+            "alias": "giao-duc-dao-tao-truong-hoc"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1781",
+            "name": "D\u01b0\u1ee3c Ph\u1ea9m",
+            "value": "",
+            "type": "business_field",
+            "index_num": 20,
+            "alias": "duoc-pham"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1780",
+            "name": "Du l\u1ecbch",
+            "value": "",
+            "type": "business_field",
+            "index_num": 19,
+            "alias": "du-lich"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177f",
+            "name": "\u0110i\u1ec7n t\u1eed",
+            "value": "",
+            "type": "business_field",
+            "index_num": 18,
+            "alias": "dien-tu"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177e",
+            "name": "\u0110i\u1ec7n tho\u1ea1i (B\u00e1n l\u1ebb)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 17,
+            "alias": "dien-thoai-ban-le"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177d",
+            "name": "\u0110i\u1ec7n l\u1ea1nh",
+            "value": "",
+            "type": "business_field",
+            "index_num": 16,
+            "alias": "dien-lanh"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177c",
+            "name": "\u0110i\u1ec7n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 15,
+            "alias": "dien"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177b",
+            "name": "D\u1ecbch v\u1ee5 kh\u00e1ch h\u00e0ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 14,
+            "alias": "dich-vu-khach-hang"
+        },
+        {
+            "id": "63db2f01f9edc77d561d176d",
+            "name": "B\u00e1n l\u1ebb",
+            "value": "",
+            "type": "business_field",
+            "index_num": 0,
+            "alias": "ban-le"
+        },
+        {
+            "id": "63db2f01f9edc77d561d176e",
+            "name": "B\u00e1n s\u1ec9",
+            "value": "",
+            "type": "business_field",
+            "index_num": 1,
+            "alias": "ban-si"
+        },
+        {
+            "id": "63db2f01f9edc77d561d176f",
+            "name": "B\u00e1o ch\u00ed",
+            "value": "",
+            "type": "business_field",
+            "index_num": 2,
+            "alias": "bao-chi"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1770",
+            "name": "B\u1ea3o hi\u1ec3m",
+            "value": "",
+            "type": "business_field",
+            "index_num": 3,
+            "alias": "bao-hiem"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1771",
+            "name": "B\u1ea3o tr\u00ec & S\u1eeda ch\u1eefa",
+            "value": "",
+            "type": "business_field",
+            "index_num": 4,
+            "alias": "bao-tri-sua-chua"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1772",
+            "name": "B\u1ea3o v\u1ec7",
+            "value": "",
+            "type": "business_field",
+            "index_num": 5,
+            "alias": "bao-ve"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1773",
+            "name": "B\u1ea5t \u0111\u1ed9ng s\u1ea3n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 6,
+            "alias": "bat-dong-san"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1774",
+            "name": "Ch\u0103m s\u00f3c s\u1ee9c kh\u1ecfe",
+            "value": "",
+            "type": "business_field",
+            "index_num": 7,
+            "alias": "cham-soc-suc-khoe"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1775",
+            "name": "Ch\u1ee9ng kho\u00e1n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 8,
+            "alias": "chung-khoan"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1776",
+            "name": "C\u01a1 kh\u00ed (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 9,
+            "alias": "co-khi-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1777",
+            "name": "C\u00f4ng ngh\u1ec7 cao (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 10,
+            "alias": "cong-nghe-cao-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1778",
+            "name": "Da gi\u00e0y (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 11,
+            "alias": "da-giay-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1779",
+            "name": "\u0110\u1ea7u t\u01b0",
+            "value": "",
+            "type": "business_field",
+            "index_num": 12,
+            "alias": "dau-tu"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177a",
+            "name": "D\u1ec7t may (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 13,
+            "alias": "det-may-san-xuat"
+        }
+    ]
+}
+
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": [
+        {
+            "id": "63db2f01f9edc77d561d1784",
+            "name": "G\u1ed7 (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 23,
+            "alias": "go-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177f",
+            "name": "\u0110i\u1ec7n t\u1eed",
+            "value": "",
+            "type": "business_field",
+            "index_num": 18,
+            "alias": "dien-tu"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1796",
+            "name": "Nh\u00e2n s\u1ef1",
+            "value": "",
+            "type": "business_field",
+            "index_num": 41,
+            "alias": "nhan-su"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17ac",
+            "name": "Kh\u00e1c (Ch\u01b0a ph\u00e2n lo\u1ea1i \u0111\u01b0\u1ee3c)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 63,
+            "alias": "khac-chua-phan-loai-duoc"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179a",
+            "name": "Qu\u00e1n \u0103n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 45,
+            "alias": "quan-an"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177e",
+            "name": "\u0110i\u1ec7n tho\u1ea1i (B\u00e1n l\u1ebb)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 17,
+            "alias": "dien-thoai-ban-le"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a8",
+            "name": "X\u1eed l\u00fd ch\u1ea5t th\u1ea3i",
+            "value": "",
+            "type": "business_field",
+            "index_num": 59,
+            "alias": "xu-ly-chat-thai"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1795",
+            "name": "Nh\u00e0 h\u00e0ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 40,
+            "alias": "nha-hang"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179d",
+            "name": "Qu\u00e1n Rau m\u00e1, Yaua\u2026",
+            "value": "",
+            "type": "business_field",
+            "index_num": 48,
+            "alias": "quan-rau-ma-yaua"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1791",
+            "name": "Kho v\u1eadn",
+            "value": "",
+            "type": "business_field",
+            "index_num": 36,
+            "alias": "kho-van"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1789",
+            "name": "IT- M\u1ea1ng Internet",
+            "value": "",
+            "type": "business_field",
+            "index_num": 28,
+            "alias": "it-mang-internet"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177d",
+            "name": "\u0110i\u1ec7n l\u1ea1nh",
+            "value": "",
+            "type": "business_field",
+            "index_num": 16,
+            "alias": "dien-lanh"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1780",
+            "name": "Du l\u1ecbch",
+            "value": "",
+            "type": "business_field",
+            "index_num": 19,
+            "alias": "du-lich"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177b",
+            "name": "D\u1ecbch v\u1ee5 kh\u00e1ch h\u00e0ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 14,
+            "alias": "dich-vu-khach-hang"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a7",
+            "name": "X\u00e2y d\u1ef1ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 58,
+            "alias": "xay-dung"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179f",
+            "name": "Qu\u00e1n tr\u00e0 s\u1eefa",
+            "value": "",
+            "type": "business_field",
+            "index_num": 50,
+            "alias": "quan-tra-sua"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179b",
+            "name": "Qu\u00e1n cafe",
+            "value": "",
+            "type": "business_field",
+            "index_num": 46,
+            "alias": "quan-cafe"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1799",
+            "name": "Ph\u00e2n ph\u1ed1i",
+            "value": "",
+            "type": "business_field",
+            "index_num": 44,
+            "alias": "phan-phoi"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1798",
+            "name": "N\u00f4ng nghi\u1ec7p",
+            "value": "",
+            "type": "business_field",
+            "index_num": 43,
+            "alias": "nong-nghiep"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178e",
+            "name": "IT-Th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed",
+            "value": "",
+            "type": "business_field",
+            "index_num": 33,
+            "alias": "itthuong-mai-dien-tu"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178c",
+            "name": "IT-Ph\u1ea7n c\u1ee9ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 31,
+            "alias": "itphan-cung"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a9",
+            "name": "Xu\u1ea5t b\u1ea3n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 60,
+            "alias": "xuat-ban"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1787",
+            "name": "In \u1ea5n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 26,
+            "alias": "in-an"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a5",
+            "name": "Th\u1ef1c ph\u1ea9m (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 56,
+            "alias": "thuc-pham-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1785",
+            "name": "H\u00e0ng h\u1ea3i",
+            "value": "",
+            "type": "business_field",
+            "index_num": 24,
+            "alias": "hang-hai"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1794",
+            "name": "Ng\u00e2n h\u00e0ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 39,
+            "alias": "ngan-hang"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a6",
+            "name": "V\u1eadn chuy\u1ec3n (Logistic)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 57,
+            "alias": "van-chuyen-logistic"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a4",
+            "name": "Th\u1eddi trang (B\u00e1n l\u1ebb)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 55,
+            "alias": "thoi-trang-ban-le"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178f",
+            "name": "Karaoke",
+            "value": "",
+            "type": "business_field",
+            "index_num": 34,
+            "alias": "karaoke"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1782",
+            "name": "Gi\u00e1o d\u1ee5c- \u0110\u00e0o t\u1ea1o- Tr\u01b0\u1eddng h\u1ecdc",
+            "value": "",
+            "type": "business_field",
+            "index_num": 21,
+            "alias": "giao-duc-dao-tao-truong-hoc"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177c",
+            "name": "\u0110i\u1ec7n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 15,
+            "alias": "dien"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178b",
+            "name": "IT-Online Media, Truy\u1ec1n th\u00f4ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 30,
+            "alias": "itonline-media-truyen-thong"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a1",
+            "name": "Spa, l\u00e0m \u0111\u1eb9p",
+            "value": "",
+            "type": "business_field",
+            "index_num": 52,
+            "alias": "spa-lam-dep"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1790",
+            "name": "Kh\u00e1ch s\u1ea1n\/Resort",
+            "value": "",
+            "type": "business_field",
+            "index_num": 35,
+            "alias": "khach-sanresort"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1781",
+            "name": "D\u01b0\u1ee3c Ph\u1ea9m",
+            "value": "",
+            "type": "business_field",
+            "index_num": 20,
+            "alias": "duoc-pham"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17aa",
+            "name": "Xu\u1ea5t nh\u1eadp kh\u1ea9u",
+            "value": "",
+            "type": "business_field",
+            "index_num": 61,
+            "alias": "xuat-nhap-khau"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179c",
+            "name": "Qu\u00e1n nh\u1eadu",
+            "value": "",
+            "type": "business_field",
+            "index_num": 47,
+            "alias": "quan-nhau"
+        },
+        {
+            "id": "63db2f01f9edc77d561d179e",
+            "name": "Qu\u00e1n Sinh t\u1ed1, Kem",
+            "value": "",
+            "type": "business_field",
+            "index_num": 49,
+            "alias": "quan-sinh-to-kem"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a3",
+            "name": "Thi\u1ebft k\u1ebf n\u1ed9i th\u1ea5t",
+            "value": "",
+            "type": "business_field",
+            "index_num": 54,
+            "alias": "thiet-ke-noi-that"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178d",
+            "name": "IT-Ph\u1ea7n m\u1ec1m",
+            "value": "",
+            "type": "business_field",
+            "index_num": 32,
+            "alias": "itphan-mem"
+        },
+        {
+            "id": "63db2f01f9edc77d561d178a",
+            "name": "IT- Vi\u1ec5n Th\u00f4ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 29,
+            "alias": "it-vien-thong"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a0",
+            "name": "S\u1ea3n Xu\u1ea5t",
+            "value": "",
+            "type": "business_field",
+            "index_num": 51,
+            "alias": "san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1786",
+            "name": "H\u00e0ng kh\u00f4ng",
+            "value": "",
+            "type": "business_field",
+            "index_num": 25,
+            "alias": "hang-khong"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1797",
+            "name": "Nhi\u1ec7t l\u1ea1nh",
+            "value": "",
+            "type": "business_field",
+            "index_num": 42,
+            "alias": "nhiet-lanh"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1793",
+            "name": "Ki\u1ebfn tr\u00fac",
+            "value": "",
+            "type": "business_field",
+            "index_num": 38,
+            "alias": "kien-truc"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17ab",
+            "name": "Y t\u1ebf",
+            "value": "",
+            "type": "business_field",
+            "index_num": 62,
+            "alias": "y-te"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1792",
+            "name": "Ki\u1ec3m to\u00e1n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 37,
+            "alias": "kiem-toan"
+        },
+        {
+            "id": "63db2f01f9edc77d561d17a2",
+            "name": "T\u00e0i ch\u00ednh",
+            "value": "",
+            "type": "business_field",
+            "index_num": 53,
+            "alias": "tai-chinh"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1783",
+            "name": "Giao nh\u1eadn",
+            "value": "",
+            "type": "business_field",
+            "index_num": 22,
+            "alias": "giao-nhan"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1773",
+            "name": "B\u1ea5t \u0111\u1ed9ng s\u1ea3n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 6,
+            "alias": "bat-dong-san"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1776",
+            "name": "C\u01a1 kh\u00ed (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 9,
+            "alias": "co-khi-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1772",
+            "name": "B\u1ea3o v\u1ec7",
+            "value": "",
+            "type": "business_field",
+            "index_num": 5,
+            "alias": "bao-ve"
+        },
+        {
+            "id": "63db2f01f9edc77d561d177a",
+            "name": "D\u1ec7t may (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 13,
+            "alias": "det-may-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1775",
+            "name": "Ch\u1ee9ng kho\u00e1n",
+            "value": "",
+            "type": "business_field",
+            "index_num": 8,
+            "alias": "chung-khoan"
+        },
+        {
+            "id": "63db2f01f9edc77d561d176e",
+            "name": "B\u00e1n s\u1ec9",
+            "value": "",
+            "type": "business_field",
+            "index_num": 1,
+            "alias": "ban-si"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1779",
+            "name": "\u0110\u1ea7u t\u01b0",
+            "value": "",
+            "type": "business_field",
+            "index_num": 12,
+            "alias": "dau-tu"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1770",
+            "name": "B\u1ea3o hi\u1ec3m",
+            "value": "",
+            "type": "business_field",
+            "index_num": 3,
+            "alias": "bao-hiem"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1778",
+            "name": "Da gi\u00e0y (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 11,
+            "alias": "da-giay-san-xuat"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1771",
+            "name": "B\u1ea3o tr\u00ec & S\u1eeda ch\u1eefa",
+            "value": "",
+            "type": "business_field",
+            "index_num": 4,
+            "alias": "bao-tri-sua-chua"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1774",
+            "name": "Ch\u0103m s\u00f3c s\u1ee9c kh\u1ecfe",
+            "value": "",
+            "type": "business_field",
+            "index_num": 7,
+            "alias": "cham-soc-suc-khoe"
+        },
+        {
+            "id": "63db2f01f9edc77d561d176d",
+            "name": "B\u00e1n l\u1ebb",
+            "value": "",
+            "type": "business_field",
+            "index_num": 0,
+            "alias": "ban-le"
+        },
+        {
+            "id": "63db2f01f9edc77d561d176f",
+            "name": "B\u00e1o ch\u00ed",
+            "value": "",
+            "type": "business_field",
+            "index_num": 2,
+            "alias": "bao-chi"
+        },
+        {
+            "id": "63db2f01f9edc77d561d1777",
+            "name": "C\u00f4ng ngh\u1ec7 cao (S\u1ea3n xu\u1ea5t)",
+            "value": "",
+            "type": "business_field",
+            "index_num": 10,
+            "alias": "cong-nghe-cao-san-xuat"
+        }
+    ]
+}

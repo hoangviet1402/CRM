@@ -1,0 +1,27 @@
+-- Login mà chưa có pass
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "signin_methods": [
+            "phone"
+        ],
+        "shop": {
+            "id": "681b11df7cd470c2a10cc9b0",
+            "name": "1234",
+            "shop_username": "1234-3188213",
+            "is_new_user": 1,
+            "need_set_password": 1
+        },
+        "user": {
+            "id": "681b11df6db72VLEU",
+            "name": "1234",
+            "client_role": "MANAGER",
+            "phone": "+8412341234"
+        }
+    }
+}
+
