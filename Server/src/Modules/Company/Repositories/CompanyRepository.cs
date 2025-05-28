@@ -292,4 +292,29 @@ public class CompanyRepository : StoredProcedureMapperModule, ICompanyRepository
             return new List<DepartmentCreatedResult>();
         }
     }
+
+    public async Task<int> UpdateCompanyStepAsync(int createStep, int companyId)
+    {
+        try
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "@CreateStep", createStep },
+                { "@CompanyId", companyId }
+            };
+
+            var outputParameters = new Dictionary<string, object>
+            {
+                { "@OutResult", 0 }
+            };
+
+            await ExecuteStoredProcedureAsync<int>("Ins_Company_UpdateStep", parameters, outputParameters);
+            return outputParameters.GetSafeInt32("@OutResult");
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"UpdateCompanyStepAsync Exception CreateStep {createStep}, CompanyId {companyId} ", ex);
+            return 0;
+        }
+    }
 }
