@@ -7,8 +7,8 @@ namespace AuthModule.Repositories;
 
 public interface IAuthRepository
 {
-    Task<LoginResultEntities?> Login(string accountName, bool isUsePhone, string password);
-    Task<int> RegisterAccount(string phone, string email, string fullname);
+    Task<LoginResultEntities?> Login(string accountName, bool isUsePhone);
+    Task<int> RegisterAccount(string phoneCode,string phone, string email, string fullname,string deviceId);
     Task<List<CompanyAccountMapEntities>> GetCompanyByAccountId(int accountId);
     Task<int> InsertEmployeeToken(int employeeId, string jwtID, string refreshToken, int lifeTime, string ip, string imie);
     Task<int> RevokeEmployeeToken(int employeeId, string ip, string imie);

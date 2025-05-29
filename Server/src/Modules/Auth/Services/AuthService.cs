@@ -1,8 +1,10 @@
 using System.Linq;
+using System.Text.Json.Serialization;
 using AuthModule.DTOs;
 using AuthModule.Entities;
 using AuthModule.Repositories;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Shared.Enums;
 using Shared.Helpers;
 using Shared.Result;
@@ -20,7 +22,8 @@ public class AuthService : IAuthService
         _authRepository = authRepository;
         _configuration = configuration;
     }
-    public async Task<ApiResult<AuthResponse>> SignupAsync(string accountName, bool isUsePhone,string password)
+
+    public async Task<ApiResult<AuthResponse>> SignupAsync(SignupRequest request,bool isUsePhone)
     {
         var response = new ApiResult<AuthResponse>()
         {
@@ -29,7 +32,7 @@ public class AuthService : IAuthService
             Message = ResponseResultEnum.ServiceUnavailable.Text()
         };
 
-        if (string.IsNullOrEmpty(accountName))
+        if (request == null)
         {
             response.Code = ResponseResultEnum.InvalidInput.Value();
             if (isUsePhone == true)
@@ -48,37 +51,54 @@ public class AuthService : IAuthService
             // var jwtID = "";
             // var accessToken = "";
             // var refreshToken = "";
-            int lifeTime = 30;
-            var configValue = _configuration["Token:RefreshTokenLifeTime"];
-            if (int.TryParse(configValue, out int parsedLifeTime))
-            {
-                lifeTime = parsedLifeTime;
-            }
-
+            // int lifeTime = 30;
+            // var configValue = _configuration["Token:RefreshTokenLifeTime"];
+            // if (int.TryParse(configValue, out int parsedLifeTime))
+            // {
+            //     lifeTime = parsedLifeTime;
+            // }
+            var accountName = "";
             CompanyAccountMapEntities? company = new CompanyAccountMapEntities()
             {
                 CompanyId = 0,
                 EmployeesInfoId = 0,
                 Role = UserRole.SystemAdmin.Value(),
             };
+
             response.Data.SigninMethods = new List<string>();
             if (isUsePhone)
             {
+                accountName = request.Phone;
                 response.Data.SigninMethods.Add("phone");
             }
             else
             {
+                accountName = request.Mail;
                 response.Data.SigninMethods.Add("mail");
             }
-            
-            var authdata = await _authRepository.Login(accountName , isUsePhone, password);
-            if(authdata == null || authdata.AccountId <= 0)
+
+            var authdata = await _authRepository.Login(accountName, isUsePhone);
+            if (authdata == null || authdata.AccountId <= 0)
             {
-                LoggerHelper.Warning($"LoginAsync {accountName} không tồn tại");
-                response.Code = ResponseResultEnum.AccountNotExist.Value();
-                response.Message = $"Tài khoản {accountName} không tồn tại";
-                response.Data = null;
-                return response;
+                string fullname = Helper.GenerateUniqueString(15);
+                string phone = "";
+                string email = "";
+
+                if (isUsePhone)
+                {
+                    phone = accountName;
+                    email = $"{accountName}@mail.com";
+                }
+                else
+                {
+                    email = accountName;
+                    phone = Helper.GenerateUniqueNumber(11);
+                }
+                authdata = new LoginResultEntities()
+                {
+                    AccountId = await _authRepository.RegisterAccount(request.PhoneCode, phone, email, fullname, request.DeviceId),
+                    IsActive = true,
+                };
             }
 
             if (authdata.IsActive == false)
@@ -91,10 +111,11 @@ public class AuthService : IAuthService
             }
 
             var list_companys = await _authRepository.GetCompanyByAccountId(authdata.AccountId);
+
             // tài khoản đã được add 1 công ty
             if (list_companys.Count() == 1)
             {
-                company = list_companys.FirstOrDefault();               
+                company = list_companys.FirstOrDefault();
                 if (company == null) //Chưa tạo doanh nghiệp
                 {
                     response.Code = ResponseResultEnum.CompanyNoData.Value();
@@ -188,7 +209,7 @@ public class AuthService : IAuthService
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"LoginAsync Exception {accountName}", ex);
+            LoggerHelper.Error($"LoginAsync Exception {JsonConvert.SerializeObject(request)}", ex);
             response.Code = ResponseResultEnum.SystemError.Value();
             response.Message = ResponseResultEnum.SystemError.Text();
             response.Data = null;
@@ -196,7 +217,7 @@ public class AuthService : IAuthService
 
         return response;
     }
-    public async Task<ApiResult<RefeshTokenResponse>> RefreshTokenAsync(string refreshToken,string jwtID, int accountId, int companyId, string ip, string imie)
+    public async Task<ApiResult<RefeshTokenResponse>> RefreshTokenAsync(string refreshToken, string jwtID, int accountId, int companyId, string ip, string imie)
     {
         var response = new ApiResult<RefeshTokenResponse>()
         {
@@ -226,13 +247,13 @@ public class AuthService : IAuthService
             var tokenInfo = await _authRepository.GetTokenInfo(accountId, companyId);
             if (tokenInfo != null)
             {
-                if(tokenInfo.RefreshToken.Equals(AESHelper.HashPassword(refreshToken), StringComparison.OrdinalIgnoreCase) ==false)
+                if (tokenInfo.RefreshToken.Equals(AESHelper.HashPassword(refreshToken), StringComparison.OrdinalIgnoreCase) == false)
                 {
                     response.Code = ResponseResultEnum.InvalidToken.Value();
                     response.Message = $"Phiên đăng nhập Không tồn tại.";
                     return response;
                 }
-                else if(tokenInfo.JwtID.Equals(AESHelper.HashPassword(jwtID), StringComparison.OrdinalIgnoreCase) == false)
+                else if (tokenInfo.JwtID.Equals(AESHelper.HashPassword(jwtID), StringComparison.OrdinalIgnoreCase) == false)
                 {
                     response.Code = ResponseResultEnum.InvalidToken.Value();
                     response.Message = $"Phiên đăng nhập Không tồn tại.";
@@ -266,7 +287,7 @@ public class AuthService : IAuthService
 
                 // Xử lý tạo accessToken mới
                 var newJwtID = "";
-                var newAccessToken = JwtHelper.GenerateAccessToken(tokenInfo.AccountId, tokenInfo.EmployeesInfoId, tokenInfo.CompanyId, tokenInfo.Role , _configuration, out newJwtID);
+                var newAccessToken = JwtHelper.GenerateAccessToken(tokenInfo.AccountId, tokenInfo.EmployeesInfoId, tokenInfo.CompanyId, tokenInfo.Role, _configuration, out newJwtID);
 
                 var isUpdateAccessToken = await _authRepository.UpdateEmployeeJwtID(tokenInfo.Id, newJwtID, ip, imie);
 
@@ -277,15 +298,15 @@ public class AuthService : IAuthService
                         AccessToken = newAccessToken,
                     };
                     response.Code = ResponseResultEnum.Success.Value();
-                    
+
                     return response;
                 }
                 else
-                {                    
+                {
                     response.Code = ResponseResultEnum.AccountLocked.Value();
                     response.Message = $"Không tạo được token.";
                     return response;
-                }  
+                }
             }
             else
             {
@@ -329,7 +350,7 @@ public class AuthService : IAuthService
                 if (isUpdateOrInsertAccountToken > 0)
                 {
                     response.Data = true;
-                    response.Code = ResponseResultEnum.Success.Value();                    
+                    response.Code = ResponseResultEnum.Success.Value();
                     return response;
                 }
                 else
@@ -340,7 +361,7 @@ public class AuthService : IAuthService
                 }
             }
             else
-            {               
+            {
                 response.Code = ResponseResultEnum.NoData.Value();
                 response.Message = $"Không tồn tại.";
                 return response;
@@ -354,7 +375,7 @@ public class AuthService : IAuthService
             return response;
         }
     }
-    public async Task<ApiResult<bool>> CreatePassFornewEmployeeAsync(int accountId, int companyId, string newPass , string comfirmPass)
+    public async Task<ApiResult<bool>> CreatePassFornewEmployeeAsync(int accountId, int companyId, string newPass, string comfirmPass)
     {
         var response = new ApiResult<bool>()
         {
@@ -402,7 +423,7 @@ public class AuthService : IAuthService
         try
         {
             // Implement refresh token logic here
-            var updatePass = await _authRepository.UpdatePass(accountId ,companyId, newPass,"", 1);
+            var updatePass = await _authRepository.UpdatePass(accountId, companyId, newPass, "", 1);
             if (updatePass > 0)
             {
                 response.Data = true;
@@ -472,7 +493,7 @@ public class AuthService : IAuthService
         try
         {
             // Implement refresh token logic here
-            var updatePass = await _authRepository.UpdatePass(accountId,companyId, newPass, oldPass , 0);
+            var updatePass = await _authRepository.UpdatePass(accountId, companyId, newPass, oldPass, 0);
             if (updatePass > 0)
             {
                 response.Data = true;
@@ -512,38 +533,39 @@ public class AuthService : IAuthService
 
         try
         {
-            string phone = "";
-            string email = "";
-            if (string.IsNullOrEmpty(fullname))
-            {
-                fullname = Helper.GenerateUniqueString(15);
-            }
+            // string phone = "";
+            // string email = "";
+            // if (string.IsNullOrEmpty(fullname))
+            // {
+            //     fullname = Helper.GenerateUniqueString(15);
+            // }
 
-            if(isUsePhone == true)
-            {
-                phone = accountName;
-                email = $"{accountName}@mail.com";
-            }
-            else
-            {
-                email = accountName;
-                phone = Helper.GenerateUniqueNumber(11);
-            }
+            // if (isUsePhone == true)
+            // {
+            //     phone = accountName;
+            //     email = $"{accountName}@mail.com";
+            // }
+            // else
+            // {
+            //     email = accountName;
+            //     phone = Helper.GenerateUniqueNumber(11);
+            // }
 
-            // Implement refresh token logic here
-            var accountId = await _authRepository.RegisterAccount(phone,email , fullname);
-            if (accountId > 0)
-            {
-                response.Data = accountId;
-                response.Code = ResponseResultEnum.Success.Value();
-                return response;
-            }
-            else
-            {
-                response.Code = ResponseResultEnum.InvalidData.Value();
-                response.Message = $"Sai thông tin.";
-                return response;
-            }
+            // // Implement refresh token logic here
+            // var accountId = await _authRepository.RegisterAccount(phone, email, fullname);
+            // if (accountId > 0)
+            // {
+            //     response.Data = accountId;
+            //     response.Code = ResponseResultEnum.Success.Value();
+            //     return response;
+            // }
+            // else
+            // {
+            //     response.Code = ResponseResultEnum.InvalidData.Value();
+            //     response.Message = $"Sai thông tin.";
+            //     return response;
+            // }
+            return response;
         }
         catch (Exception ex)
         {
@@ -553,4 +575,4 @@ public class AuthService : IAuthService
             return response;
         }
     }
-} 
+}

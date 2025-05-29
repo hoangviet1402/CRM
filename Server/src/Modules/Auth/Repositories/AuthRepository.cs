@@ -17,15 +17,17 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
     {
     }
 
-    public async Task<int> RegisterAccount(string phone, string email, string fullname)
+    public async Task<int> RegisterAccount(string phoneCode, string phone, string email, string fullname,string deviceId)
     {
         try
         {
             var parameters = new Dictionary<string, object>
             {
                 { "@Phone", phone },
+                { "@PhoneCode", phoneCode },
                 { "@Email", email },
-                { "@FullName", fullname }
+                { "@FullName", fullname },
+                { "@DeviceId", deviceId }
             };
 
             var outputParameters = new Dictionary<string, object>
@@ -43,7 +45,7 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
         }
     }
 
-    public async Task<LoginResultEntities?> Login(string accountName, bool isUsePhone, string password)
+    public async Task<LoginResultEntities?> Login(string accountName, bool isUsePhone)
     {
         try
         {
