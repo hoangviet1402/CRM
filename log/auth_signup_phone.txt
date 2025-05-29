@@ -1,0 +1,103 @@
+{"stage":"validate","phone":"123123123","phone_code":"84","is_no_otp_flow":1}
+
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "shops": [
+            {
+                "client_role": "EMPLOYEE",
+                "employee_name": "Nguy\u1ec5n V\u00e2n Anh",
+                "user_id": "61162606b628cwGCx",
+                "need_set_password": 0,
+                "id": "5c20eded0b0888778c5b2b0d",
+                "name": "C\u00f4ng ty C\u1ed5 ph\u1ea7n Tanca Cafe",
+                "shop_username": "tancacafe",
+                "is_new_user": 1
+            },
+            {
+                "client_role": "EMPLOYEE",
+                "employee_name": "test 9",
+                "user_id": "25d53a7cb7a34d3b9",
+                "need_set_password": 0,
+                "id": "611de11a5a0d750f40e5be7c",
+                "name": "IATIEM",
+                "shop_username": "iatiem",
+                "is_new_user": 1
+            },
+            {
+                "client_role": "EMPLOYEE",
+                "employee_name": "Hi\u1ec1n",
+                "user_id": "62f477132b7adMj8g",
+                "need_set_password": 0,
+                "id": "62f47632b4bbeb55c406fcb7",
+                "name": "CTY TNHH \u1ee8NG D\u1ee4NG C\u00d4NG NGH\u1ec6 HITAP",
+                "shop_username": "quynguyen",
+                "is_new_user": 1
+            },
+            {
+                "client_role": "EMPLOYEE",
+                "employee_name": "H\u01b0ng",
+                "user_id": "639059a23982cXL8Q",
+                "need_set_password": 0,
+                "id": "639057ce3651e1163d03c145",
+                "name": "YOLO!",
+                "shop_username": "yolo",
+                "is_new_user": 1
+            },
+            {
+                "client_role": "EMPLOYEE",
+                "employee_name": "Demo 2",
+                "user_id": "6400565a636f2raFB",
+                "need_set_password": 0,
+                "id": "640051a720db508c8802fd09",
+                "name": "Tan Ca",
+                "shop_username": "nguyenthanh-8885080",
+                "is_new_user": 1
+            },
+            {
+                "client_role": "MANAGER",
+                "employee_name": "hOANG SO 1000",
+                "user_id": "655f65cbb4c0ey7Q6",
+                "need_set_password": 0,
+                "id": "655f65cbd95752d9270694df",
+                "name": "Hoang vip pro123243",
+                "shop_username": "hoangvippro123243-7545205",
+                "is_new_user": 1
+            },
+            {
+                "client_role": "BRANCH",
+                "employee_name": "azureadmin",
+                "user_id": "671b1586e2d37jUNP",
+                "need_set_password": 0,
+                "id": "66e91f5ca6c5169ed003932e",
+                "name": "BTS\u00a0Azure\u00a0Ops",
+                "shop_username": "trananhdung-8665654",
+                "is_new_user": 1
+            },
+            {
+                "client_role": "EMPLOYEE",
+                "employee_name": "dd",
+                "user_id": "66ed425071c20pUzb",
+                "need_set_password": 1,
+                "id": "66ecfdbfbc8fa610600e984d",
+                "name": "None",
+                "shop_username": "none-3764937",
+                "is_new_user": 1
+            },
+            {
+                "client_role": "BRANCH",
+                "employee_name": "van t\u00f9ng",
+                "user_id": "681ce1a9d6e9dwG8G",
+                "need_set_password": 0,
+                "id": "681ce10c54f6bd5a840cad4a",
+                "name": "ACB",
+                "shop_username": "vien-2604179",
+                "is_new_user": 1
+            }
+        ]
+    }
+}

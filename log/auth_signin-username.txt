@@ -1,0 +1,79 @@
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "signin_methods": [
+            "password",
+            "email"
+        ],
+        "shop": {
+            "id": "68367a7892895b12ca0e6108",
+            "name": "TapHoaMeo",
+            "shop_username": "longkha",
+            "is_new_user": 1,
+            "need_set_password": 0
+        },
+        "user": {
+            "id": "68367a783f85fPPTP",
+            "name": "Longkha",
+            "client_role": "MANAGER",
+            "email": "vietlong123@gmail.com"
+        }
+    }
+}
+
+
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "signin_methods": [
+            "phone"
+        ],
+        "shop": {
+            "id": "68373f04d4e8fc6d1101d98b",
+            "name": "vi\u1ec7t",
+            "shop_username": "viet-4115237",
+            "is_new_user": 1,
+            "need_set_password": 1
+        },
+        "user": {
+            "id": "68373f04158a6Z4AU",
+            "name": "vi\u1ec7t",
+            "client_role": "MANAGER",
+            "phone": "+84140214021402"
+        }
+    }
+}
+
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "signin_methods": [
+            "password"
+        ],
+        "shop": {
+            "id": "68373f04d4e8fc6d1101d98b",
+            "name": "B\u00e1n GUndame",
+            "shop_username": "viet-4115237",
+            "is_new_user": 1,
+            "need_set_password": 0
+        },
+        "user": {
+            "id": "68373f04158a6Z4AU",
+            "name": "vi\u1ec7t",
+            "client_role": "MANAGER"
+        }
+    }
+}
+/api/v4/auth/signin-v2

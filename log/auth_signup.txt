@@ -1,0 +1,19 @@
+{"stage":"validate","phone":"123423453456","phone_code":"84","is_no_otp_flow":1}
+
+
+{
+    "error_code": 0,
+    "message": [
+        "Successfully"
+    ],
+    "from_cache": null,
+    "data": {
+        "phone": "123423453456",
+        "phone_code": "84",
+        "email": null,
+        "name": null,
+        "fullname": null,
+        "provider": "phone",
+        "is_no_otp_flow": 1
+    }
+}
