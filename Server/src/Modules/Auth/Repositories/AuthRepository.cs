@@ -62,13 +62,14 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
         }
     }
 
-    public async Task<int> UpdatePass(int employeeAccountMapId, string newPass, string oldPass, int needSetPassword)
+    public async Task<int> UpdatePass(int accountId, int companyId, string newPass, string oldPass, int needSetPassword)
     {
         try
         {
             var parameters = new Dictionary<string, object>
             {
-                { "@EmployeeAccountMapId", employeeAccountMapId },
+                { "@AccountId", accountId },
+                { "@CompanyId", companyId },
                 { "@Pass", AESHelper.HashPassword(newPass) },
                 { "@OldPass", needSetPassword == 0 ? AESHelper.HashPassword(oldPass) : "" },
                 { "@NeedSetPassword", needSetPassword }

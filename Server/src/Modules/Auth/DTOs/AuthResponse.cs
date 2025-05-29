@@ -1,60 +1,85 @@
-using System.Numerics;
-using AutoMapper.Configuration.Annotations;
 using Newtonsoft.Json;
 
 namespace AuthModule.DTOs;
 
+
 public class AuthResponse
 {
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public string? AccessToken { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public string? RefreshToken { get; set; }
+    [JsonProperty("signin_methods")]
+    public List<string>? SigninMethods { get; set; }
 
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public string? Model { get; set; }
-
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public AuthUserResponse? User { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("shop")]
     public AuthCompanyResponse? Company { get; set; }
 
-    public List<AuthCompanyResponse>? ListCompanies { get; set; }
-}
+    [JsonProperty("shops")]
+    public List<AuthCompaniesResponse>? ListCompanies { get; set; }
 
-public class AuthUserResponse
-{
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public int? Id { get; set; }
-
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public int? EmployeesInfoId { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-
-    public string? FullName { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public string? Phone { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public string? Email { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public bool? IsNewUser { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public bool? IsActive { get; set; }
+    [JsonProperty("user")]
+    public AuthUserResponse? User { get; set; }
 }
 
 public class AuthCompanyResponse
 {
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("id")]
     public int? Id { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public string FullName { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public bool IsActive { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public int Role { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public bool NeedSetPassword { get; set; }
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public bool NeedSetCompany { get; set; }
-    public int? CreateStep { get; set; }
+
+    [JsonProperty("name")]
+    public string? Name { get; set; }
+
+    [JsonProperty("shop_username")]
+    public string? ShopUsername { get; set; }
+
+    [JsonProperty("user_id")]
+    public int? UserId { get; set; }
+
+    [JsonProperty("is_new_user")]
+    public bool? IsNewUser { get; set; }
+
+    [JsonProperty("need_set_password")]
+    public bool? NeedSetPassword { get; set; }
+}
+
+public class AuthUserResponse
+{
+    [JsonProperty("id")]
+    public int? Id { get; set; }
+
+    [JsonProperty("name")]
+    public string? Name { get; set; }
+
+    [JsonProperty("client_role")]
+    public string? ClientRole { get; set; }
+
+    [JsonProperty("phone")]
+    public string? Phone { get; set; }
+
+    [JsonProperty("email")]
+    public string? Email { get; set; }
+}
+
+public class AuthCompaniesResponse
+{
+    [JsonProperty("client_role")]
+    public string? ClientRole { get; set; }
+
+    [JsonProperty("employee_name")]
+    public string? EmployeeName { get; set; }
+
+    [JsonProperty("user_id")]
+    public int? UserId { get; set; }
+
+    [JsonProperty("need_set_password")]
+    public bool? NeedSetPassword { get; set; }
+
+    [JsonProperty("id")]
+    public int? Id { get; set; }
+
+    [JsonProperty("name")]
+    public string? Name { get; set; }
+
+    [JsonProperty("shop_username")]
+    public string? ShopUsername { get; set; }
+
+    [JsonProperty("is_new_user")]
+    public bool? IsNewUser { get; set; }
 }

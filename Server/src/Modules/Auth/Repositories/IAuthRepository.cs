@@ -14,5 +14,5 @@ public interface IAuthRepository
     Task<int> RevokeEmployeeToken(int employeeId, string ip, string imie);
     Task<int> UpdateEmployeeJwtID(int employeeId, string jwtID, string ip, string imie);
     Task<AccountTokenInfoEntities> GetTokenInfo(int accountId, int companyId);
-    Task<int> UpdatePass(int employeeAccountMapId, string newPass, string oldPass, int needSetPassword);
+    Task<int> UpdatePass(int accountId,int companyId, string newPass, string oldPass, int needSetPassword);
 } 

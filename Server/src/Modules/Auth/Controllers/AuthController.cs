@@ -21,30 +21,6 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost("login")]
-    [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
-    {
-        try
-        {
-            var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
-            var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();            
-            var resultUser= await _authService.LoginAsync(request.AccountName, request.IsUsePhone, request.Password, ip, userAgent);           
-             return Ok(resultUser);
-        }
-        catch (ArgumentException ex)
-        {
-            LoggerHelper.Warning($"Login Tham số không hợp lệ. Lỗi: {ex.Message}");
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            LoggerHelper.Error($"GetEmployee ID: Exception.", ex);
-            return StatusCode(500,
-                new { message = "Đã xảy ra lỗi trong quá trình Login (-1)." });
-        }      
-    }
-
     [Authorize]
     [HttpPost("refreshtoken")]
     [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
@@ -105,7 +81,7 @@ public class AuthController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("createpass")]
+    [HttpPost("auth/set-password-new-user")]
     [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
     public async Task<IActionResult> CreatePass([FromBody] CreatePassRequest request)
     {
@@ -114,7 +90,7 @@ public class AuthController : ControllerBase
             var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
-            var result = await _authService.CreatePassFornewEmployeeAsync(request.EmployeeAccountMapId, request.NewPass, request.ComfirmPass);
+            var result = await _authService.CreatePassFornewEmployeeAsync(request.UserId,request.ShopId, request.Password, request.ComfirmPass);
 
             return Ok(result);
         }
@@ -141,7 +117,7 @@ public class AuthController : ControllerBase
             var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
-            var result = await _authService.CreatePassFornewEmployeeAsync(request.EmployeeAccountMapId, request.NewPass, request.OldPass);
+            var result = await _authService.CreatePassFornewEmployeeAsync(request.UserId,request.ShopId, request.NewPass, request.OldPass);
 
             return Ok(result);
         }
@@ -159,20 +135,41 @@ public class AuthController : ControllerBase
     }
 
 
-    [HttpPost("register")]
+    [HttpPost("auth/signup/phone")]
     [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
-    public async Task<IActionResult> RegisterAccount([FromBody] LoginRequest request)
+    public async Task<IActionResult> Signup_phone([FromBody] LoginRequest request)
     {
         try
         {
             var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
-            var resultUser = await _authService.LoginAsync(request.AccountName, request.IsUsePhone, request.Password, ip, userAgent);
-            if(resultUser.Code == ResponseResultEnum.AccountNotExist.Value())
-            {
-                var resultNewUser = await _authService.RegisterAccount(request.AccountName, "" , request.IsUsePhone);
-                return Ok(resultNewUser);
-            }
+            request.IsUsePhone = true;
+            var resultUser = await _authService.SignupAsync(request.AccountName, request.IsUsePhone, request.Password);           
+            return Ok(resultUser);
+        }
+        catch (ArgumentException ex)
+        {
+            LoggerHelper.Warning($"Login Tham số không hợp lệ. Lỗi: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"GetEmployee ID: Exception.", ex);
+            return StatusCode(500,
+                new { message = "Đã xảy ra lỗi trong quá trình Login (-1)." });
+        }
+    }
+    
+    [HttpPost("auth/signup/email")]
+    [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
+    public async Task<IActionResult> Signup_email([FromBody] LoginRequest request)
+    {
+        try
+        {
+            var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
+            var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
+            request.IsUsePhone = false;
+            var resultUser = await _authService.SignupAsync(request.AccountName, request.IsUsePhone, request.Password);            
             return Ok(resultUser);
         }
         catch (ArgumentException ex)

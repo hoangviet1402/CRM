@@ -20,7 +20,7 @@ public class AuthService : IAuthService
         _authRepository = authRepository;
         _configuration = configuration;
     }
-    public async Task<ApiResult<AuthResponse>> LoginAsync(string accountName, bool isUsePhone, string password, string ip, string imie)
+    public async Task<ApiResult<AuthResponse>> SignupAsync(string accountName, bool isUsePhone,string password)
     {
         var response = new ApiResult<AuthResponse>()
         {
@@ -45,9 +45,9 @@ public class AuthService : IAuthService
 
         try
         {
-            var jwtID = "";
-            var accessToken = "";
-            var refreshToken = "";
+            // var jwtID = "";
+            // var accessToken = "";
+            // var refreshToken = "";
             int lifeTime = 30;
             var configValue = _configuration["Token:RefreshTokenLifeTime"];
             if (int.TryParse(configValue, out int parsedLifeTime))
@@ -61,8 +61,16 @@ public class AuthService : IAuthService
                 EmployeesInfoId = 0,
                 Role = UserRole.SystemAdmin.Value(),
             };
-
-            response.Data.Model = isUsePhone ? "phone" : "mail";
+            response.Data.SigninMethods = new List<string>();
+            if (isUsePhone)
+            {
+                response.Data.SigninMethods.Add("phone");
+            }
+            else
+            {
+                response.Data.SigninMethods.Add("mail");
+            }
+            
             var authdata = await _authRepository.Login(accountName , isUsePhone, password);
             if(authdata == null || authdata.AccountId <= 0)
             {
@@ -102,97 +110,42 @@ public class AuthService : IAuthService
                         Role = UserRole.SystemAdmin.Value(),
                     };
                 }
-                else if((company.CompanyIsActive == false))// doanh nghiệp bị khóa
-                {
-                    response.Code = ResponseResultEnum.CompanyLocked.Value();
-                    response.Message = $"Doanh nghiệp của tài khoản {accountName} đã bị khóa.";
-
-                    #region data mặc định
-                    response.Data.User = new AuthUserResponse()
-                    {
-                        FullName = company.EmployeesFullName,
-                        Id = authdata.AccountId,
-                        EmployeesInfoId = company.EmployeesInfoId,
-                        IsActive = company.IsActive
-                    };
-                    response.Data.Company = new AuthCompanyResponse()
-                    {
-                        FullName = company.CompanyFullName,
-                        IsActive = company.CompanyIsActive,
-                        Id = company.CompanyId,
-                        CreateStep = company.CreateStep,
-                        Role = company.Role
-                    };
-                    #endregion
-                }
                 else // doanh nghiệp ok
                 {
                     #region data mặc định
                     response.Data.User = new AuthUserResponse()
                     {
-                        FullName = company.EmployeesFullName,
+                        Name = company.EmployeesFullName,
                         Id = authdata.AccountId,
-                        EmployeesInfoId = company.EmployeesInfoId,
-                        IsActive = company.IsActive
+                        ClientRole = company.Role.ToString(),
+                        Phone = isUsePhone ? accountName : null,
+                        Email = isUsePhone ? null : accountName,
                     };
                     response.Data.Company = new AuthCompanyResponse()
                     {
-                        FullName = company.CompanyFullName,
-                        IsActive = company.CompanyIsActive,
+                        Name = company.CompanyFullName,
+                        ShopUsername = company.CompanyFullName,
                         Id = company.CompanyId,
-                        CreateStep = company.CreateStep,
-                        Role = company.Role
+                        IsNewUser = company.IsNewUser,
+                        NeedSetPassword = company.NeedSetPassword,
+                        UserId = company.EmployeesInfoId,
                     };
                     #endregion
-
-                    // tài khoàn mới chỉ có thông tin doanh nghiệp mặc định
-                    if (company.IsNewUser)
-                    {
-                        response.Code = ResponseResultEnum.Success.Value();
-                        response.Message = $"Điền thông tin doanh nghiệp";
-
-                        response.Data.User.IsNewUser = true;
-                        response.Data.Company.NeedSetCompany = true;
-                        response.Data.Company.NeedSetPassword = true;
-                    }
-                    else // tài khoàn đã được đăng ký bởi ai đó hoặc đã tạo xong doanh nghiệp
-                    {
-                        if (company.NeedSetPassword == true) // tài khoàn mới chưa tạo pass
-                        {
-                            response.Code = ResponseResultEnum.EmployeesNeedSetPass.Value();
-                            response.Message = $"Vui lòng cập nhật mật khẩu.";
-                        }
-                        else if (company.NeedSetPassword == false && string.IsNullOrEmpty(password)) // ko nhập pass
-                        {
-                            response.Code = ResponseResultEnum.InvalidInput.Value();
-                            response.Message = $"Vui lòng nhập mật khẩu.";
-                            response.Data = null;
-                            return response;
-                        }
-                        else if (company.NeedSetPassword == false && string.IsNullOrEmpty(password) == false) // có nhập pass
-                        {
-                            // nhập pass sai
-                            if (company.PasswordHash.Equals(AESHelper.HashPassword(password), StringComparison.CurrentCultureIgnoreCase) == false)
-                            {
-                                response.Code = ResponseResultEnum.InvalidPass.Value();
-                                response.Message = $"Mật khẩu không đúng.";
-                                response.Data = null;
-                                return response;
-                            }
-                        }
-                    }
                 }
             }
             else if (list_companys.Count() > 1)// có nhiều hơn  1 doanh nghiệp
             {
 
-                response.Data.ListCompanies = new List<AuthCompanyResponse>();
-                response.Data.ListCompanies = list_companys.Select(company => new AuthCompanyResponse
+                response.Data.ListCompanies = new List<AuthCompaniesResponse>();
+                response.Data.ListCompanies = list_companys.Select(company => new AuthCompaniesResponse()
                 {
-                    FullName = company.CompanyFullName,
-                    IsActive = company.CompanyIsActive,
+                    ClientRole = company.Role.ToString(),
+                    EmployeeName = company.EmployeesFullName,
+                    UserId = company.EmployeesInfoId,
+                    NeedSetPassword = company.NeedSetPassword,
                     Id = company.CompanyId,
-                    CreateStep = company.CreateStep
+                    Name = company.CompanyFullName,
+                    IsNewUser = company.IsNewUser
                 }).ToList();
 
                 response.Data.User = new AuthUserResponse()
@@ -214,24 +167,24 @@ public class AuthService : IAuthService
                 return response;
             }
 
-            #region Xử lý token int employeeId, string role, int companyId, IConfiguration configuration
-            accessToken = JwtHelper.GenerateAccessToken(authdata.AccountId, company.EmployeesInfoId.GetValueOrDefault(0), company.Role, company.CompanyId, _configuration, out jwtID);
-            refreshToken = JwtHelper.GenerateRefreshToken();
-            var isUpdateOrInsertAccountToken = await _authRepository.InsertEmployeeToken(company.EmployeeAccountMapId, jwtID, refreshToken, lifeTime, ip, imie);
-            if (isUpdateOrInsertAccountToken > 0)
-            {
-                response.Data.AccessToken = accessToken;
-                response.Data.RefreshToken = refreshToken;
-                response.Code = ResponseResultEnum.Success.Value();
-                response.Message = "Đăng nhập thành công";
-            }
-            else
-            {
-                response.Code = ResponseResultEnum.AccountLocked.Value();
-                response.Message = $"Không tạo được token.";
-                response.Data = null;
-            }
-            #endregion
+            // #region Xử lý token int employeeId, string role, int companyId, IConfiguration configuration
+            // accessToken = JwtHelper.GenerateAccessToken(authdata.AccountId, company.EmployeesInfoId.GetValueOrDefault(0), company.Role, company.CompanyId, _configuration, out jwtID);
+            // refreshToken = JwtHelper.GenerateRefreshToken();
+            // var isUpdateOrInsertAccountToken = await _authRepository.InsertEmployeeToken(company.EmployeeAccountMapId, jwtID, refreshToken, lifeTime, ip, imie);
+            // if (isUpdateOrInsertAccountToken > 0)
+            // {
+            //     response.Data.AccessToken = accessToken;
+            //     response.Data.RefreshToken = refreshToken;
+            //     response.Code = ResponseResultEnum.Success.Value();
+            //     response.Message = "Đăng nhập thành công";
+            // }
+            // else
+            // {
+            //     response.Code = ResponseResultEnum.AccountLocked.Value();
+            //     response.Message = $"Không tạo được token.";
+            //     response.Data = null;
+            // }
+            // #endregion
         }
         catch (Exception ex)
         {
@@ -401,7 +354,7 @@ public class AuthService : IAuthService
             return response;
         }
     }
-    public async Task<ApiResult<bool>> CreatePassFornewEmployeeAsync(int employeeAccountMapId, string newPass , string comfirmPass)
+    public async Task<ApiResult<bool>> CreatePassFornewEmployeeAsync(int accountId, int companyId, string newPass , string comfirmPass)
     {
         var response = new ApiResult<bool>()
         {
@@ -409,6 +362,20 @@ public class AuthService : IAuthService
             Code = ResponseResultEnum.ServiceUnavailable.Value(),
             Message = ResponseResultEnum.ServiceUnavailable.Text()
         };
+
+        if (accountId <= 0)
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = "Bạn chưa chọn nhân viên.";
+            return response;
+        }
+
+        if (companyId <= 0)
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = "Bạn chưa chọn công ty.";
+            return response;
+        }
 
         // Validate input (có thể thêm FluentValidation ở đây)
         if (string.IsNullOrEmpty(newPass))
@@ -435,7 +402,7 @@ public class AuthService : IAuthService
         try
         {
             // Implement refresh token logic here
-            var updatePass = await _authRepository.UpdatePass(employeeAccountMapId, newPass,"", 1);
+            var updatePass = await _authRepository.UpdatePass(accountId ,companyId, newPass,"", 1);
             if (updatePass > 0)
             {
                 response.Data = true;
@@ -451,13 +418,13 @@ public class AuthService : IAuthService
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"UpdatePassAsync Exception  {employeeAccountMapId} int newPass {newPass}, int comfirmPass {comfirmPass}", ex);
+            LoggerHelper.Error($"UpdatePassAsync Exception  {accountId} int newPass {newPass}, int comfirmPass {comfirmPass}", ex);
             response.Code = ResponseResultEnum.SystemError.Value();
             response.Message = ResponseResultEnum.SystemError.Text();
             return response;
         }
     }
-    public async Task<ApiResult<bool>> ChangePass(int employeeAccountMapId, string newPass, string oldPass)
+    public async Task<ApiResult<bool>> ChangePass(int accountId, int companyId, string newPass, string oldPass)
     {
         var response = new ApiResult<bool>()
         {
@@ -465,6 +432,20 @@ public class AuthService : IAuthService
             Code = ResponseResultEnum.ServiceUnavailable.Value(),
             Message = ResponseResultEnum.ServiceUnavailable.Text()
         };
+
+        if (accountId <= 0)
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = "Bạn chưa chọn nhân viên.";
+            return response;
+        }
+
+        if (companyId <= 0)
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = "Bạn chưa chọn công ty.";
+            return response;
+        }
 
         // Validate input (có thể thêm FluentValidation ở đây)
         if (string.IsNullOrEmpty(newPass))
@@ -491,7 +472,7 @@ public class AuthService : IAuthService
         try
         {
             // Implement refresh token logic here
-            var updatePass = await _authRepository.UpdatePass(employeeAccountMapId, newPass, oldPass , 0);
+            var updatePass = await _authRepository.UpdatePass(accountId,companyId, newPass, oldPass , 0);
             if (updatePass > 0)
             {
                 response.Data = true;
@@ -507,7 +488,7 @@ public class AuthService : IAuthService
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"UpdatePassAsync Exception  {employeeAccountMapId} int newPass {newPass}, int comfirmPass {oldPass}", ex);
+            LoggerHelper.Error($"UpdatePassAsync Exception  {accountId} int newPass {newPass}, int comfirmPass {oldPass}", ex);
             response.Code = ResponseResultEnum.SystemError.Value();
             response.Message = ResponseResultEnum.SystemError.Text();
             return response;
