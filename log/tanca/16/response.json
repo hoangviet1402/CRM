@@ -1,0 +1,17 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "code": 200,
+  "duration": "11ms",
+  "headers": {
+    "content-type": "application/json; charset\u003dutf-8",
+    "content-length": "62",
+    "access-control-allow-origin": "*",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization, origin, x-requested-with, content-type, device, LANG, IS_ADMIN, Authorization, IS-ADMIN, is-admin, TIMEZONE, timezone"
+  },
+  "message": null,
+  "protocol": "h2",
+  "remoteIp": "103.42.56.146",
+  "remotePort": 443,
+  "sessionId": "4c8988ab-e079-4b51-b01c-a942b37c7661",
+  "time": "2025-05-29 19:29:32"
+}

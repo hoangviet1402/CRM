@@ -1,0 +1,19 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "duration": "312ms",
+  "headers": {
+    "Content-Length": "10055",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 7.1.2; SM-G960N Build/N2G48B)",
+    "Host": "api.mixpanel.com",
+    "Connection": "Keep-Alive",
+    "Accept-Encoding": "gzip"
+  },
+  "method": "POST",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "130.211.34.183",
+  "remotePort": 443,
+  "sessionId": "f32272f4-5f7c-42a3-8be6-1327c27ad2fb",
+  "time": "2025-05-29 19:30:10",
+  "url": "https://api.mixpanel.com/track/?ip\u003d1"
+}

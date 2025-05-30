@@ -1,0 +1,17 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "duration": "51ms",
+  "headers": {
+    "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 7.1.2; SM-G960N Build/N2G48B)",
+    "Host": "api.mixpanel.com",
+    "Connection": "Keep-Alive",
+    "Accept-Encoding": "gzip"
+  },
+  "method": "GET",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "130.211.34.183",
+  "remotePort": 443,
+  "sessionId": "146cd32b-7d09-4e53-b341-2f9ef6cfdfce",
+  "time": "2025-05-29 19:30:10",
+  "url": "https://api.mixpanel.com/decide?version\u003d1\u0026lib\u003dandroid\u0026token\u003d68b6a55accb358bff349220be8f22b5a\u0026distinct_id\u003d682eefe1189d3q7Nz\u0026properties\u003d%7B%22%24android_lib_version%22%3A%226.3.0%22%2C%22%24android_app_version%22%3A%228.9.17%22%2C%22%24android_version%22%3A%227.1.2%22%2C%22%24android_app_release%22%3A734%2C%22%24android_device_model%22%3A%22SM-G960N%22%7D"
+}

@@ -1,0 +1,20 @@
+{
+  "app": "com.edujoy.vlad.niki",
+  "duration": "215ms",
+  "headers": {
+    "Content-Encoding": "gzip",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 7.1.2; SM-G960N Build/N2G48B)",
+    "Host": "configv2.unityads.unity3d.com",
+    "Connection": "Keep-Alive",
+    "Accept-Encoding": "gzip",
+    "Content-Length": "213"
+  },
+  "method": "POST",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "34.110.229.214",
+  "remotePort": 443,
+  "sessionId": "dd3735bf-e4f7-455d-bf20-60e18cee46ce",
+  "time": "2024-08-31 17:13:08",
+  "url": "https://configv2.unityads.unity3d.com/webview/4.10.0/release/config.json"
+}

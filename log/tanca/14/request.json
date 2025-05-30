@@ -1,0 +1,16 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "duration": "268ms",
+  "headers": {
+    "Host": "upload.tanca.io",
+    "accept-encoding": "gzip",
+    "user-agent": "okhttp/4.10.0"
+  },
+  "method": "GET",
+  "protocol": "h2",
+  "remoteIp": "172.67.196.12",
+  "remotePort": 443,
+  "sessionId": "db9709b1-fed9-4a5a-84f4-a200cd332e07",
+  "time": "2025-05-29 19:29:32",
+  "url": "https://upload.tanca.io/api/upload/user-avatar/682eefe1189d3q7Nz/?v\u003d3"
+}

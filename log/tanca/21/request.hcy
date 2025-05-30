@@ -1,0 +1,6 @@
+GET /decide?version=1&lib=android&token=68b6a55accb358bff349220be8f22b5a&distinct_id=682eefe1189d3q7Nz&properties=%7B%22%24android_lib_version%22%3A%226.3.0%22%2C%22%24android_app_version%22%3A%228.9.17%22%2C%22%24android_version%22%3A%227.1.2%22%2C%22%24android_app_release%22%3A734%2C%22%24android_device_model%22%3A%22SM-G960N%22%7D HTTP/1.1
+User-Agent: Dalvik/2.1.0 (Linux; U; Android 7.1.2; SM-G960N Build/N2G48B)
+Host: api.mixpanel.com
+Connection: Keep-Alive
+Accept-Encoding: gzip
+

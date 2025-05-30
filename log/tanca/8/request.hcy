@@ -1,0 +1,11 @@
+GET /ws?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLnRhbmNhLmlvL2FwaS92NC9hdXRoL3NpZ25pbi12MiIsImlhdCI6MTc0ODUyMTc3MSwibmJmIjoxNzQ4NTIxNzcxLCJqdGkiOiIydVg0c3NVTmhBUEpBQlNnIiwic3ViIjoiNjgyZWVmZTExODlkM3E3TnoiLCJwcnYiOiIxYzU1MjBmNzBiYWE2NTVkZGM1NzQ2YTY3NjRmMzcyYTFiNjU1YWE2Iiwic2hvcF9pZCI6IjY4MmVlZmUxOGNkY2YyODE2MjAyMWYzNyIsInNob3BfdXNlcm5hbWUiOiJob3ZhdGVuLTY2NTg0ODAiLCJzaG9wX3ByZWZpeCI6ImgiLCJ0eXBlIjoiYXBpIn0.whYao4AQU_QyPK-fQOdA2uew78rGlmZLN45qRuSFVBU HTTP/1.1
+origin: https://chat.tanca.io
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Key: Ibr/hJKUAo2dLSpdbM+UXQ==
+Sec-WebSocket-Version: 13
+Sec-WebSocket-Extensions: permessage-deflate
+Host: chat.tanca.io
+Accept-Encoding: gzip
+User-Agent: okhttp/4.10.0
+

@@ -1,0 +1,17 @@
+HTTP/1.1 200 OK
+Date: Thu, 29 May 2025 12:29:37 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 16
+Connection: keep-alive
+access-control-allow-headers: SDK-Version,Content-Type,Origin,Authorization,OneSignal-Subscription-Id
+access-control-allow-origin: *
+traceparent: 00-7d2714a7354cc44e9690b57f28bf3701-875c4bceea31713c-00
+via: 1.1 google
+alt-svc: h3=":443"; ma=86400
+cf-cache-status: DYNAMIC
+Set-Cookie: __cf_bm=luN_3JANziDmyXyf8eqS87SZOfpu1I3PSDBZ3THSnx4-1748521777-1.0.1.1-wflkGB1fjEwmSDe6HgJS6Zz3ckiPu9rC7Tb7D9ICA1Gv66pN8QWvkbwmGVNwOyG5bqZPyw4y19GGWTr_92vkufCNjw7zZ2gOj0R00iwzbus; path=/; expires=Thu, 29-May-25 12:59:37 GMT; domain=.onesignal.com; HttpOnly; Secure; SameSite=None
+Strict-Transport-Security: max-age=15552000; includeSubDomains
+Server: cloudflare
+CF-RAY: 9475ff920c5876b3-HKG
+
+{"success":true}

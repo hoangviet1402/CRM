@@ -36,7 +36,7 @@ public class StoredProcedureMapperModule
     /// </summary>
     /// <param name="dbConnection">Quản lý kết nối database</param>
     /// <param name="connectionName">Tên kết nối database</param>
-    public StoredProcedureMapperModule(DatabaseConnection dbConnection = null, string connectionName = null)
+    public StoredProcedureMapperModule(DatabaseConnection dbConnection , string connectionName = "TanCa")
     {
         _dbConnection = dbConnection;
         _connectionName = connectionName;

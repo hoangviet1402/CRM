@@ -1,0 +1,14 @@
+h2 200
+content-type: application/json
+cache-control: no-cache, private
+etag: "8ac0d232864fcce335e8338740f9e4b15e4fd851"
+access-control-allow-methods: GET, HEAD, POST, PUT, DELETE, PUT, GET, POST, DELETE, OPTIONS
+access-control-allow-credentials: true
+access-control-max-age: 60
+access-control-allow-headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, origin, x-requested-with, content-type, device, LANG, IS_ADMIN, IS-ADMIN, is-admin, IS-TV-APP, is-tv-app, timezone
+charset: utf-8
+access-control-allow-origin: *
+access-control-allow-headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, origin, x-requested-with, content-type, device, LANG, IS_ADMIN, IS-ADMIN, is-admin, IS-TV-APP, is-tv-app, timezone
+strict-transport-security: max-age=31536000
+
+{"error_code":0,"message":["Successfully"],"from_cache":null,"data":[{"title":"Ho\u00e0n thi\u1ec7n th\u00f4ng tin c\u00f4ng ty","icon":"icmn-info","code":"COMPLETE_COMPANY_INFO","day_add":1,"is_done":true},{"title":"Th\u00eam nh\u00e2n vi\u00ean m\u1edbi","icon":"icmn-user-plus","code":"ADD_NEW_EMPLOYEE","day_add":1,"route":"\/personnel\/employees#new-employee","is_done":true},{"title":"T\u1ea1o ca l\u00e0m","icon":"icmn-calendar","code":"CREATE_SHIFTS","day_add":2,"route":"\/working-day\/timekeeping#new-shift","is_done":true},{"title":"Duy\u1ec7t m\u1ed9t y\u00eau c\u1ea7u c\u00f4ng vi\u1ec7c","icon":"icmn-file-text2","code":"BROWSE_JOB_REQUEST","day_add":2,"route":"\/personnel\/request","is_done":true},{"title":"\u0110\u1eb7t l\u1ecbch Demo","icon":"icmn-address-book","code":"SCHEDULE_DEMO","day_add":2,"is_done":false}]}

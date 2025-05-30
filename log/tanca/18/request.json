@@ -1,0 +1,21 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "duration": "395ms",
+  "headers": {
+    "SDK-Version": "onesignal/android/040802",
+    "Accept": "application/vnd.onesignal.v1+json",
+    "Content-Type": "application/json; charset\u003dUTF-8",
+    "Content-Length": "183",
+    "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 7.1.2; SM-G960N Build/N2G48B)",
+    "Host": "api.onesignal.com",
+    "Connection": "Keep-Alive",
+    "Accept-Encoding": "gzip"
+  },
+  "method": "PUT",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "104.16.160.145",
+  "remotePort": 443,
+  "sessionId": "e7c0629d-a3fc-407b-aee6-f0ddd5030f6b",
+  "time": "2025-05-29 19:29:36",
+  "url": "https://api.onesignal.com/players/a5d624d4-69a7-4556-9a28-7c4baa39f5cc"
+}

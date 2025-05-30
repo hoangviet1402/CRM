@@ -1,0 +1,5 @@
+GET /api/upload/user-avatar/682eefe1189d3q7Nz/?v=3 h2
+Host: upload.tanca.io
+accept-encoding: gzip
+user-agent: okhttp/4.10.0
+

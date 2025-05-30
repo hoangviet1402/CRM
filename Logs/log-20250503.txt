@@ -1,9 +1,0 @@
-[2025-05-03 21:29:52.697] [INF] [] Khởi tạo Logger thành công. Đường dẫn log file: D:\BANCA\Logs\log-.txt
-[2025-05-03 21:30:29.633] [INF] [] Khởi tạo Logger thành công. Đường dẫn log file: D:\BANCA\Logs\log-.txt
-[2025-05-03 21:30:41.671] [INF] [] Khởi tạo Logger thành công. Đường dẫn log file: D:\BANCA\Logs\log-.txt
-[2025-05-03 21:45:13.107] [INF] [] Khởi tạo Logger thành công. Đường dẫn log file: D:\BANCA\Logs\log-.txt
-[2025-05-03 21:52:11.366] [INF] [] Khởi tạo Logger thành công. Đường dẫn log file: D:\BANCA\Logs\log-.txt
-[2025-05-03 22:02:13.604] [INF] [] Khởi tạo Logger thành công. Đường dẫn log file: D:\BANCA\Logs\log-.txt
-[2025-05-03 22:03:26.857] [INF] [] Khởi tạo Logger thành công. Đường dẫn log file: D:\BANCA\Logs\log-.txt
-[2025-05-03 22:18:35.790] [INF] [] Khởi tạo Logger thành công. Đường dẫn log file: D:\BANCA\Logs\log-.txt
-[2025-05-03 22:24:57.107] [INF] [] Khởi tạo Logger thành công. Đường dẫn log file: D:\BANCA\Logs\log-.txt

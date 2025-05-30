@@ -1,0 +1,8 @@
+HTTP/1.1 101 Switching Protocols
+Server: nginx/1.21.6
+Date: Thu, 29 May 2025 12:29:31 GMT
+Connection: upgrade
+Upgrade: websocket
+Sec-WebSocket-Accept: nTnOZ9CPtQLhNLhxSlhPO6gXTPs=
+Strict-Transport-Security: max-age=31536000
+

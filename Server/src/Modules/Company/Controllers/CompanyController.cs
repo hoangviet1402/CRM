@@ -1,6 +1,9 @@
 using AuthModule.Middleware;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Shared.Enums;
 using Shared.Helpers;
+using Shared.Result;
 
 namespace Company.Controllers;
 
@@ -111,6 +114,24 @@ public class CompanyController : ControllerBase
     /// </summary>
     [HttpPost("department/all-branches")]
     public async Task<IActionResult> CreateDepartmentInAllBranches([FromBody] CreateDepartmentInAllBranchesRequest request)
+    {
+        try
+        {
+            var result = await _companyService.CreateDepartmentInAllBranchesAsync(request);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"CreateDepartmentInAllBranches Exception.", ex);
+            return StatusCode(500, new { message = "Đã xảy ra lỗi trong quá trình tạo phòng ban." });
+        }
+    }
+
+    /// <summary>
+    /// Tạo phòng ban ở tất cả chi nhánh của công ty
+    /// </summary>
+    [HttpPost("element/list-business-field")]
+    public async Task<IActionResult> listBusinessField([FromBody] CreateDepartmentInAllBranchesRequest request)
     {
         try
         {

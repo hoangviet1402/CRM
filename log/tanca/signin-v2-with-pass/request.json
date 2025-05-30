@@ -1,0 +1,26 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "duration": "458ms",
+  "headers": {
+    "Host": "api.tanca.io",
+    "timezone": "Asia/Bangkok",
+    "cache-control": "Private, No-Cache",
+    "expires": "",
+    "pragma": "no-cache",
+    "device": "eyJpbWVpIjoiOWMxYjRhZGUwYmIzN2VmNCIsIm5hbWUiOiJTTS1HOTYwTiIsImlkIjoiU00tRzk2ME4iLCJvcyI6IkFuZHJvaWQiLCJvc1ZlcnNpb24iOiI3LjEuMiIsInBhY2thZ2VOYW1lIjoidm4uZ3JlZW5hcHAud29ya3RyYWNrIiwiYXBwVmVyc2lvbiI6IjguOS4xNy43MzQiLCJyb290ZWQiOnRydWUsIm1vY2tMb2NhdGlvbiI6ZmFsc2UsImJ1aWxkVmVyc2lvbiI6IjczNCJ9",
+    "lang": "vi",
+    "accept": "application/json",
+    "authorization": "Bearer",
+    "content-type": "application/json",
+    "content-length": "299",
+    "accept-encoding": "gzip",
+    "user-agent": "okhttp/4.10.0"
+  },
+  "method": "POST",
+  "protocol": "h2",
+  "remoteIp": "103.42.56.146",
+  "remotePort": 443,
+  "sessionId": "bc0fd98d-b5c1-4202-9e37-f04ef5806fe4",
+  "time": "2025-05-29 19:29:31",
+  "url": "https://api.tanca.io/api/v4/auth/signin-v2"
+}

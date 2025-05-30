@@ -1,0 +1,21 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "duration": "426ms",
+  "headers": {
+    "User-Agent": "FBAndroidSDK.14.1.1",
+    "Accept-Language": "vi_VN",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Content-Encoding": "gzip",
+    "Transfer-Encoding": "chunked",
+    "Host": "graph.facebook.com",
+    "Connection": "Keep-Alive",
+    "Accept-Encoding": "gzip"
+  },
+  "method": "POST",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "157.240.15.1",
+  "remotePort": 443,
+  "sessionId": "a736401a-ccf5-49b2-a9b3-e013c0bb4cd7",
+  "time": "2025-05-29 19:30:52",
+  "url": "https://graph.facebook.com/v14.0/315941625668868/activities"
+}

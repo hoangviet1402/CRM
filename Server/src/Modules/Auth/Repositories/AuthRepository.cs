@@ -13,11 +13,11 @@ namespace AuthModule.Repositories;
 public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
 {
     public AuthRepository(DatabaseConnection dbConnection)
-        : base(dbConnection, "TanCa")
+        : base(dbConnection, "TanTam")
     {
     }
 
-    public async Task<int> RegisterAccount(string phoneCode, string phone, string email, string fullname,string deviceId)
+    public async Task<int> RegisterAccount(string phoneCode, string phone, string email, string fullname, string deviceId)
     {
         try
         {
@@ -32,7 +32,7 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
 
             var outputParameters = new Dictionary<string, object>
             {
-                { "@OutResult", 0 } 
+                { "@OutResult", 0 }
             };
 
             await ExecuteStoredProcedureAsync<int>("Ins_Account_Register", parameters, outputParameters);
@@ -76,12 +76,12 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
                 { "@OldPass", needSetPassword == 0 ? AESHelper.HashPassword(oldPass) : "" },
                 { "@NeedSetPassword", needSetPassword }
             };
-            
+
             var outputParameters = new Dictionary<string, object>
             {
-                { "@OutResult", 0 } 
+                { "@OutResult", 0 }
             };
-            
+
             await ExecuteStoredProcedureAsync<int>("Ins_Account_UpdatePass", parameters, outputParameters);
             return outputParameters.GetSafeInt32("@OutResult");
         }
@@ -126,7 +126,7 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
 
             var outputParameters = new Dictionary<string, object>
             {
-                { "@OutResult", 0 } 
+                { "@OutResult", 0 }
             };
 
             await ExecuteStoredProcedureAsync<int>("Ins_Account_InsertTokens", parameters, outputParameters);
@@ -194,6 +194,7 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
 
     public async Task<AccountTokenInfoEntities> GetTokenInfo(int accountId, int companyId)
     {
+        var dataTable = new AccountTokenInfoEntities();
         try
         {
             var parameters = new Dictionary<string, object>
@@ -202,12 +203,42 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
                 { "@CompanyId", companyId }
             };
 
-            return await ExecuteStoredProcedureAsync<AccountTokenInfoEntities>("Ins_Account_GetTokensByEmployeeID", parameters);
+            dataTable = await ExecuteStoredProcedureAsync<AccountTokenInfoEntities>("Ins_Account_GetTokensByEmployeeID", parameters);
+            if (dataTable == null)
+            {
+                dataTable = new AccountTokenInfoEntities();
+            }
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"GetTokenInfo Exception.", ex);
-            return null;
+
         }
+        return dataTable ?? new AccountTokenInfoEntities();
+    }
+
+    public async Task<List<Ins_Account_UpdateFullName_Result>> UpdateFullName(string AccountName, string  FullName, bool IsUsePhone)
+    {
+        var dataTable = new List<Ins_Account_UpdateFullName_Result>();
+        try
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "@AccountName", AccountName },
+                { "@FullName", FullName },
+                { "@IsUsePhone",IsUsePhone }
+            };
+            dataTable = await ExecuteStoredProcedureListAsync<Ins_Account_UpdateFullName_Result>("Ins_Account_UpdateFullName", parameters);
+            if (dataTable == null)
+            {
+                dataTable = new List<Ins_Account_UpdateFullName_Result>();
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"UpdateFullName Exception.", ex);
+        }
+        
+        return dataTable;
     }
 } 

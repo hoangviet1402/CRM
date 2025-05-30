@@ -1,0 +1,11 @@
+PUT /players/a5d624d4-69a7-4556-9a28-7c4baa39f5cc HTTP/1.1
+SDK-Version: onesignal/android/040802
+Accept: application/vnd.onesignal.v1+json
+Content-Type: application/json; charset=UTF-8
+Content-Length: 183
+User-Agent: Dalvik/2.1.0 (Linux; U; Android 7.1.2; SM-G960N Build/N2G48B)
+Host: api.onesignal.com
+Connection: Keep-Alive
+Accept-Encoding: gzip
+
+{"tags":{"mode":"production","userId":"682eefe1189d3q7Nz","shop_id":"682eefe18cdcf28162021f37"},"external_user_id":"682eefe1189d3q7Nz","app_id":"af08312a-9e84-47eb-b0da-184e94000f37"}

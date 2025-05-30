@@ -1,0 +1,31 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "code": 200,
+  "duration": "426ms",
+  "headers": {
+    "Content-Type": "text/javascript; charset\u003dUTF-8",
+    "Vary": "Origin",
+    "x-ad-api-version-warning": "The call has been auto-upgraded to v17.0 as v14.0 has been deprecated.",
+    "Access-Control-Allow-Origin": "*",
+    "facebook-api-version": "v17.0",
+    "Strict-Transport-Security": "max-age\u003d15552000; preload",
+    "Pragma": "no-cache",
+    "Cache-Control": "private, no-cache, no-store, must-revalidate",
+    "Expires": "Sat, 01 Jan 2000 00:00:00 GMT",
+    "x-fb-request-id": "AnyCQCwi_3mAoTzqhWxtUfC",
+    "x-fb-trace-id": "GzOqqtK9yQs",
+    "x-fb-rev": "1023297019",
+    "X-FB-Debug": "0k50MrSUsBbW++ym8W0aiGmXZDt0Ik2fgOxmgv6+9x58pIOJjXHu6naDz+8pCxrSk21/pHEmWO+xhWD5aKjK6g\u003d\u003d",
+    "Date": "Thu, 29 May 2025 12:30:53 GMT",
+    "X-FB-Connection-Quality": "EXCELLENT; q\u003d0.9, rtt\u003d38, rtx\u003d0, c\u003d10, mss\u003d1392, tbw\u003d3241, tp\u003d-1, tpl\u003d-1, uplat\u003d215, ullat\u003d0",
+    "Alt-Svc": "h3\u003d\":443\"; ma\u003d86400",
+    "Connection": "keep-alive",
+    "Content-Length": "16"
+  },
+  "message": "OK",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "157.240.15.1",
+  "remotePort": 443,
+  "sessionId": "a736401a-ccf5-49b2-a9b3-e013c0bb4cd7",
+  "time": "2025-05-29 19:30:52"
+}

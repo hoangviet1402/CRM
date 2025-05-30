@@ -1,0 +1,25 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "code": 200,
+  "duration": "51ms",
+  "headers": {
+    "Server": "gunicorn",
+    "Date": "Thu, 29 May 2025 12:30:10 GMT",
+    "Cache-Control": "no-cache, no-store",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "X-Requested-With",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Max-Age": "1728000",
+    "Content-Type": "application/json",
+    "Via": "1.1 google",
+    "Alt-Svc": "clear",
+    "Transfer-Encoding": "chunked"
+  },
+  "message": "OK",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "130.211.34.183",
+  "remotePort": 443,
+  "sessionId": "146cd32b-7d09-4e53-b341-2f9ef6cfdfce",
+  "time": "2025-05-29 19:30:10"
+}

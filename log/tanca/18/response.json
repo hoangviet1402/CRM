@@ -1,0 +1,27 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "code": 200,
+  "duration": "395ms",
+  "headers": {
+    "Date": "Thu, 29 May 2025 12:29:37 GMT",
+    "Content-Type": "application/json; charset\u003dutf-8",
+    "Content-Length": "16",
+    "Connection": "keep-alive",
+    "access-control-allow-headers": "SDK-Version,Content-Type,Origin,Authorization,OneSignal-Subscription-Id",
+    "access-control-allow-origin": "*",
+    "traceparent": "00-7d2714a7354cc44e9690b57f28bf3701-875c4bceea31713c-00",
+    "via": "1.1 google",
+    "alt-svc": "h3\u003d\":443\"; ma\u003d86400",
+    "cf-cache-status": "DYNAMIC",
+    "Set-Cookie": "__cf_bm\u003dluN_3JANziDmyXyf8eqS87SZOfpu1I3PSDBZ3THSnx4-1748521777-1.0.1.1-wflkGB1fjEwmSDe6HgJS6Zz3ckiPu9rC7Tb7D9ICA1Gv66pN8QWvkbwmGVNwOyG5bqZPyw4y19GGWTr_92vkufCNjw7zZ2gOj0R00iwzbus; path\u003d/; expires\u003dThu, 29-May-25 12:59:37 GMT; domain\u003d.onesignal.com; HttpOnly; Secure; SameSite\u003dNone",
+    "Strict-Transport-Security": "max-age\u003d15552000; includeSubDomains",
+    "Server": "cloudflare",
+    "CF-RAY": "9475ff920c5876b3-HKG"
+  },
+  "message": "OK",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "104.16.160.145",
+  "remotePort": 443,
+  "sessionId": "e7c0629d-a3fc-407b-aee6-f0ddd5030f6b",
+  "time": "2025-05-29 19:29:36"
+}

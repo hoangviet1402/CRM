@@ -1,0 +1,22 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "duration": "77ms",
+  "headers": {
+    "origin": "https://chat.tanca.io",
+    "Upgrade": "websocket",
+    "Connection": "Upgrade",
+    "Sec-WebSocket-Key": "Ibr/hJKUAo2dLSpdbM+UXQ\u003d\u003d",
+    "Sec-WebSocket-Version": "13",
+    "Sec-WebSocket-Extensions": "permessage-deflate",
+    "Host": "chat.tanca.io",
+    "Accept-Encoding": "gzip",
+    "User-Agent": "okhttp/4.10.0"
+  },
+  "method": "GET",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "103.42.56.146",
+  "remotePort": 443,
+  "sessionId": "077365de-1b92-44d8-9b15-b968db62ca6d",
+  "time": "2025-05-29 19:29:31",
+  "url": "https://chat.tanca.io/ws?token\u003deyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLnRhbmNhLmlvL2FwaS92NC9hdXRoL3NpZ25pbi12MiIsImlhdCI6MTc0ODUyMTc3MSwibmJmIjoxNzQ4NTIxNzcxLCJqdGkiOiIydVg0c3NVTmhBUEpBQlNnIiwic3ViIjoiNjgyZWVmZTExODlkM3E3TnoiLCJwcnYiOiIxYzU1MjBmNzBiYWE2NTVkZGM1NzQ2YTY3NjRmMzcyYTFiNjU1YWE2Iiwic2hvcF9pZCI6IjY4MmVlZmUxOGNkY2YyODE2MjAyMWYzNyIsInNob3BfdXNlcm5hbWUiOiJob3ZhdGVuLTY2NTg0ODAiLCJzaG9wX3ByZWZpeCI6ImgiLCJ0eXBlIjoiYXBpIn0.whYao4AQU_QyPK-fQOdA2uew78rGlmZLN45qRuSFVBU"
+}

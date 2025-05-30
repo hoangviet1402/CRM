@@ -5,7 +5,10 @@ namespace AuthModule.Services;
 
 public interface IAuthService
 {
-    Task<ApiResult<AuthResponse>> SignupAsync(SignupRequest request,bool isUsePhone);
+    Task<ApiResult<List<UpdateFullNameResponse>>> UpdateFullNameAsync(string accountName, string fullName, bool isUsePhone);
+    Task<ApiResult<ValidateAccountRequest>> ValidateAccountAsync(SignupRequest request,bool isUsePhone);
+    Task<ApiResult<AuthResponse>> SigninAsync(SignupRequest request,bool isUsePhone);
+    Task<ApiResult<ValidateAccountRequest>> SignupAsync(SignupRequest request, bool isUsePhone);
     Task<ApiResult<RefeshTokenResponse>> RefreshTokenAsync(string refreshToken, string accessToken, int accountId, int companyId, string ip, string imie);
     Task<ApiResult<bool>> LogoutAsync(string refreshToken, int accountId, int companyId, string ip, string imie);
     Task<ApiResult<bool>> CreatePassFornewEmployeeAsync(int accountId, int companyId, string newPass , string comfirmPass);

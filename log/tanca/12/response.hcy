@@ -1,0 +1,14 @@
+h2 200
+content-type: application/json
+cache-control: no-cache, private
+etag: "3b49d2d1cde15af17726b791dd1450ff33fc77c8"
+access-control-allow-methods: GET, HEAD, POST, PUT, DELETE, PUT, GET, POST, DELETE, OPTIONS
+access-control-allow-credentials: true
+access-control-max-age: 60
+access-control-allow-headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, origin, x-requested-with, content-type, device, LANG, IS_ADMIN, IS-ADMIN, is-admin, IS-TV-APP, is-tv-app, timezone
+charset: utf-8
+access-control-allow-origin: *
+access-control-allow-headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, origin, x-requested-with, content-type, device, LANG, IS_ADMIN, IS-ADMIN, is-admin, IS-TV-APP, is-tv-app, timezone
+strict-transport-security: max-age=31536000
+
+{"error_code":0,"message":["Successfully"],"from_cache":null,"data":{"items":["password","email"],"item_to_optimize":0,"score":100,"security_level":"Cao","status":{"color":"#1ECC78","status_color":["#1ECC78","#DDF7EB","#EAECF0"]}}}

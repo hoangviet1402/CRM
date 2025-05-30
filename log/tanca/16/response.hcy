@@ -1,0 +1,7 @@
+h2 200
+content-type: application/json; charset=utf-8
+content-length: 62
+access-control-allow-origin: *
+access-control-allow-headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, origin, x-requested-with, content-type, device, LANG, IS_ADMIN, Authorization, IS-ADMIN, is-admin, TIMEZONE, timezone
+
+{"error_code":0,"message":"Success","data":{"unread_count":0}}

@@ -1,0 +1,14 @@
+h2 200
+content-type: application/json
+cache-control: no-cache, private
+etag: "ce6acf784edcdcfffcf658ee6369c9c072f6231c"
+access-control-allow-methods: GET, HEAD, POST, PUT, DELETE, PUT, GET, POST, DELETE, OPTIONS
+access-control-allow-credentials: true
+access-control-max-age: 60
+access-control-allow-headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, origin, x-requested-with, content-type, device, LANG, IS_ADMIN, IS-ADMIN, is-admin, IS-TV-APP, is-tv-app, timezone
+charset: utf-8
+access-control-allow-origin: *
+access-control-allow-headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, origin, x-requested-with, content-type, device, LANG, IS_ADMIN, IS-ADMIN, is-admin, IS-TV-APP, is-tv-app, timezone
+strict-transport-security: max-age=31536000
+
+{"error_code":0,"message":["Successfully"],"from_cache":null,"data":{"clock_setting":{"clock_in_out_requirements":["gps"],"is_location_tracking":null,"distance":100,"debug":false,"logLevel":5},"clock_type":"clock_in","current_employee_shift":{"id":"on_call","name":"Ca C\u00e1 Nh\u00e2n"},"employee_shifts":[],"timekeeper_log":{"id":"68380a6c1cfdbff48605e67b","time":"2025-05-29 14:19:08","clock_type":"clock_out","employee_shift_id":"682f0ca9e6deed9e2d05b0f9"}}}

@@ -1,0 +1,23 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "code": 200,
+  "duration": "738ms",
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "no-cache, private",
+    "etag": "\"bfe19f76b639b1936108edb1b8899f7638c98737\"",
+    "access-control-allow-methods": "GET, HEAD, POST, PUT, DELETE, PUT, GET, POST, DELETE, OPTIONS",
+    "access-control-allow-credentials": "true",
+    "access-control-max-age": "60",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization, origin, x-requested-with, content-type, device, LANG, IS_ADMIN, IS-ADMIN, is-admin, IS-TV-APP, is-tv-app, timezone",
+    "charset": "utf-8",
+    "access-control-allow-origin": "*",
+    "strict-transport-security": "max-age\u003d31536000"
+  },
+  "message": null,
+  "protocol": "h2",
+  "remoteIp": "103.42.56.146",
+  "remotePort": 443,
+  "sessionId": "df681bdd-a710-4486-bca7-3882bb143583",
+  "time": "2025-05-29 19:29:32"
+}

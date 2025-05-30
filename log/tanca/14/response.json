@@ -1,0 +1,30 @@
+{
+  "app": "vn.greenapp.worktrack",
+  "code": 404,
+  "duration": "268ms",
+  "headers": {
+    "date": "Thu, 29 May 2025 12:29:32 GMT",
+    "content-type": "application/json",
+    "server": "cloudflare",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "cache-control": "no-cache, private",
+    "access-control-allow-methods": "GET, HEAD, POST, PUT, DELETE, PUT, GET, POST, DELETE, OPTIONS",
+    "access-control-allow-credentials": "true",
+    "access-control-max-age": "60",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization, origin, x-requested-with, content-type, device, LANG, IS_ADMIN, IS-ADMIN, is-admin, IS-TV-APP, is-tv-app, timezone",
+    "charset": "utf-8",
+    "strict-transport-security": "max-age\u003d31536000",
+    "cf-cache-status": "BYPASS",
+    "vary": "accept-encoding",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s\u003dgF2Q%2F4sJXmDIFRnTwL5lxT85paoEbw1xGrIEBvmklV%2BCLnRhZG54lCzARij9GZeyBgET3njyi5Q6pwtPyrBL0SEag4vyv0bQOhuz9CFeSw%3D%3D\"}]}",
+    "content-encoding": "gzip",
+    "cf-ray": "9475ff740db88561-HKG",
+    "alt-svc": "h3\u003d\":443\"; ma\u003d86400"
+  },
+  "message": null,
+  "protocol": "h2",
+  "remoteIp": "172.67.196.12",
+  "remotePort": 443,
+  "sessionId": "db9709b1-fed9-4a5a-84f4-a200cd332e07",
+  "time": "2025-05-29 19:29:32"
+}

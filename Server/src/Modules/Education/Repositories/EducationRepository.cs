@@ -11,6 +11,6 @@ public class EducationRepository : IEducationRepository
     public EducationRepository(DatabaseConnection dbConnection)
     {
         _dbConnection = dbConnection;
-        _storedProcedureMapper = new StoredProcedureMapperModule();
+        _storedProcedureMapper = new StoredProcedureMapperModule(dbConnection);
     }
 } 

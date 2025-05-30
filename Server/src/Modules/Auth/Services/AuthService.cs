@@ -22,8 +22,225 @@ public class AuthService : IAuthService
         _authRepository = authRepository;
         _configuration = configuration;
     }
+    
+    public async Task<ApiResult<List<UpdateFullNameResponse>>> UpdateFullNameAsync(string accountName, string fullName, bool isUsePhone)
+    {
+        var response = new ApiResult<List<UpdateFullNameResponse>>()
+        {
+            Data = new List<UpdateFullNameResponse>(),
+            Code = ResponseResultEnum.ServiceUnavailable.Value(),
+            Message = ResponseResultEnum.ServiceUnavailable.Text()
+        };
 
-    public async Task<ApiResult<AuthResponse>> SignupAsync(SignupRequest request,bool isUsePhone)
+        if (string.IsNullOrEmpty(accountName))
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = ResponseResultEnum.InvalidInput.Text();
+            if (isUsePhone == true)
+            {
+                response.Message = $"Vui lòng nhập số điện thoại.";
+            }
+            else
+            {
+                response.Message = $"Vui lòng nhập mail.";
+            }
+            return response;
+        }
+
+        if (string.IsNullOrEmpty(fullName))
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = "Vui lòng nhập tên.";                
+            return response;
+        }
+        try
+        {
+            var updatedFullNames = await _authRepository.UpdateFullName(accountName, fullName, isUsePhone);
+            if (updatedFullNames == null || updatedFullNames.Count() <= 0)
+            {
+                response.Code = ResponseResultEnum.NoData.Value();
+                response.Message = $"Không tìm thấy tài khoản {accountName}.";
+                return response;
+            }
+            response.Data = updatedFullNames.Select(x => new UpdateFullNameResponse()
+            {
+                AccountID = x.AccountID,
+                EmployeeAccountMapID = x.EmployeeAccountMapID,
+                CompanyId = x.CompanyId,
+            }).ToList();
+            response.Code = ResponseResultEnum.Success.Value();
+            response.Message = "Cập nhật tên thành công.";
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"UpdateFullNameAsync Exception accountName {accountName}, fullName {fullName}, isUsePhone {isUsePhone}", ex);
+            response.Code = ResponseResultEnum.SystemError.Value();
+            response.Message = ResponseResultEnum.SystemError.Text();
+        }
+        
+        return response;
+    }
+
+    public async Task<ApiResult<ValidateAccountRequest>> SignupAsync(SignupRequest request, bool isUsePhone)
+    {
+        var response = new ApiResult<ValidateAccountRequest>()
+        {
+            Data = new ValidateAccountRequest(),
+            Code = ResponseResultEnum.ServiceUnavailable.Value(),
+            Message = ResponseResultEnum.ServiceUnavailable.Text()
+        };
+
+        if (request == null)
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            if (isUsePhone == true)
+            {
+                response.Message = $"Vui lòng nhập số điện thoại.";
+            }
+            else
+            {
+                response.Message = $"Vui lòng nhập mail.";
+            }
+            return response;
+        }
+        else if ((string.IsNullOrEmpty(request.Phone)  == true || string.IsNullOrEmpty(request.PhoneCode)) && isUsePhone == true)
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = "Vui lòng nhập số điện thoại.";
+            return response;
+        }
+        else if (string.IsNullOrEmpty(request.Mail) == false && isUsePhone == false)
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            response.Message = "Vui lòng chỉ nhập số điện thoại hoặc mail.";
+            return response;
+        }
+
+        try
+        {
+            var accountName = "";
+            if (isUsePhone)
+            {
+                accountName = $"{request.PhoneCode}{request.Phone}";
+            }
+            else
+            {
+                accountName = request.Mail;
+            }
+
+            var authdata = await _authRepository.Login(accountName, isUsePhone);
+            if (authdata == null || authdata.AccountId <= 0)
+            {
+                response.Code = ResponseResultEnum.NoData.Value();
+                response.Message = $"Tài khoản {accountName} không tồn tại.";
+                response.Data = null;
+                return response;
+            }
+            if (authdata.IsActive == false)
+            {
+                LoggerHelper.Warning($"LoginAsync email {accountName} này đã bị khóa.");
+                response.Code = ResponseResultEnum.AccountLocked.Value();
+                response.Message = $"Tài khoản {accountName} đã bị khóa.";
+                response.Data = null;
+                return response;
+            }
+
+            response.Data = new ValidateAccountRequest()
+            {
+                Phone = isUsePhone ? request.Phone : "",
+                PhoneCode = isUsePhone ? request.PhoneCode : "+84",
+                Email = null,
+                Name = null,
+                Fullname = null,
+                Provider = isUsePhone ? "phone" : "mail",
+                IsNoOtpFlow = 1
+            };
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"LoginAsync Exception {JsonConvert.SerializeObject(request)}", ex);
+            response.Code = ResponseResultEnum.SystemError.Value();
+            response.Message = ResponseResultEnum.SystemError.Text();
+            response.Data = null;
+        }
+
+        return response;
+    }
+
+    public async Task<ApiResult<ValidateAccountRequest>> ValidateAccountAsync(SignupRequest request,bool isUsePhone)
+    {
+        var response = new ApiResult<ValidateAccountRequest>()
+        {
+            Data = new ValidateAccountRequest(),
+            Code = ResponseResultEnum.ServiceUnavailable.Value(),
+            Message = ResponseResultEnum.ServiceUnavailable.Text()
+        };
+
+        if (request == null)
+        {
+            response.Code = ResponseResultEnum.InvalidInput.Value();
+            if (isUsePhone == true)
+            {
+                response.Message = $"Vui lòng nhập số điện thoại.";
+            }
+            else
+            {
+                response.Message = $"Vui lòng nhập mail.";
+            }
+            return response;
+        }
+
+        try
+        {
+            var accountName = "";
+            if (isUsePhone)
+            {
+                accountName = $"{request.PhoneCode}{request.Phone}";
+            }
+            else
+            {
+                accountName = request.Mail;
+            }
+
+            var authdata = await _authRepository.Login(accountName, isUsePhone);
+            if (authdata == null || authdata.AccountId <= 0)
+            {
+                response.Code = ResponseResultEnum.NoData.Value();
+                response.Message = $"Tài khoản {accountName} không tồn tại.";
+                response.Data = null;
+                return response;
+            }
+            if (authdata.IsActive == false)
+            {
+                LoggerHelper.Warning($"LoginAsync email {accountName} này đã bị khóa.");
+                response.Code = ResponseResultEnum.AccountLocked.Value();
+                response.Message = $"Tài khoản {accountName} đã bị khóa.";
+                response.Data = null;
+                return response;
+            }
+
+            response.Data = new ValidateAccountRequest()
+            {
+                Phone = isUsePhone ? request.Phone : "",
+                PhoneCode = isUsePhone ? request.PhoneCode : "+84",
+                Email = null,
+                Name = null,
+                Fullname = null,
+                Provider = isUsePhone ? "phone" : "mail",
+                IsNoOtpFlow = 1
+            };
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"LoginAsync Exception {JsonConvert.SerializeObject(request)}", ex);
+            response.Code = ResponseResultEnum.SystemError.Value();
+            response.Message = ResponseResultEnum.SystemError.Text();
+            response.Data = null;
+        }
+
+        return response;
+    }
+    public async Task<ApiResult<AuthResponse>> SigninAsync(SignupRequest request, bool isUsePhone)
     {
         var response = new ApiResult<AuthResponse>()
         {
@@ -48,15 +265,6 @@ public class AuthService : IAuthService
 
         try
         {
-            // var jwtID = "";
-            // var accessToken = "";
-            // var refreshToken = "";
-            // int lifeTime = 30;
-            // var configValue = _configuration["Token:RefreshTokenLifeTime"];
-            // if (int.TryParse(configValue, out int parsedLifeTime))
-            // {
-            //     lifeTime = parsedLifeTime;
-            // }
             var accountName = "";
             CompanyAccountMapEntities? company = new CompanyAccountMapEntities()
             {
@@ -149,8 +357,10 @@ public class AuthService : IAuthService
                         Id = company.CompanyId,
                         IsNewUser = company.IsNewUser,
                         NeedSetPassword = company.NeedSetPassword,
-                        UserId = company.EmployeesInfoId,
+                        UserId = company.EmployeeAccountMapId,
                     };
+                    response.Code = ResponseResultEnum.Success.Value();
+                    response.Message = ResponseResultEnum.Success.Text();
                     #endregion
                 }
             }
@@ -173,7 +383,7 @@ public class AuthService : IAuthService
                 {
                     Id = authdata.AccountId
                 };
-                response.Code = ResponseResultEnum.MoreThanOneCompany.Value();
+                response.Code = ResponseResultEnum.Success.Value();
                 response.Message = $"Vui lòng chọn doanh nghiệp.";
             }
             else
@@ -187,25 +397,6 @@ public class AuthService : IAuthService
                 };
                 return response;
             }
-
-            // #region Xử lý token int employeeId, string role, int companyId, IConfiguration configuration
-            // accessToken = JwtHelper.GenerateAccessToken(authdata.AccountId, company.EmployeesInfoId.GetValueOrDefault(0), company.Role, company.CompanyId, _configuration, out jwtID);
-            // refreshToken = JwtHelper.GenerateRefreshToken();
-            // var isUpdateOrInsertAccountToken = await _authRepository.InsertEmployeeToken(company.EmployeeAccountMapId, jwtID, refreshToken, lifeTime, ip, imie);
-            // if (isUpdateOrInsertAccountToken > 0)
-            // {
-            //     response.Data.AccessToken = accessToken;
-            //     response.Data.RefreshToken = refreshToken;
-            //     response.Code = ResponseResultEnum.Success.Value();
-            //     response.Message = "Đăng nhập thành công";
-            // }
-            // else
-            // {
-            //     response.Code = ResponseResultEnum.AccountLocked.Value();
-            //     response.Message = $"Không tạo được token.";
-            //     response.Data = null;
-            // }
-            // #endregion
         }
         catch (Exception ex)
         {
@@ -533,38 +724,36 @@ public class AuthService : IAuthService
 
         try
         {
-            // string phone = "";
-            // string email = "";
-            // if (string.IsNullOrEmpty(fullname))
-            // {
-            //     fullname = Helper.GenerateUniqueString(15);
-            // }
+            string phone = "";
+            string email = "";
+            if (string.IsNullOrEmpty(fullname))
+            {
+                fullname = Helper.GenerateUniqueString(15);
+            }
 
-            // if (isUsePhone == true)
-            // {
-            //     phone = accountName;
-            //     email = $"{accountName}@mail.com";
-            // }
-            // else
-            // {
-            //     email = accountName;
-            //     phone = Helper.GenerateUniqueNumber(11);
-            // }
+            if (isUsePhone == true)
+            {
+                phone = accountName;
+                email = $"{accountName}@mail.com";
+            }
+            else
+            {
+                email = accountName;
+                phone = Helper.GenerateUniqueNumber(11);
+            }
 
-            // // Implement refresh token logic here
-            // var accountId = await _authRepository.RegisterAccount(phone, email, fullname);
-            // if (accountId > 0)
-            // {
-            //     response.Data = accountId;
-            //     response.Code = ResponseResultEnum.Success.Value();
-            //     return response;
-            // }
-            // else
-            // {
-            //     response.Code = ResponseResultEnum.InvalidData.Value();
-            //     response.Message = $"Sai thông tin.";
-            //     return response;
-            // }
+            // Implement refresh token logic here
+            var accountId = await _authRepository.RegisterAccount("",phone, email, fullname,"");
+            if (accountId > 0)
+            {
+                response.Data = accountId;
+                response.Code = ResponseResultEnum.Success.Value();                
+            }
+            else
+            {
+                response.Code = ResponseResultEnum.InvalidData.Value();
+                response.Message = $"Sai thông tin.";                
+            }
             return response;
         }
         catch (Exception ex)

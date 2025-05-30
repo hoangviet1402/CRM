@@ -23,9 +23,7 @@ builder.Services.AddControllers()
 // Configure Database Connections
 var connectionStrings = new Dictionary<string, string>
 {
-    { "TanCa", builder.Configuration.GetConnectionString("TanCaConnection") },
     { "TanTam", builder.Configuration.GetConnectionString("TanTamConnection") },
-    { "TanLam", builder.Configuration.GetConnectionString("TanLamConnection") }
 };
 builder.Services.AddSingleton(new DatabaseConnection(connectionStrings));
 
