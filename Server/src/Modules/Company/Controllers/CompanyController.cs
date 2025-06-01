@@ -71,12 +71,24 @@ public class CompanyController : ControllerBase
     /// <summary>
     /// Tạo mới phòng ban
     /// </summary>
+    [Authorize]
     [HttpPost("department-add")]
     public async Task<IActionResult> CreateDepartment([FromBody] CreateDepartmentRequest request)
     {
         try
         {
-            var result = await _companyService.CreateDepartmentAsync(request);
+            var companyId =  HttpContext.GetCompanyId();
+            var accountId = HttpContext.GetAccountId();
+            if (companyId <= 0 || accountId <= 0)
+            {
+                return BadRequest(new { message = "Thông tin tài khoản hoặc công ty không hợp lệ." });
+            }
+
+            if (request == null || request.Name == null || request.Name.Count() == 0)
+            {
+                return BadRequest(new { message = "Danh sách phòng ban không được để trống." });
+            }
+            var result = await _companyService.CreateDepartmentAllBranchAsync(companyId,request);
             return Ok(result);
         }
         catch (Exception ex)

@@ -109,12 +109,12 @@ public class CompanyService : ICompanyService
                     SortIndex = 0,
                     PhoneCode = 84,
                     Region = new RegionInfo
-                    { 
+                    {
                         Id = companyId
                     }
                 });
                 branchIds++;
-            }           
+            }
 
             if (branchIds == request.Count())
             {
@@ -135,57 +135,55 @@ public class CompanyService : ICompanyService
         }
 
         return response;
-    }    
-    public async Task<ApiResult<int>> CreateDepartmentAsync(CreateDepartmentRequest request)
+    }
+    public async Task<ApiResult<List<CreateDepartmentResponse>>> CreateDepartmentAllBranchAsync(int companyId, CreateDepartmentRequest request)
     {
-        var response = new ApiResult<int>()
+        var response = new ApiResult<List<CreateDepartmentResponse>>()
         {
-            Data = 0,
+            Data = new List<CreateDepartmentResponse>(),
             Code = ResponseResultEnum.ServiceUnavailable.Value(),
             Message = ResponseResultEnum.ServiceUnavailable.Text()
         };
-
-        if (string.IsNullOrEmpty(request.Name))
-        {
-            response.Code = ResponseResultEnum.InvalidInput.Value();
-            response.Message = "Vui lòng nhập tên phòng ban.";
-            return response;
-        }
-
-        if (request.BranchId <= 0)
-        {
-            response.Code = ResponseResultEnum.InvalidInput.Value();
-            response.Message = "ID chi nhánh không hợp lệ.";
-            return response;
-        }
-
-        if (request.CompanyId <= 0)
-        {
-            response.Code = ResponseResultEnum.InvalidInput.Value();
-            response.Message = "ID công ty không hợp lệ.";
-            return response;
-        }
-
         try
         {
-            var departmentId = await _companyRepository.CreateDepartmentAsync(request.Name, request.BranchId, request.CompanyId);
-
-            if (departmentId > 0)
+            List<DepartmentCreatedResult> departmentId;
+            var now = DateTime.Now;
+            foreach (var item in request.Name)
             {
-                var result = await _companyRepository.UpdateCompanyStepAsync(SetupStep.ONBOARDING_CREATE_DEPARTMENT.Value(), request.CompanyId);
-                response.Data = departmentId;
+                departmentId = await _companyRepository.CreateDepartmentInAllBranchesAsync(item, companyId);
+
+                response.Data.Add(
+                    new CreateDepartmentResponse()
+                    {
+                        Id = 1,
+                        Name = item,
+                        CreatedAt = now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        BranchIds = departmentId.Select(x => x.BranchId).Distinct().ToList(),
+                        SortIndex = 0,
+                        Alias = TextHelper.NormalizeText(item, "-"),
+                        Code = TextHelper.NormalizeText(item, "_").ToUpper(),
+                        ShopId = companyId,
+                        Key = "1",
+                        Value = "1",
+                        Title = item
+                    }
+                );
+            }
+            if (response.Data != null && response.Data.Any())
+            {
+                var result = await _companyRepository.UpdateCompanyStepAsync(SetupStep.ONBOARDING_CREATE_DEPARTMENT.Value(), companyId);
                 response.Code = ResponseResultEnum.Success.Value();
                 response.Message = "Tạo phòng ban thành công";
-                return response;
             }
-
-            response.Data = departmentId;
-            response.Code = ResponseResultEnum.Failed.Value();
-            response.Message = "Tạo phòng ban thất bại";
+            else
+            {
+                response.Code = ResponseResultEnum.SystemError.Value();
+                response.Message = "Tạo phòng ban thất bại";
+            }
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"CreateDepartmentAsync Exception Name {request.Name}, BranchId {request.BranchId}, CompanyId {request.CompanyId} ", ex);
+            LoggerHelper.Error($"CreateDepartmentAsync Exception Name {request.Name}, BranchId {request.BranchId}, CompanyId {companyId} ", ex);
             response.Code = ResponseResultEnum.SystemError.Value();
             response.Message = "Tạo phòng ban thất bại";
         }
@@ -337,7 +335,7 @@ public class CompanyService : ICompanyService
 
         return response;
     }
-    
+
     public async Task<ApiResult<int>> UpdateUserAndShopNameAsync(UpdateInfoWhenSinupRequest request)
     {
         var response = new ApiResult<int>()
@@ -363,4 +361,4 @@ public class CompanyService : ICompanyService
 
         return response;
     }
-} 
+}

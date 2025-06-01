@@ -168,7 +168,9 @@ public class CompanyRepository : StoredProcedureMapperModule, ICompanyRepository
             var parameters = new Dictionary<string, object>
             {
                 { "@Name", name },
-                { "@CompanyId", companyId }
+                { "@CompanyId", companyId },
+                { "@Alias", TextHelper.NormalizeText(name,"-") },
+                { "@Code", TextHelper.NormalizeText(name,"_").ToUpper() }
             };
 
             var outputParameters = new Dictionary<string, object>
