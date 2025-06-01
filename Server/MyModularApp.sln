@@ -16,17 +16,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeModule", "src\Modules\Employee\EmployeeModule.csproj", "{28912CE8-ED7E-F16E-2C97-AD82A462E66C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{EC447DCF-ABFA-6E24-52A5-D7FD48A5C558}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EducationsLevel", "EducationsLevel", "{00424606-221E-D6FE-095D-2ADAB1A3BDD1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducationModule", "src\Modules\Education\EducationModule.csproj", "{18665526-4BE2-818F-8B1F-792558688832}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanyModule", "src\Modules\Company\CompanyModule.csproj", "{E4345BF7-07F6-C2C5-0B2F-346379DFE4C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthModule", "src\Modules\Auth\AuthModule.csproj", "{356408BB-7952-6077-11A3-B7BDAD539347}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuModule", "src\Modules\Menu\MenuModule.csproj", "{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,13 +118,21 @@ Global
 		{356408BB-7952-6077-11A3-B7BDAD539347}.Release|x64.Build.0 = Release|Any CPU
 		{356408BB-7952-6077-11A3-B7BDAD539347}.Release|x86.ActiveCfg = Release|Any CPU
 		{356408BB-7952-6077-11A3-B7BDAD539347}.Release|x86.Build.0 = Release|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Debug|x64.Build.0 = Debug|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Debug|x86.Build.0 = Debug|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Release|x64.ActiveCfg = Release|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Release|x64.Build.0 = Release|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Release|x86.ActiveCfg = Release|Any CPU
+		{DC9E7DF7-CFD8-77AF-255F-4BAFF39C9DB4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{EC447DCF-ABFA-6E24-52A5-D7FD48A5C558} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{00424606-221E-D6FE-095D-2ADAB1A3BDD1} = {EC447DCF-ABFA-6E24-52A5-D7FD48A5C558}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CA9D5148-4B9A-4B21-812F-D2E4FD0809D1}

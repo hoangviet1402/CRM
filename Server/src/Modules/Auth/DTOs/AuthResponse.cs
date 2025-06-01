@@ -3,6 +3,12 @@ using Newtonsoft.Json;
 namespace AuthModule.DTOs;
 public class AuthResponse
 {
+    [JsonProperty("refresh_token", NullValueHandling = NullValueHandling.Ignore)]
+    public string? RefreshToken { get; set; }
+
+    [JsonProperty("access_token", NullValueHandling = NullValueHandling.Ignore)]
+    public string? AccessToken { get; set; }  
+    
     [JsonProperty("signin_methods", NullValueHandling = NullValueHandling.Ignore)]
     public List<string>? SigninMethods { get; set; }
 
@@ -82,7 +88,7 @@ public class AuthCompaniesResponse
     public bool? IsNewUser { get; set; }
 }
 
-public class ValidateAccountRequest
+public class ValidateAccountResponse
 {
     [JsonProperty("phone", NullValueHandling = NullValueHandling.Ignore)]
     public string? Phone { get; set; }
@@ -104,4 +110,19 @@ public class ValidateAccountRequest
 
     [JsonProperty("is_no_otp_flow", NullValueHandling = NullValueHandling.Ignore)]
     public int? IsNoOtpFlow { get; set; }
+
+    [JsonProperty("accountid", NullValueHandling = NullValueHandling.Ignore)]
+    public int? AccountId { get; set; }
+}
+
+public class ValidateAccountRequest
+{
+    [JsonProperty("phone", NullValueHandling = NullValueHandling.Ignore)]
+    public string? Phone { get; set; }
+
+    [JsonProperty("phone_code", NullValueHandling = NullValueHandling.Ignore)]
+    public string? PhoneCode { get; set; }
+
+    [JsonProperty("email", NullValueHandling = NullValueHandling.Ignore)]
+    public string? Mail { get; set; }
 }

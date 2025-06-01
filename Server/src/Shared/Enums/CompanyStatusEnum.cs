@@ -23,22 +23,11 @@ public enum CompanyStatusEnum
     
 }
 
-public enum CompanyStep
+public enum SetupStep
 {
-    /// <summary>
-    /// Đang hoạt động
-    /// </summary>
-    Begin = 0,
-
-    /// <summary>
-    /// Đã ngừng hoạt động
-    /// </summary>
-    Branch = 1,
-
-    /// <summary>
-    /// Đã bị khóa
-    /// </summary>
-    Department = 2,
-
-
+    ONBOARDING_CREATE_BRANCH = 1,
+    ONBOARDING_CREATE_DEPARTMENT = 2,
+    ONBOARDING_CREATE_POSITION = 3,
+    ONBOARDING_CREATE_EMPLOYEE = 4,
+    ONBOARDING_CREATE_SHIFT = 5 
 }

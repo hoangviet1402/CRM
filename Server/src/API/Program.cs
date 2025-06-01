@@ -21,9 +21,11 @@ builder.Services.AddControllers()
     });
 
 // Configure Database Connections
+var tanTamConnection = builder.Configuration.GetConnectionString("TanTamConnection") 
+    ?? throw new InvalidOperationException("TanTamConnection string is missing in configuration.");
 var connectionStrings = new Dictionary<string, string>
 {
-    { "TanTam", builder.Configuration.GetConnectionString("TanTamConnection") },
+    { "TanTam", tanTamConnection },
 };
 builder.Services.AddSingleton(new DatabaseConnection(connectionStrings));
 

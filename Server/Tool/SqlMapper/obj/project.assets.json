@@ -3390,23 +3390,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\vietnhh\\.nuget\\packages\\": {},
+    "C:\\Users\\vietn\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\CRM\\TANCA_GIT\\Server\\Tool\\SqlMapper\\SqlMapper.csproj",
+      "projectUniqueName": "D:\\BANCA\\Server\\Tool\\SqlMapper\\SqlMapper.csproj",
       "projectName": "SqlMapper",
-      "projectPath": "D:\\CRM\\TANCA_GIT\\Server\\Tool\\SqlMapper\\SqlMapper.csproj",
-      "packagesPath": "C:\\Users\\vietnhh\\.nuget\\packages\\",
-      "outputPath": "D:\\CRM\\TANCA_GIT\\Server\\Tool\\SqlMapper\\obj\\",
+      "projectPath": "D:\\BANCA\\Server\\Tool\\SqlMapper\\SqlMapper.csproj",
+      "packagesPath": "C:\\Users\\vietn\\.nuget\\packages\\",
+      "outputPath": "D:\\BANCA\\Server\\Tool\\SqlMapper\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\vietnhh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "D:\\BANCA\\Server\\NuGet.Config",
+        "C:\\Users\\vietn\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

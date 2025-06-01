@@ -8,6 +8,6 @@ namespace AuthModule.Entities;
         public int? EmployeeAccountMapID { get; set; }
         public int? CompanyId { get; set; }
         public int? AccountID { get; set; }
-
+        public int? AccountRole { get; set; }
     }
 

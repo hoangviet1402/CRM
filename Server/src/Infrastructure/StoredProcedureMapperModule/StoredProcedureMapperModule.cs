@@ -334,7 +334,7 @@ public class StoredProcedureMapperModule
         }
     }
 
-    public async Task<List<T>> ExecuteStoredProcedureListAsync<T>(string storedProcedureName, Dictionary<string, object> parameters = null, int? commandTimeout = null) where T : new()
+    public async Task<List<T>> ExecuteStoredProcedureListAsync<T>(string storedProcedureName, Dictionary<string, object>? parameters = null, Dictionary<string, object>? outputParameters = null, int? commandTimeout = null) where T : new()
     {
         using var connection = CreateConnection();
         try
@@ -352,6 +352,18 @@ public class StoredProcedureMapperModule
                     var parameter = command.CreateParameter();
                     parameter.ParameterName = param.Key;
                     parameter.Value = param.Value ?? DBNull.Value;
+                    command.Parameters.Add(parameter);
+                }
+            }
+
+            if (outputParameters != null)
+            {
+                foreach (var param in outputParameters)
+                {
+                    var parameter = command.CreateParameter();
+                    parameter.ParameterName = param.Key;
+                    parameter.Direction = ParameterDirection.Output;
+                    parameter.Size = 100; // Kích thước mặc định cho output
                     command.Parameters.Add(parameter);
                 }
             }

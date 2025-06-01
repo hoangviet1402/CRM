@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SqlMapper")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+68249829a9900f476fce145c6a555d3c136401a2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6fa591e58a79110a4feab97c7803434b89eed5eb")]
 [assembly: System.Reflection.AssemblyProductAttribute("SqlMapper")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SqlMapper")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

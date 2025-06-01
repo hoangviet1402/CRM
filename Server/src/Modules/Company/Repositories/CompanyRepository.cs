@@ -5,13 +5,14 @@ using Microsoft.Data.SqlClient;
 using Shared.Helpers;
 using Shared.Extensions;
 using Company.Entities;
+using SqlMapper.Models;
 
 namespace Company.Repositories;
 
 public class CompanyRepository : StoredProcedureMapperModule, ICompanyRepository
 {
-    public CompanyRepository(DatabaseConnection dbConnection) 
-        : base(dbConnection, "TanCa")
+    public CompanyRepository(DatabaseConnection dbConnection)
+        : base(dbConnection, "TanTam")
     {
     }
 
@@ -77,14 +78,21 @@ public class CompanyRepository : StoredProcedureMapperModule, ICompanyRepository
         return result;
     }
 
-    public async Task<int> CreateBranchAsync(string name, int companyId)
+    public async Task<int> CreateBrancheAsync(CreateBranchesRequest request, int companyId)
     {
         try
         {
             var parameters = new Dictionary<string, object>
             {
-                { "@Name", name },
-                { "@CompanyId", companyId }
+                { "@BranchName", request.Name },
+                { "@BranchAddress", request.Address },
+                { "@RegionId", request.RegionId },
+                { "@IsOnboarding", request.IsOnboarding },
+                { "@Latitude", request.Latitude },
+                { "@Longitude", request.Longitude },
+                { "@CompanyId", companyId },
+                { "@Alias", TextHelper.NormalizeText(request.Name,"-") },
+                { "@Code", TextHelper.NormalizeText(request.Name,"_").ToUpper() }
             };
 
             var outputParameters = new Dictionary<string, object>
@@ -100,8 +108,7 @@ public class CompanyRepository : StoredProcedureMapperModule, ICompanyRepository
             LoggerHelper.Error("CreateBranch Exception.", ex);
             return 0;
         }
-    }
-
+    }   
     public async Task<int> CreateDepartmentAsync(string name, int branchId, int companyId)
     {
         try
@@ -168,76 +175,12 @@ public class CompanyRepository : StoredProcedureMapperModule, ICompanyRepository
             {
                 { "@OutResult", 0 }
             };
-
-            var dataTable = await ExecuteStoredProcedureAsync<DataTable>("Ins_CompanyDepartment_CreateInAllBranchId", parameters, outputParameters);
-            var result = new List<DepartmentCreatedResult>();
-
-            if (dataTable != null)
-            {
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    result.Add(new DepartmentCreatedResult
-                    {
-                        DepartmentId = row.GetSafeInt32("Id"),
-                        Name = row.GetSafeString("Name"),
-                        CompanyId = row.GetSafeInt32("CompanyId")
-                    });
-                }
-            }
-
-            return result;
+            return await ExecuteStoredProcedureListAsync<DepartmentCreatedResult>("Ins_CompanyDepartment_CreateInAllBranchId", parameters, outputParameters);
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"CreateDepartmentInAllBranchesAsync Exception Name {name}, CompanyId {companyId} ", ex);
             return new List<DepartmentCreatedResult>();
-        }
-    }
-
-    public async Task<List<int>> CreateBranchesOptimizedAsync(int companyId, List<string> branchNames)
-    {
-        try
-        {
-            // Nếu chỉ có 1 item, sử dụng stored procedure cũ
-            if (branchNames.Count == 1)
-            {
-                var branchId = await CreateBranchAsync(branchNames[0], companyId);
-                return branchId > 0 ? new List<int> { branchId } : new List<int>();
-            }
-
-            // Nếu có nhiều item, sử dụng stored procedure mới
-            var parameters = new Dictionary<string, object>
-            {
-                { "@CompanyId", companyId },
-                { "@BranchNames", string.Join(",", branchNames) }
-            };
-
-            var outputParameters = new Dictionary<string, object>
-            {
-                { "@OutResult", 0 }
-            };
-
-            await ExecuteStoredProcedureAsync<int>("Ins_CompanyBranch_CreateMultiple", parameters, outputParameters);
-            
-            // Lấy danh sách ID đã tạo
-            var dataTable = await ExecuteStoredProcedureAsync<DataTable>("Sel_CompanyBranch_GetIds", 
-                new Dictionary<string, object> { { "@CompanyId", companyId } });
-                
-            var result = new List<int>();
-            if (dataTable != null)
-            {
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    result.Add(row.GetSafeInt32("Id"));
-                }
-            }
-                
-            return result;
-        }
-        catch (Exception ex)
-        {
-            LoggerHelper.Error($"CreateBranchesOptimizedAsync Exception CompanyId {companyId}, BranchNames {string.Join(", ", branchNames)} ", ex);
-            return new List<int>();
         }
     }
 
@@ -264,27 +207,8 @@ public class CompanyRepository : StoredProcedureMapperModule, ICompanyRepository
                 { "@OutResult", 0 }
             };
 
-            await ExecuteStoredProcedureAsync<int>("Ins_CompanyDepartment_CreateMultipleInAllBranches", parameters, outputParameters);
-            
-            // Lấy danh sách phòng ban đã tạo
-            var dataTable = await ExecuteStoredProcedureAsync<DataTable>("Sel_CompanyDepartment_GetCreated", 
-                new Dictionary<string, object> { { "@CompanyId", companyId } });
-                
-            var result = new List<DepartmentCreatedResult>();
-            if (dataTable != null)
-            {
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    result.Add(new DepartmentCreatedResult
-                    {
-                        DepartmentId = row.GetSafeInt32("DepartmentId"),
-                        Name = row.GetSafeString("Name"),
-                        CompanyId = row.GetSafeInt32("CompanyId")
-                    });
-                }
-            }
-            
-            return result;
+            return await ExecuteStoredProcedureListAsync<DepartmentCreatedResult>("Ins_CompanyDepartment_CreateMultipleInAllBranches", parameters, outputParameters);
+
         }
         catch (Exception ex)
         {
@@ -293,14 +217,14 @@ public class CompanyRepository : StoredProcedureMapperModule, ICompanyRepository
         }
     }
 
-    public async Task<int> UpdateCompanyStepAsync(int createStep, int companyId)
+    public async Task<int> UpdateCompanyStepAsync(int companyId, int code)
     {
         try
         {
             var parameters = new Dictionary<string, object>
             {
-                { "@CreateStep", createStep },
-                { "@CompanyId", companyId }
+                { "@CompanyId", companyId },
+                { "@Code", code },
             };
 
             var outputParameters = new Dictionary<string, object>
@@ -308,13 +232,56 @@ public class CompanyRepository : StoredProcedureMapperModule, ICompanyRepository
                 { "@OutResult", 0 }
             };
 
-            await ExecuteStoredProcedureAsync<int>("Ins_Company_UpdateStep", parameters, outputParameters);
+            await ExecuteStoredProcedureAsync<int>("Ins_ComPany_UpdateSetupStep", parameters, outputParameters);
             return outputParameters.GetSafeInt32("@OutResult");
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"UpdateCompanyStepAsync Exception CreateStep {createStep}, CompanyId {companyId} ", ex);
+            LoggerHelper.Error($"UpdateCompanyStepAsync Exception code {code}, CompanyId {companyId} ", ex);
             return 0;
         }
     }
+
+    public async Task<List<Ins_Business_GetList_Result>> BusinessGetListAsync()
+    {
+        var result = new List<Ins_Business_GetList_Result>();
+        try
+        {
+            return await ExecuteStoredProcedureListAsync<Ins_Business_GetList_Result>("Ins_Account_Login");
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error("BusinessGetListAsync Exception.", ex);
+        }
+        return result;
+    }
+
+    public async Task<int> UpdateInfoWhenSinup(UpdateInfoWhenSinupRequest request)
+    {
+        try
+        {
+           
+            var parameters = new Dictionary<string, object>
+            {
+                { "@AccountId", request.AccountId },
+                { "@CompanyId", request.CompanyId },
+                { "@CompanyName", request.CompanyName },
+                { "@ComPany_Latitude", request.CompanyLatitude },
+                { "@ComPany_Longitude", request.CompanyLongitude },
+                { "@ComPany_Number_Employee", request.CompanyNumberEmploye },
+                { "@ComPany_Address", request.CompanyAddress},
+                { "@Email", request.Email },
+                { "@HearAbout", request.HearAbout},
+                { "@UsePurpose", request.UsePurpose }
+            };
+
+            await ExecuteStoredProcedureAsync<int>("Ins_Company_UpdateInfoWhenSinup", parameters);
+            return 1;
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"CreateSetupStepAsync Exception CompanyId {request.CompanyId},AccountId {request.AccountId} ", ex);
+            return 0;
+        }
+    }    
 }

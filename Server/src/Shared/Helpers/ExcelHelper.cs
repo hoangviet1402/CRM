@@ -148,7 +148,7 @@ namespace Shared.Helpers
         /// <param name="filePath">Đường dẫn file Excel</param>
         /// <param name="sheetName">Tên sheet (nếu null sẽ đọc sheet đầu tiên)</param>
         /// <returns>Danh sách đối tượng</returns>
-        public static List<T> ReadExcelToList<T>(string filePath, string sheetName = null) where T : new()
+        public static List<T> ReadExcelToList<T>(string filePath, string? sheetName = null) where T : new()
         {
             var result = new List<T>();
             var properties = typeof(T).GetProperties();

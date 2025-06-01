@@ -43,7 +43,7 @@ public class CompanyService : ICompanyService
         try
         {
             var companyId = await _companyRepository.CreateCompanyAsync(request.FullName, request.Address);
-            
+
             if (companyId > 0)
             {
                 response.Data = companyId;
@@ -66,56 +66,76 @@ public class CompanyService : ICompanyService
         return response;
     }
 
-    public async Task<ApiResult<int>> CreateBranchAsync(CreateBranchRequest request)
+    public async Task<ApiResult<List<CreateBranchesResponse>>> CreateBranchesAsync(int companyId, List<CreateBranchesRequest> request)
     {
-        var response = new ApiResult<int>()
+        var response = new ApiResult<List<CreateBranchesResponse>>()
         {
-            Data = 0,
+            Data = new List<CreateBranchesResponse>(),
             Code = ResponseResultEnum.ServiceUnavailable.Value(),
             Message = ResponseResultEnum.ServiceUnavailable.Text()
         };
 
-        if (string.IsNullOrEmpty(request.Name))
-        {
-            response.Code = ResponseResultEnum.InvalidInput.Value();
-            response.Message = "Vui lòng nhập tên chi nhánh.";
-            return response;
-        }
-
-        if (request.CompanyId <= 0)
-        {
-            response.Code = ResponseResultEnum.InvalidInput.Value();
-            response.Message = "ID công ty không hợp lệ.";
-            return response;
-        }
-
         try
         {
-            var branchId = await _companyRepository.CreateBranchAsync(request.Name, request.CompanyId);
-            
-            if (branchId > 0)
+            var branchIds = 0;
+            var branchId = 0;
+            var now = DateTime.Now;
+            foreach (var branch in request)
             {
-                var result = await _companyRepository.UpdateCompanyStepAsync(CompanyStep.Branch.Value(), request.CompanyId);
-                response.Data = branchId;
+                if (string.IsNullOrEmpty(branch.Name))
+                {
+                    branch.Name = "Chi nhánh " + (branchIds + 1);
+                }
+
+                if (string.IsNullOrEmpty(branch.Address))
+                {
+                    branch.Address = "Địa chỉ chi nhánh " + (branchIds + 1);
+                }
+                branchId = await _companyRepository.CreateBrancheAsync(branch, companyId);
+
+                response.Data.Add(new CreateBranchesResponse
+                {
+                    Id = branchId,
+                    Name = branch.Name,
+                    AddressLat = branch.Latitude,
+                    AddressLng = branch.Longitude,
+                    Country = "",
+                    Province = "",
+                    District = "",
+                    Address = branch.Address,
+                    CreatedAt = now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    Alias = TextHelper.NormalizeText(branch.Name, "-"),
+                    Code = TextHelper.NormalizeText(branch.Name, "_").ToUpper(),
+                    SortIndex = 0,
+                    PhoneCode = 84,
+                    Region = new RegionInfo
+                    { 
+                        Id = companyId
+                    }
+                });
+                branchIds++;
+            }           
+
+            if (branchIds == request.Count())
+            {
+                var result = await _companyRepository.UpdateCompanyStepAsync(companyId, SetupStep.ONBOARDING_CREATE_BRANCH.Value());
                 response.Code = ResponseResultEnum.Success.Value();
                 response.Message = "Tạo chi nhánh thành công";
                 return response;
             }
 
-            response.Data = branchId;
             response.Code = ResponseResultEnum.Failed.Value();
             response.Message = "Tạo chi nhánh thất bại";
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"CreateBranchAsync Exception Name {request.Name}, CompanyId {request.CompanyId} ", ex);
+            LoggerHelper.Error($"CreateBranchesAsync Exception CompanyId {companyId},", ex);
             response.Code = ResponseResultEnum.SystemError.Value();
             response.Message = "Tạo chi nhánh thất bại";
         }
 
         return response;
-    }
-
+    }    
     public async Task<ApiResult<int>> CreateDepartmentAsync(CreateDepartmentRequest request)
     {
         var response = new ApiResult<int>()
@@ -149,10 +169,10 @@ public class CompanyService : ICompanyService
         try
         {
             var departmentId = await _companyRepository.CreateDepartmentAsync(request.Name, request.BranchId, request.CompanyId);
-            
+
             if (departmentId > 0)
             {
-                var result = await _companyRepository.UpdateCompanyStepAsync(CompanyStep.Department.Value(), request.CompanyId);
+                var result = await _companyRepository.UpdateCompanyStepAsync(SetupStep.ONBOARDING_CREATE_DEPARTMENT.Value(), request.CompanyId);
                 response.Data = departmentId;
                 response.Code = ResponseResultEnum.Success.Value();
                 response.Message = "Tạo phòng ban thành công";
@@ -206,7 +226,7 @@ public class CompanyService : ICompanyService
         try
         {
             var positionId = await _companyRepository.CreatePositionAsync(request.Name, request.DepartmentId, request.CompanyId);
-            
+
             if (positionId > 0)
             {
                 response.Data = positionId;
@@ -224,54 +244,6 @@ public class CompanyService : ICompanyService
             LoggerHelper.Error($"CreatePositionAsync Exception Name {request.Name}, DepartmentId {request.DepartmentId}, CompanyId {request.CompanyId} ", ex);
             response.Code = ResponseResultEnum.SystemError.Value();
             response.Message = "Tạo vị trí thất bại";
-        }
-
-        return response;
-    }
-
-    public async Task<ApiResult<List<int>>> CreateBranchesAsync(CreateBranchesRequest request)
-    {
-        var response = new ApiResult<List<int>>()
-        {
-            Data = new List<int>(),
-            Code = ResponseResultEnum.ServiceUnavailable.Value(),
-            Message = ResponseResultEnum.ServiceUnavailable.Text()
-        };
-
-        if (request.CompanyId <= 0)
-        {
-            response.Code = ResponseResultEnum.InvalidInput.Value();
-            response.Message = "ID công ty không hợp lệ.";
-            return response;
-        }
-
-        if (request.BranchNames == null || !request.BranchNames.Any())
-        {
-            response.Code = ResponseResultEnum.InvalidInput.Value();
-            response.Message = "Danh sách tên chi nhánh không được rỗng.";
-            return response;
-        }
-
-        try
-        {
-            var branchIds = await _companyRepository.CreateBranchesOptimizedAsync(request.CompanyId, request.BranchNames);
-            
-            if (branchIds.Any())
-            {
-                response.Data = branchIds;
-                response.Code = ResponseResultEnum.Success.Value();
-                response.Message = "Tạo chi nhánh thành công";
-                return response;
-            }
-
-            response.Code = ResponseResultEnum.Failed.Value();
-            response.Message = "Tạo chi nhánh thất bại";
-        }
-        catch (Exception ex)
-        {
-            LoggerHelper.Error($"CreateBranchesAsync Exception CompanyId {request.CompanyId}, BranchNames {string.Join(", ", request.BranchNames)} ", ex);
-            response.Code = ResponseResultEnum.SystemError.Value();
-            response.Message = "Tạo chi nhánh thất bại";
         }
 
         return response;
@@ -303,7 +275,7 @@ public class CompanyService : ICompanyService
         try
         {
             var departments = await _companyRepository.CreateDepartmentsInAllBranchesOptimizedAsync(request.CompanyId, request.Names);
-            
+
             if (departments.Any())
             {
                 response.Data = departments;
@@ -320,6 +292,73 @@ public class CompanyService : ICompanyService
             LoggerHelper.Error($"CreateDepartmentInAllBranchesAsync Exception Names {string.Join(", ", request.Names)}, CompanyId {request.CompanyId} ", ex);
             response.Code = ResponseResultEnum.SystemError.Value();
             response.Message = "Tạo phòng ban thất bại";
+        }
+
+        return response;
+    }
+
+    public async Task<ApiResult<List<ListBusinessResponse>>> ListBusinessResponseAsync()
+    {
+        var response = new ApiResult<List<ListBusinessResponse>>()
+        {
+            Data = new List<ListBusinessResponse>(),
+            Code = ResponseResultEnum.ServiceUnavailable.Value(),
+            Message = ResponseResultEnum.ServiceUnavailable.Text()
+        };
+
+        try
+        {
+            var departments = await _companyRepository.BusinessGetListAsync();
+
+            if (departments.Any())
+            {
+                response.Data = departments.Select(d => new ListBusinessResponse
+                {
+                    Id = d.Id,
+                    Value = "",
+                    Name = d.Business,
+                    Alias = d.Alias,
+                    IndexNum = d.IndexNum ?? 0
+                }).ToList();
+
+                response.Code = ResponseResultEnum.Success.Value();
+                response.Message = ResponseResultEnum.Success.Text();
+                return response;
+            }
+
+            response.Code = ResponseResultEnum.NoData.Value();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"ListBusinessResponseAsync Exception", ex);
+            response.Code = ResponseResultEnum.SystemError.Value();
+            response.Message = ResponseResultEnum.SystemError.Text();
+        }
+
+        return response;
+    }
+    
+    public async Task<ApiResult<int>> UpdateUserAndShopNameAsync(UpdateInfoWhenSinupRequest request)
+    {
+        var response = new ApiResult<int>()
+        {
+            Data = 0,
+            Code = ResponseResultEnum.ServiceUnavailable.Value(),
+            Message = ResponseResultEnum.ServiceUnavailable.Text()
+        };
+
+        try
+        {
+            var departments = await _companyRepository.UpdateInfoWhenSinup(request);
+            response.Code = ResponseResultEnum.Success.Value();
+            response.Message = ResponseResultEnum.Success.Text();
+            response.Code = ResponseResultEnum.NoData.Value();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"ListBusinessResponseAsync Exception", ex);
+            response.Code = ResponseResultEnum.SystemError.Value();
+            response.Message = ResponseResultEnum.SystemError.Text();
         }
 
         return response;

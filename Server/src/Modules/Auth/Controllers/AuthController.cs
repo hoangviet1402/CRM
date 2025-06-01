@@ -134,35 +134,64 @@ public class AuthController : ControllerBase
         }
     }
 
-
     [HttpPost("signup/phone")]
     [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
     public async Task<IActionResult> Signup_phone([FromBody] SignupRequest request)
     {
         try
         {
+            var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
+            var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
+            var isUsePhone = true;
+            if (string.IsNullOrEmpty(request.Phone) || string.IsNullOrEmpty(request.PhoneCode))
+            {
+                return BadRequest(new { message = "Số điện thoại không được để trống." });
+            }
+
+            if (ValidationHelper.IsValidPhone($"{request.PhoneCode}{request.Phone}") == false)
+            {
+                return BadRequest(new { message = "Số điện thoại không hợp lệ." });
+            }
+
             if (string.IsNullOrEmpty(request.Stage))
             {
-                return Ok(new ApiResult<AuthResponse>()
-                {
-                    Code = ResponseResultEnum.Failed.Value(),
-                    Message = ResponseResultEnum.Failed.Text()
-                });
+                return BadRequest(new { message = "Thông tin không hợp lệ." });
             }
+            var validateRequest = new ValidateAccountRequest()
+            {
+                PhoneCode = request.PhoneCode,
+                Phone = request.Phone,
+                Mail = request.Mail
+            };
             switch (request.Stage.ToLower())
             {
-                case "signin":
-                    var resultSignin =   await _authService.SigninAsync(request, true);
-                    return Ok(resultSignin);
                 case "validate":
-                    var resultValidate = await _authService.ValidateAccountAsync(request, true);
+                    var resultValidate = await _authService.ValidateAccountAsync(validateRequest, isUsePhone);
+                    if (resultValidate.Code == ResponseResultEnum.Success.Value())
+                    {
+                        if (resultValidate.Data != null && resultValidate.Data.AccountId != null)
+                        {
+                            var dataAlter = await _authService.GetDataAlterAsync(
+                                resultValidate.Data.AccountId.Value,
+                                isUsePhone,
+                                $"{request.PhoneCode}{request.Phone}",
+                                new List<string>() { "phone" });
+                            return Ok(dataAlter);
+                        }
+                        return Ok(resultValidate);
+                    }
                     return Ok(resultValidate);
                 case "signup":
-                    var resultSignup =   await _authService.SignupAsync(request, true);
-                    return Ok(resultSignup);
+                    var result = await _authService.UpdateFullNameSigupAsync(
+                        request.Phone,
+                        request.Mail ?? string.Empty,
+                        request.Fullname ?? string.Empty,
+                        isUsePhone,
+                        ip,
+                        imie: userAgent);
+                    return Ok(result);
                 default:
-                    var resultSignup1 =  await _authService.SignupAsync(request, true);
-                    return Ok(resultSignup1);
+                    return BadRequest(new { message = "Thông tin không hợp lệ." });
             }
         }
         catch (ArgumentException ex)
@@ -178,29 +207,85 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpPost("signup/phone/update-fullname")]
+    [HttpPost("signin-v2")]
     [ProducesResponseType(typeof(ApiResult<AuthResponse>), 200)]
-    public async Task<IActionResult> UpdateFullname([FromBody] UpdateFullNameResquest request)
+    public async Task<IActionResult> Signin([FromBody] SigninRequest request)
     {
         try
         {
-            if (string.IsNullOrEmpty(request.Phone))
+            var ip = HttpContextExtensions.GetClientIpAddress(HttpContext);
+            var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
+            var isUsePhone = request.Provider?.ToLower() == "phone";
+            if (isUsePhone == true)
             {
-                return BadRequest(new { message = "Số điện thoại không được để trống." });
+                if (string.IsNullOrEmpty(request.Phone) || string.IsNullOrEmpty(request.PhoneCode))
+                {
+                    return BadRequest(new { message = "Số điện thoại không được để trống." });
+                }
+
+                if (ValidationHelper.IsValidPhone($"{request.PhoneCode}{request.Phone}") == false)
+                {
+                    return BadRequest(new { message = "Số điện thoại không hợp lệ." });
+                }
             }
-            var result = await _authService.UpdateFullNameAsync(request.Phone, request.FullName, true);
-            return Ok(result);
+            else
+            {
+                if (string.IsNullOrEmpty(request.Mail))
+                {
+                    return BadRequest(new { message = "Email không được để trống." });
+                }
+
+                if (ValidationHelper.IsValidEmail(request.Mail) == false)
+                {
+                    return BadRequest(new { message = "Email không hợp lệ." });
+                }
+            }
+            if (string.IsNullOrEmpty(request.Stage))
+            {
+                return BadRequest(new { message = "Thông tin không hợp lệ." });
+            }
+
+            var validateRequest = new ValidateAccountRequest()
+            {
+                PhoneCode = request.PhoneCode,
+                Phone = request.Phone,
+                Mail = request.Mail
+            };
+            switch (request.Stage.ToLower())
+            {
+                case "validate":
+                    var resultValidate = await _authService.ValidateAccountAsync(validateRequest, isUsePhone);
+                    if (resultValidate.Code == ResponseResultEnum.Success.Value())
+                    {
+                        if (resultValidate.Data != null && resultValidate.Data.AccountId != null)
+                        {
+                            var dataAlter = await _authService.GetDataAlterAsync(
+                                resultValidate.Data.AccountId.Value,
+                                isUsePhone,
+                                $"{request.PhoneCode}{request.Phone}",
+                                new List<string>() { "phone" });
+                            return Ok(dataAlter);
+                        }
+                        return Ok(resultValidate);
+                    }
+                    return Ok(resultValidate);
+                case "signin":
+                    var result = await _authService.SigninAsync(request,isUsePhone,ip, userAgent);
+                    return Ok(result);
+                default:
+                    return BadRequest(new { message = "Thông tin không hợp lệ." });
+            }
         }
         catch (ArgumentException ex)
         {
             LoggerHelper.Warning($"Login Tham số không hợp lệ. Lỗi: {ex.Message}");
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new { message = "Tham số không hợp lệ" });
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"GetEmployee ID: Exception.", ex);
             return StatusCode(500,
-                new { message = "Đã xảy ra lỗi trong quá trình Login (-1)." });
+                new { message = "Đã xảy ra lỗi trong quá trình xử lý (-1)." });
         }
     }
 }

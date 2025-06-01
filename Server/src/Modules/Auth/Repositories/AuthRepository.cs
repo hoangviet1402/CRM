@@ -45,7 +45,27 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
         }
     }
 
-    public async Task<LoginResultEntities?> Login(string accountName, bool isUsePhone)
+    public async Task<LoginResultEntities?> Login(int accountId, int companyId, string passwordHash)
+    {
+        try
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "@AccountId", accountId },
+                { "@CompanyId", companyId },
+                { "@PasswordHash", passwordHash }
+            };
+
+            return await ExecuteStoredProcedureAsync<LoginResultEntities>("Ins_Account_Login", parameters);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"Login Exception.", ex);
+            return new LoginResultEntities();
+        }
+    }
+
+    public async Task<LoginResultEntities?> Validate(string accountName, bool isUsePhone)
     {
         try
         {
@@ -55,7 +75,7 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
                 { "@IsUsePhone", isUsePhone }
             };
 
-            return await ExecuteStoredProcedureAsync<LoginResultEntities>("Ins_Account_Login", parameters);
+            return await ExecuteStoredProcedureAsync<LoginResultEntities>("Ins_Account_Validata", parameters);
         }
         catch (Exception ex)
         {
@@ -217,14 +237,15 @@ public class AuthRepository : StoredProcedureMapperModule, IAuthRepository
         return dataTable ?? new AccountTokenInfoEntities();
     }
 
-    public async Task<List<Ins_Account_UpdateFullName_Result>> UpdateFullName(string AccountName, string  FullName, bool IsUsePhone)
+    public async Task<List<Ins_Account_UpdateFullName_Result>> UpdateFullName(string phone,string mail, string  FullName, bool IsUsePhone)
     {
         var dataTable = new List<Ins_Account_UpdateFullName_Result>();
         try
         {
             var parameters = new Dictionary<string, object>
             {
-                { "@AccountName", AccountName },
+                { "@Phone", phone },
+                { "@Mail" , mail },
                 { "@FullName", FullName },
                 { "@IsUsePhone",IsUsePhone }
             };
