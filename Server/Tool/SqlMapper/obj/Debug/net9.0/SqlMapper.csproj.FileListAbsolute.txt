@@ -171,12 +171,6 @@ D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\scopedcss\bundle\SqlMapp
 D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets.build.json
 D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets.development.json
 D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets\msbuild.SqlMapper.Microsoft.AspNetCore.StaticWebAssets.props
-D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets\msbuild.SqlMapper.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets\msbuild.build.SqlMapper.props
-D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.SqlMapper.props
-D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.SqlMapper.props
-D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets.pack.json
 D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\SqlMapper.csproj.Up2Date
 D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\SqlMapper.dll
@@ -184,3 +178,4 @@ D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\refint\SqlMapper.dll
 D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\SqlMapper.pdb
 D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\SqlMapper.genruntimeconfig.cache
 D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\ref\SqlMapper.dll
+D:\CRM\TANCA_GIT\Server\Tool\SqlMapper\obj\Debug\net9.0\staticwebassets.build.json.cache

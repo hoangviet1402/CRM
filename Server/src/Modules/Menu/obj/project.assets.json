@@ -6054,24 +6054,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\vietn\\.nuget\\packages\\": {},
+    "C:\\Users\\vietnhh\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\BANCA\\Server\\src\\Modules\\Menu\\MenuModule.csproj",
+      "projectUniqueName": "D:\\CRM\\TANCA_GIT\\Server\\src\\Modules\\Menu\\MenuModule.csproj",
       "projectName": "MenuModule",
-      "projectPath": "D:\\BANCA\\Server\\src\\Modules\\Menu\\MenuModule.csproj",
-      "packagesPath": "C:\\Users\\vietn\\.nuget\\packages\\",
-      "outputPath": "D:\\BANCA\\Server\\src\\Modules\\Menu\\obj\\",
+      "projectPath": "D:\\CRM\\TANCA_GIT\\Server\\src\\Modules\\Menu\\MenuModule.csproj",
+      "packagesPath": "C:\\Users\\vietnhh\\.nuget\\packages\\",
+      "outputPath": "D:\\CRM\\TANCA_GIT\\Server\\src\\Modules\\Menu\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "D:\\BANCA\\Server\\NuGet.Config",
-        "C:\\Users\\vietn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "D:\\CRM\\TANCA_GIT\\Server\\NuGet.Config",
+        "C:\\Users\\vietnhh\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -6086,14 +6086,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\BANCA\\Server\\src\\Infrastructure\\Infrastructure.csproj": {
-              "projectPath": "D:\\BANCA\\Server\\src\\Infrastructure\\Infrastructure.csproj"
+            "D:\\CRM\\TANCA_GIT\\Server\\src\\Infrastructure\\Infrastructure.csproj": {
+              "projectPath": "D:\\CRM\\TANCA_GIT\\Server\\src\\Infrastructure\\Infrastructure.csproj"
             },
-            "D:\\BANCA\\Server\\src\\Modules\\Auth\\AuthModule.csproj": {
-              "projectPath": "D:\\BANCA\\Server\\src\\Modules\\Auth\\AuthModule.csproj"
+            "D:\\CRM\\TANCA_GIT\\Server\\src\\Modules\\Auth\\AuthModule.csproj": {
+              "projectPath": "D:\\CRM\\TANCA_GIT\\Server\\src\\Modules\\Auth\\AuthModule.csproj"
             },
-            "D:\\BANCA\\Server\\src\\Shared\\Shared.csproj": {
-              "projectPath": "D:\\BANCA\\Server\\src\\Shared\\Shared.csproj"
+            "D:\\CRM\\TANCA_GIT\\Server\\src\\Shared\\Shared.csproj": {
+              "projectPath": "D:\\CRM\\TANCA_GIT\\Server\\src\\Shared\\Shared.csproj"
             }
           }
         }
@@ -6108,7 +6108,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net6.0": {
@@ -6150,12 +6150,30 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.36, 6.0.36]"
+          },
+          {
+            "name": "Microsoft.Net.Sdk.Compilers.Toolset",
+            "version": "[9.0.300, 9.0.300]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.36, 6.0.36]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.36, 6.0.36]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300\\RuntimeIdentifierGraph.json"
       }
     }
   },

@@ -1,0 +1,12 @@
+D:\CRM\TANCA\Server\src\Modules\Task\bin\Release\net7.0\TaskModule.deps.json
+D:\CRM\TANCA\Server\src\Modules\Task\bin\Release\net7.0\TaskModule.dll
+D:\CRM\TANCA\Server\src\Modules\Task\bin\Release\net7.0\TaskModule.pdb
+D:\CRM\TANCA\Server\src\Modules\Task\obj\Release\net7.0\TaskModule.csproj.AssemblyReference.cache
+D:\CRM\TANCA\Server\src\Modules\Task\obj\Release\net7.0\TaskModule.GeneratedMSBuildEditorConfig.editorconfig
+D:\CRM\TANCA\Server\src\Modules\Task\obj\Release\net7.0\TaskModule.AssemblyInfoInputs.cache
+D:\CRM\TANCA\Server\src\Modules\Task\obj\Release\net7.0\TaskModule.AssemblyInfo.cs
+D:\CRM\TANCA\Server\src\Modules\Task\obj\Release\net7.0\TaskModule.csproj.CoreCompileInputs.cache
+D:\CRM\TANCA\Server\src\Modules\Task\obj\Release\net7.0\TaskModule.dll
+D:\CRM\TANCA\Server\src\Modules\Task\obj\Release\net7.0\refint\TaskModule.dll
+D:\CRM\TANCA\Server\src\Modules\Task\obj\Release\net7.0\TaskModule.pdb
+D:\CRM\TANCA\Server\src\Modules\Task\obj\Release\net7.0\ref\TaskModule.dll

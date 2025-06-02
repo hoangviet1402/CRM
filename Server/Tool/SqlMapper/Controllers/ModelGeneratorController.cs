@@ -40,7 +40,8 @@ namespace SqlMapper.Controllers
         [HttpGet("generate")]
         public async Task<IActionResult> GenerateModel(
             [FromQuery] string procedureName,
-            [FromQuery] string className = null)
+            [FromQuery] string className = null,
+            [FromQuery] bool download = false)
         {
             if (string.IsNullOrWhiteSpace(procedureName))
             {
@@ -68,7 +69,17 @@ namespace SqlMapper.Controllers
                     }
 
                     _logger.LogInformation($"Đã tạo thành công mô hình cho stored procedure: {procedureName}");
-                    
+
+                    // Nếu có yêu cầu download file
+                    if (download)
+                    {
+                        // Lưu file tạm thời
+                        var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), className + ".cs");
+                        await System.IO.File.WriteAllTextAsync(tempPath, result.Content);
+                        var fileBytes = await System.IO.File.ReadAllBytesAsync(tempPath);
+                        var fileName = className + ".cs";
+                        return File(fileBytes, "text/plain", fileName);
+                    }
                     // Trả về nội dung lớp và cảnh báo (nếu có)
                     return Ok(new {
                         ClassContent = result.Content,
@@ -88,6 +99,15 @@ namespace SqlMapper.Controllers
                     }
 
                     _logger.LogInformation($"Đã tạo thành công mô hình cho stored procedure: {procedureName}");
+
+                    if (download)
+                    {
+                        var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), className + ".cs");
+                        await System.IO.File.WriteAllTextAsync(tempPath, classContent);
+                        var fileBytes = await System.IO.File.ReadAllBytesAsync(tempPath);
+                        var fileName = className + ".cs";
+                        return File(fileBytes, "text/plain", fileName);
+                    }
                     return Ok(classContent);
                 }
             }
@@ -109,7 +129,8 @@ namespace SqlMapper.Controllers
         [HttpPost("generate")]
         public async Task<IActionResult> GenerateAndSaveModel(
             [FromQuery] string procedureName,
-            [FromQuery] string className = null)
+            [FromQuery] string className = null,
+            [FromQuery] bool download = false)
         {
             if (string.IsNullOrWhiteSpace(procedureName))
             {
@@ -131,6 +152,13 @@ namespace SqlMapper.Controllers
                     var result = await _concreteService.GenerateAndSaveClassAsync(procedureName, className);
                     
                     _logger.LogInformation($"Đã tạo và lưu thành công mô hình cho stored procedure: {procedureName}, đường dẫn: {result.FilePath}");
+
+                    if (download && !string.IsNullOrWhiteSpace(result.FilePath) && System.IO.File.Exists(result.FilePath))
+                    {
+                        var fileBytes = await System.IO.File.ReadAllBytesAsync(result.FilePath);
+                        var fileName = className + ".cs";
+                        return File(fileBytes, "text/plain", fileName);
+                    }
                     
                     return Ok(new { 
                         FilePath = result.FilePath, 
@@ -145,6 +173,13 @@ namespace SqlMapper.Controllers
                     var filePath = await _modelGeneratorService.GenerateAndSaveClassAsync(procedureName, className);
                     
                     _logger.LogInformation($"Đã tạo và lưu thành công mô hình cho stored procedure: {procedureName}, đường dẫn: {filePath}");
+
+                    if (download && !string.IsNullOrWhiteSpace(filePath) && System.IO.File.Exists(filePath))
+                    {
+                        var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                        var fileName = className + ".cs";
+                        return File(fileBytes, "text/plain", fileName);
+                    }
                     return Ok(new { FilePath = filePath, Message = $"Model '{className}' đã được tạo thành công" });
                 }
             }
